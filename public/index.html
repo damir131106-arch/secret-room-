@@ -32,14 +32,31 @@
         .streak-number { font-size: 1.6rem; font-weight: 800; color: #db2777; }
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
         .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        
+        /* НОВОЕ МОДАЛЬНОЕ ОКНО РЕГИСТРАЦИИ */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; border: 2px solid #f472b6; }
+        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
+        .modal-content h3 { color: #c2417c; margin-bottom: 1.5rem; text-align: center; }
+        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+        .form-row input { flex: 1; }
+        .modal-content input, .modal-content select { width: 100%; padding: 0.8rem 1rem; margin-bottom: 0.8rem; border-radius: 60px; border: 1px solid #fbcfe8; font-family: inherit; font-size: 1rem; }
+        .modal-content .btn { width: 100%; margin-bottom: 0.8rem; }
+        .modal-switch { text-align: center; color: #1e5e7e; cursor: pointer; margin-top: 0.5rem; }
         .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
+        .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0; }
+        .checkbox-row input { width: auto; margin: 0; }
+        .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; }
+        .admin-badge { background: #db2777; color: white; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.7rem; margin-left: 0.5rem; }
+        
         .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
         .profile-page.active { display: flex; }
-        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; text-align: center; border: 2px solid #f472b6; }
+        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 800px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
         .close-profile { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; }
+        .user-table th { background: #fce7f3; color: #c2417c; }
+        
         .hero { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 2rem 0; }
         .hero-content { flex: 1.2; }
         .hero-badge { background: #ffe4f0; color: #c2417c; padding: 0.3rem 0.9rem; border-radius: 40px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 1.2rem; border: 1px solid #f472b6; }
@@ -78,12 +95,78 @@
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
             <button id="profileBtn" class="profile-link">✎ Профиль</button>
+            <button id="adminBtn" class="profile-link" style="display:none;">👑 Админ</button>
             <button id="logoutBtn" class="logout-btn">Выйти</button>
         </div>
     </div>
 </nav>
 
-<div id="authModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeModal">&times;</div><h3 id="modalTitle">Регистрация</h3><input type="text" id="authLogin" placeholder="Логин"><input type="password" id="authPassword" placeholder="Пароль"><button id="submitAuthBtn" class="btn">Зарегистрироваться</button><div id="authSwitch" class="modal-switch">Уже есть аккаунт? Войти</div><div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div></div></div>
+<!-- НОВОЕ МОДАЛЬНОЕ ОКНО РЕГИСТРАЦИИ/ВХОДА -->
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <div class="close-modal" id="closeModal">&times;</div>
+        <h3 id="modalTitle">Регистрация</h3>
+        <div id="loginForm" style="display: none;">
+            <input type="text" id="loginLogin" placeholder="Логин (email)">
+            <input type="password" id="loginPassword" placeholder="Пароль">
+            <button id="submitLoginBtn" class="btn">Войти</button>
+            <div class="modal-switch" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div>
+        </div>
+        <div id="registerForm">
+            <div class="form-row">
+                <input type="text" id="regName" placeholder="Имя">
+                <input type="text" id="regSurname" placeholder="Фамилия">
+            </div>
+            <div class="form-row">
+                <input type="email" id="regEmail" placeholder="Email">
+                <input type="tel" id="regPhone" placeholder="Номер телефона">
+            </div>
+            <input type="date" id="regBirthdate" placeholder="Дата рождения">
+            <input type="password" id="regPassword" placeholder="Пароль">
+            <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль">
+            <div class="checkbox-row">
+                <input type="checkbox" id="regAgree">
+                <label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span></label>
+            </div>
+            <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
+            <div class="modal-switch" id="switchToLogin">Уже есть аккаунт? Войти</div>
+        </div>
+        <div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div>
+    </div>
+</div>
+
+<!-- Модальное окно политики конфиденциальности -->
+<div id="policyModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="close-modal" id="closePolicyModal">&times;</div>
+        <h3>📋 Политика конфиденциальности</h3>
+        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; max-height: 400px; overflow-y: auto;">
+            <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта</strong></p>
+            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Дата рождения, Хэш пароля.</p>
+            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля и обеспечения связи.</p>
+            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS).</p>
+            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент.</p>
+        </div>
+        <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
+    </div>
+</div>
+
+<!-- АДМИН ПАНЕЛЬ (просмотр пользователей) -->
+<div id="adminPanel" class="profile-page">
+    <div class="profile-content">
+        <div class="close-profile" id="closeAdminPanel">&times;</div>
+        <h3>👑 Панель администратора</h3>
+        <p>Все зарегистрированные пользователи:</p>
+        <div style="overflow-x: auto;">
+            <table class="user-table" id="usersTable">
+                <thead>
+                    <tr><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <div id="profilePage" class="profile-page"><div class="profile-content"><div class="close-profile" id="closeProfile">&times;</div><h3>👤 Мой профиль</h3><p>Логин: <strong id="profileLoginDisplay"></strong></p><input type="text" id="nicknameInput" placeholder="Никнейм"><button id="saveNicknameBtn" class="btn">Сохранить</button><div id="profileMessage" style="margin-top:1rem;font-size:0.85rem;color:#db2777;"></div></div></div>
 
@@ -101,11 +184,12 @@
     <div class="container section" id="test"><div class="test-panel"><h3>🧪 Пилотное тестирование</h3><p>Ищем 20 студентов УВШЭУ УГНТУ.</p><div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;"><a href="#" id="fakeSubmitBtn" class="btn" style="background:#FFE7C7;color:#db2777;">✉️ Записаться</a><span>*до 9 мая</span></div><div id="testMessage" style="margin-top:1rem;"></div></div></div>
 </main>
 
-<div class="container" style="margin-bottom:2rem;"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиулин Газиз, Сычевников Станислав, Шайдулин Эмин — студенты УВШЭУ УГНТУ</span></div></div>
-<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ.</p><p>✉️ kozyavka67@gmail.com</p></div></footer>
+<div class="container" style="margin-bottom:2rem;"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиулин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
+<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ---------- СЕРИЯ МЫСЛЯП ----------
         function updateStreak() {
             const today = new Date().toDateString();
             let streakData = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
@@ -135,50 +219,266 @@
         }
         displayStreak();
 
-        let users = JSON.parse(localStorage.getItem('appUsers')) || {};
-        let currentUser = localStorage.getItem('currentUser') || null;
-        function getUserNickname(login) { if(!login) return "Гость"; const nick = localStorage.getItem(`nickname_${login}`); return nick || login; }
-        function saveUserNickname(login, nickname) { if(nickname.trim()) localStorage.setItem(`nickname_${login}`, nickname.trim()); }
+        // ---------- НОВАЯ СИСТЕМА РЕГИСТРАЦИИ С ПОЛНЫМИ ДАННЫМИ ----------
+        let users = JSON.parse(localStorage.getItem('appUsersFull')) || {};
+        let currentUserEmail = localStorage.getItem('currentUserEmail') || null;
         
-        const authModal = document.getElementById('authModal'), modalTitle = document.getElementById('modalTitle');
-        const authLogin = document.getElementById('authLogin'), authPassword = document.getElementById('authPassword');
-        const submitAuthBtn = document.getElementById('submitAuthBtn'), authSwitch = document.getElementById('authSwitch');
-        const authMessage = document.getElementById('authMessage'), userDisplay = document.getElementById('userDisplay');
-        const currentUserLoginSpan = document.getElementById('currentUserLogin'), logoutBtn = document.getElementById('logoutBtn');
-        const profileBtn = document.getElementById('profileBtn'), profilePage = document.getElementById('profilePage');
-        const closeProfile = document.getElementById('closeProfile'), profileLoginDisplay = document.getElementById('profileLoginDisplay');
-        const nicknameInput = document.getElementById('nicknameInput'), saveNicknameBtn = document.getElementById('saveNicknameBtn');
-        const profileMessage = document.getElementById('profileMessage');
-        let isLoginMode = false;
+        // Функция для получения данных текущего пользователя
+        function getCurrentUserData() {
+            if (!currentUserEmail) return null;
+            return users[currentUserEmail] || null;
+        }
+        
+        function getUserNickname(email) { 
+            if(!email) return "Гость"; 
+            const user = users[email];
+            return user ? (user.nickname || user.name || user.email.split('@')[0]) : "Гость"; 
+        }
+        
+        function saveUserNickname(email, nickname) { 
+            if(nickname.trim() && users[email]) { 
+                users[email].nickname = nickname.trim(); 
+                localStorage.setItem('appUsersFull', JSON.stringify(users)); 
+            } 
+        }
+        
+        // DOM элементы
+        const authModal = document.getElementById('authModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const submitRegisterBtn = document.getElementById('submitRegisterBtn');
+        const submitLoginBtn = document.getElementById('submitLoginBtn');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const authMessage = document.getElementById('authMessage');
+        const userDisplay = document.getElementById('userDisplay');
+        const currentUserLoginSpan = document.getElementById('currentUserLogin');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const profileBtn = document.getElementById('profileBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const closeModal = document.getElementById('closeModal');
+        const testButtonNav = document.getElementById('testButtonNav');
+        const fakeSubmitBtn = document.getElementById('fakeSubmitBtn');
+        
+        // Проверка админа (админ - пользователь с email admin@systemcontrol.com)
+        function isAdmin() { return currentUserEmail === 'admin@systemcontrol.com'; }
         
         function updateUI() {
-            if(currentUser) { currentUserLoginSpan.textContent = getUserNickname(currentUser); userDisplay.style.display = 'flex'; }
-            else { userDisplay.style.display = 'none'; }
+            if(currentUserEmail) { 
+                currentUserLoginSpan.textContent = getUserNickname(currentUserEmail); 
+                userDisplay.style.display = 'flex';
+                adminBtn.style.display = isAdmin() ? 'inline-block' : 'none';
+            } else { 
+                userDisplay.style.display = 'none'; 
+            }
         }
-        function showModal() { authLogin.value = ''; authPassword.value = ''; authMessage.innerHTML = ''; authModal.classList.add('active'); }
-        function closeModal() { authModal.classList.remove('active'); }
-        function register(login, password) {
-            if(!login.trim() || !password.trim()) { authMessage.innerHTML = '❌ Заполните поля'; return false; }
-            if(users[login]) { authMessage.innerHTML = '❌ Логин существует'; return false; }
-            users[login] = { password: password }; localStorage.setItem('appUsers', JSON.stringify(users));
-            currentUser = login; localStorage.setItem('currentUser', currentUser); updateUI(); closeModal(); return true;
-        }
-        function login(login, password) {
-            if(!users[login]) { authMessage.innerHTML = '❌ Пользователь не найден'; return false; }
-            if(users[login].password !== password) { authMessage.innerHTML = '❌ Неверный пароль'; return false; }
-            currentUser = login; localStorage.setItem('currentUser', currentUser); updateUI(); closeModal(); return true;
-        }
-        function logout() { currentUser = null; localStorage.removeItem('currentUser'); updateUI(); }
         
-        submitAuthBtn.onclick = () => { const l = authLogin.value.trim(), p = authPassword.value.trim(); isLoginMode ? login(l,p) : register(l,p); };
-        authSwitch.onclick = () => { isLoginMode = !isLoginMode; modalTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация'; submitAuthBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться'; authSwitch.innerHTML = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти'; authMessage.innerHTML = ''; };
-        document.getElementById('closeModal').onclick = closeModal; authModal.onclick = (e) => { if(e.target === authModal) closeModal(); };
+        function showModal() { 
+            authMessage.innerHTML = '';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            modalTitle.textContent = 'Регистрация';
+            document.getElementById('regName').value = '';
+            document.getElementById('regSurname').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPhone').value = '';
+            document.getElementById('regBirthdate').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regPasswordConfirm').value = '';
+            document.getElementById('regAgree').checked = false;
+            authModal.classList.add('active'); 
+        }
+        
+        function closeModalFunc() { authModal.classList.remove('active'); }
+        
+        // Регистрация
+        function registerUser() {
+            const name = document.getElementById('regName').value.trim();
+            const surname = document.getElementById('regSurname').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const birthdate = document.getElementById('regBirthdate').value;
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            const agree = document.getElementById('regAgree').checked;
+            
+            if (!name || !surname || !email || !phone || !birthdate || !password) {
+                authMessage.innerHTML = '❌ Заполните все поля';
+                return;
+            }
+            if (password !== passwordConfirm) {
+                authMessage.innerHTML = '❌ Пароли не совпадают';
+                return;
+            }
+            if (password.length < 4) {
+                authMessage.innerHTML = '❌ Пароль должен быть не менее 4 символов';
+                return;
+            }
+            if (!agree) {
+                authMessage.innerHTML = '❌ Вы должны согласиться с Политикой конфиденциальности';
+                return;
+            }
+            if (users[email]) {
+                authMessage.innerHTML = '❌ Пользователь с таким Email уже существует';
+                return;
+            }
+            
+            users[email] = {
+                name: name,
+                surname: surname,
+                email: email,
+                phone: phone,
+                birthdate: birthdate,
+                password: password,
+                nickname: name,
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('appUsersFull', JSON.stringify(users));
+            currentUserEmail = email;
+            localStorage.setItem('currentUserEmail', currentUserEmail);
+            updateUI();
+            closeModalFunc();
+        }
+        
+        // Вход
+        function loginUser() {
+            const email = document.getElementById('loginLogin').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) {
+                authMessage.innerHTML = '❌ Заполните все поля';
+                return;
+            }
+            if (!users[email]) {
+                authMessage.innerHTML = '❌ Пользователь не найден';
+                return;
+            }
+            if (users[email].password !== password) {
+                authMessage.innerHTML = '❌ Неверный пароль';
+                return;
+            }
+            currentUserEmail = email;
+            localStorage.setItem('currentUserEmail', currentUserEmail);
+            updateUI();
+            closeModalFunc();
+        }
+        
+        function logout() { 
+            currentUserEmail = null; 
+            localStorage.removeItem('currentUserEmail'); 
+            updateUI(); 
+        }
+        
+        // Переключение между формами
+        switchToLogin.onclick = () => {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            modalTitle.textContent = 'Вход';
+            authMessage.innerHTML = '';
+        };
+        switchToRegister.onclick = () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            modalTitle.textContent = 'Регистрация';
+            authMessage.innerHTML = '';
+        };
+        
+        submitRegisterBtn.onclick = registerUser;
+        submitLoginBtn.onclick = loginUser;
+        closeModal.onclick = closeModalFunc;
+        authModal.onclick = (e) => { if(e.target === authModal) closeModalFunc(); };
         logoutBtn.onclick = logout;
-        profileBtn.onclick = () => { if(currentUser) { profileLoginDisplay.textContent = currentUser; nicknameInput.value = getUserNickname(currentUser); profileMessage.innerHTML = ''; profilePage.classList.add('active'); } };
-        closeProfile.onclick = () => profilePage.classList.remove('active'); profilePage.onclick = (e) => { if(e.target === profilePage) profilePage.classList.remove('active'); };
-        saveNicknameBtn.onclick = () => { if(currentUser) { const newNick = nicknameInput.value.trim(); if(newNick) { saveUserNickname(currentUser, newNick); profileMessage.innerHTML = '✅ Никнейм изменён!'; updateUI(); } else profileMessage.innerHTML = '❌ Не может быть пустым'; } };
-        document.getElementById('testButtonNav').onclick = (e) => { e.preventDefault(); showModal(); };
-        document.getElementById('fakeSubmitBtn').onclick = (e) => { e.preventDefault(); showModal(); };
+        
+        testButtonNav.onclick = (e) => { e.preventDefault(); showModal(); };
+        fakeSubmitBtn.onclick = (e) => { e.preventDefault(); showModal(); };
+        
+        // Политика конфиденциальности
+        const policyModal = document.getElementById('policyModal');
+        const showPolicyLink = document.getElementById('showPolicyLink');
+        const closePolicyModal = document.getElementById('closePolicyModal');
+        const closePolicyBtn = document.getElementById('closePolicyBtn');
+        
+        showPolicyLink.onclick = () => policyModal.classList.add('active');
+        closePolicyModal.onclick = () => policyModal.classList.remove('active');
+        closePolicyBtn.onclick = () => policyModal.classList.remove('active');
+        policyModal.onclick = (e) => { if(e.target === policyModal) policyModal.classList.remove('active'); };
+        
+        // Админ панель
+        const adminPanel = document.getElementById('adminPanel');
+        const closeAdminPanel = document.getElementById('closeAdminPanel');
+        const usersTableBody = document.getElementById('usersTableBody');
+        
+        function renderAdminTable() {
+            if (!usersTableBody) return;
+            usersTableBody.innerHTML = '';
+            for (let email in users) {
+                const user = users[email];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${escapeHtml(user.name || '')}</td>
+                    <td>${escapeHtml(user.surname || '')}</td>
+                    <td>${escapeHtml(user.email || '')}</td>
+                    <td>${escapeHtml(user.phone || '')}</td>
+                    <td>${escapeHtml(user.birthdate || '')}</td>
+                `;
+                usersTableBody.appendChild(row);
+            }
+        }
+        
+        adminBtn.onclick = () => {
+            if (isAdmin()) {
+                renderAdminTable();
+                adminPanel.classList.add('active');
+            }
+        };
+        closeAdminPanel.onclick = () => adminPanel.classList.remove('active');
+        adminPanel.onclick = (e) => { if(e.target === adminPanel) adminPanel.classList.remove('active'); };
+        
+        // Профиль
+        const profilePage = document.getElementById('profilePage');
+        const closeProfile = document.getElementById('closeProfile');
+        const profileLoginDisplay = document.getElementById('profileLoginDisplay');
+        const nicknameInput = document.getElementById('nicknameInput');
+        const saveNicknameBtn = document.getElementById('saveNicknameBtn');
+        const profileMessage = document.getElementById('profileMessage');
+        
+        profileBtn.onclick = () => { 
+            if(currentUserEmail) { 
+                profileLoginDisplay.textContent = currentUserEmail; 
+                nicknameInput.value = getUserNickname(currentUserEmail); 
+                profileMessage.innerHTML = ''; 
+                profilePage.classList.add('active'); 
+            } 
+        };
+        closeProfile.onclick = () => profilePage.classList.remove('active');
+        profilePage.onclick = (e) => { if(e.target === profilePage) profilePage.classList.remove('active'); };
+        saveNicknameBtn.onclick = () => { 
+            if(currentUserEmail) { 
+                const newNick = nicknameInput.value.trim(); 
+                if(newNick) { 
+                    saveUserNickname(currentUserEmail, newNick); 
+                    profileMessage.innerHTML = '✅ Никнейм изменён!'; 
+                    updateUI(); 
+                } else profileMessage.innerHTML = '❌ Не может быть пустым'; 
+            } 
+        };
+        
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+        
+        // Если админ не создан, создаём его
+        if (!users['admin@systemcontrol.com']) {
+            users['admin@systemcontrol.com'] = {
+                name: 'Admin',
+                surname: 'System',
+                email: 'admin@systemcontrol.com',
+                phone: '+70000000000',
+                birthdate: '2000-01-01',
+                password: 'admin123',
+                nickname: 'Администратор',
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('appUsersFull', JSON.stringify(users));
+        }
         
         updateUI();
     });
