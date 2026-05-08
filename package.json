@@ -1,0 +1,22 @@
+{
+  "name": "my-chat-app",
+  "version": "1.0.0",
+  "description": "Чат с WebSocket и комнатами для проекта Системный контроль",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "chat",
+    "websocket",
+    "nodejs",
+    "render"
+  ],
+  "author": "SECRET ROOM SQUAD",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.0"
+  }
+}

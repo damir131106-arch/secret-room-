@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatRoom — Облачный чат</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 32px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #ec489a, #db2777); padding: 20px; color: white; text-align: center; }
+        .room-panel { padding: 20px; background: #fef2f8; text-align: center; }
+        .room-panel input { padding: 12px 16px; border-radius: 60px; border: 1px solid #fbcfe8; width: 200px; margin: 10px; }
+        .btn { background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 12px 24px; border-radius: 60px; cursor: pointer; font-weight: 600; margin: 5px; }
+        .btn-outline { background: transparent; border: 2px solid #ec489a; color: #ec489a; }
+        .chat-area { display: none; }
+        .chat-header { background: #fff0f7; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .messages { height: 400px; overflow-y: auto; padding: 20px; background: #fef9fc; }
+        .message { background: white; padding: 10px 15px; border-radius: 20px; border-left: 4px solid #ec489a; margin-bottom: 10px; max-width: 80%; }
+        .message .nickname { font-weight: 700; color: #c2417c; font-size: 0.8rem; }
+        .message .text { margin: 5px 0; }
+        .message .time { font-size: 0.7rem; color: #94a3b8; text-align: right; }
+        .message-system { text-align: center; color: #c2417c; font-size: 0.8rem; margin: 10px 0; }
+        .input-area { padding: 20px; display: flex; gap: 10px; background: white; border-top: 1px solid #fbcfe8; }
+        .input-area input { flex: 1; padding: 12px 16px; border-radius: 60px; border: 1px solid #fbcfe8; }
+        .status { font-size: 0.8rem; color: #c2417c; margin-top: 10px; }
+        .participants { font-size: 0.8rem; background: #fce7f3; padding: 5px 12px; border-radius: 40px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎙️ LIVE-ЧАТ</h1>
+        <p>Сообщения видны на всех устройствах!</p>
+    </div>
+    <div class="room-panel" id="roomPanel">
+        <h3>Выберите действие:</h3>
+        <button class="btn" id="createRoomBtn">✨ Создать комнату</button>
+        <div style="margin: 10px;">или</div>
+        <input type="text" id="joinCodeInput" placeholder="Код комнаты" maxlength="6" style="text-transform:uppercase">
+        <button class="btn btn-outline" id="joinRoomBtn">🔑 Войти</button>
+        <div id="errorMsg" class="status"></div>
+    </div>
+    <div class="chat-area" id="chatArea">
+        <div class="chat-header">
+            <span>💬 Комната: <strong id="roomCodeDisplay">-</strong></span>
+            <span class="participants" id="participantsCount">👥 0 участников</span>
+            <button class="btn-outline" id="leaveBtn" style="padding: 5px 15px;">🚪 Выйти</button>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Напишите сообщение...">
+            <button class="btn" id="sendBtn">Отправить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const WS_URL = `ws://localhost:3000`;
+    let ws = null;
+    let currentRoom = null;
+    let currentNickname = localStorage.getItem('nickname') || 'Гость_' + Math.floor(Math.random() * 1000);
+    
+    const userNick = prompt('Ваш никнейм:', currentNickname);
+    if (userNick && userNick.trim()) {
+        currentNickname = userNick.trim();
+        localStorage.setItem('nickname', currentNickname);
+    }
+    
+    function connectWebSocket() {
+        ws = new WebSocket(WS_URL);
+        ws.onopen = () => document.getElementById('errorMsg').innerHTML = '✅ Готово!';
+        ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
+        ws.onerror = () => document.getElementById('errorMsg').innerHTML = '❌ Ошибка соединения';
+        ws.onclose = () => document.getElementById('errorMsg').innerHTML = '⚠️ Соединение потеряно';
+    }
+    
+    function handleMessage(data) {
+        if (data.type === 'room_created' || data.type === 'room_joined' && data.success) {
+            currentRoom = data.roomCode;
+            document.getElementById('roomCodeDisplay').textContent = currentRoom;
+            document.getElementById('roomPanel').style.display = 'none';
+            document.getElementById('chatArea').style.display = 'block';
+            addSystemMessage(data.type === 'room_created' ? `🎉 Комната создана! Код: ${currentRoom}` : `✅ Вы вошли в комнату ${currentRoom}`);
+        } else if (data.type === 'room_joined' && !data.success) {
+            document.getElementById('errorMsg').innerHTML = '❌ Комната не найдена';
+        } else if (data.type === 'history') {
+            document.getElementById('messages').innerHTML = '';
+            data.data.forEach(msg => addMessage(msg));
+        } else if (data.type === 'message') {
+            addMessage(data);
+        } else if (data.type === 'system') {
+            addSystemMessage(data.text);
+        } else if (data.type === 'participants') {
+            document.getElementById('participantsCount').textContent = `👥 ${data.count} участников`;
+        }
+    }
+    
+    function addMessage(msg) {
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.innerHTML = `<div class="nickname">${escapeHtml(msg.nickname)}</div><div class="text">${escapeHtml(msg.text)}</div><div class="time">${msg.time || ''}</div>`;
+        document.getElementById('messages').appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function addSystemMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'message-system';
+        div.textContent = text;
+        document.getElementById('messages').appendChild(div);
+    }
+    
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]); }
+    
+    document.getElementById('createRoomBtn').onclick = () => ws.send(JSON.stringify({ type: 'create_room' }));
+    document.getElementById('joinRoomBtn').onclick = () => {
+        const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+        if (code) ws.send(JSON.stringify({ type: 'join_room', roomCode: code }));
+        else document.getElementById('errorMsg').innerHTML = '❌ Введите код';
+    };
+    document.getElementById('sendBtn').onclick = () => {
+        const input = document.getElementById('messageInput');
+        if (input.value.trim()) {
+            ws.send(JSON.stringify({ type: 'message', nickname: currentNickname, text: input.value.trim() }));
+            input.value = '';
+        }
+    };
+    document.getElementById('messageInput').addEventListener('keypress', (e) => e.key === 'Enter' && document.getElementById('sendBtn').click());
+    document.getElementById('leaveBtn').onclick = () => location.reload();
+    
+    connectWebSocket();
+</script>
+</body>
+</html>
