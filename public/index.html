@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Системный контроль — помощь первокурсникам УГНТУ | secret room</title>
+    <title>Системный контроль — помощь первокурсникам УГНТУ | Мечта | Мысляп-серия</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,6 +27,25 @@
         .nav-links { display: flex; gap: 2rem; font-weight: 500; }
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-weight: 500; }
         .nav-links a:hover { color: #0284c7; }
+        
+        /* Блок серии Мысляп */
+        .streak-section {
+            background: rgba(255,240,247,0.95);
+            border-radius: 80px;
+            padding: 0.2rem 1rem 0.2rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 1px solid #f472b6;
+            box-shadow: 0 4px 12px rgba(236,72,154,0.2);
+            backdrop-filter: blur(4px);
+        }
+        .streak-emoji { font-size: 1.9rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .streak-text { font-weight: 700; color: #c2417c; font-size: 0.9rem; white-space: nowrap; }
+        .streak-number { font-size: 1.6rem; font-weight: 800; color: #db2777; margin-left: 0.2rem; letter-spacing: -0.02em; }
+        .streak-flame { font-size: 1.3rem; margin-left: 0.2rem; }
+        .streak-message { font-size: 0.7rem; color: #1e5e7e; margin-top: 0.1rem; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; border: 2px solid #f472b6; }
@@ -61,7 +80,7 @@
         .smart-badge { background: #fce7f3; font-weight: 600; padding: 0.5rem 1rem; border-radius: 40px; display: inline-block; margin-top: 1rem; color: #be185d; }
         .test-panel { background: linear-gradient(115deg, #db2777 0%, #0284c7 100%); border-radius: 32px; padding: 2rem; color: white; margin-top: 1.5rem; }
         
-        /* Стили для LIVE-комнаты (чат) */
+        /* LIVE-комната (чат) */
         .live-room-container { background: rgba(255,255,250,0.98); border-radius: 48px; padding: 1.8rem; margin: 2rem 0; border: 2px solid #f472b6; }
         .room-buttons { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .room-info { background: #fce7f3; border-radius: 28px; padding: 1rem; margin-bottom: 1rem; text-align: center; }
@@ -82,6 +101,10 @@
         .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem 1.8rem; text-align: center; font-weight: 600; border: 1px solid #f472b6; color: #c2417c; }
         footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; }
         @media (max-width: 760px) { h1 { font-size: 2.3rem; } h2 { font-size: 1.8rem; } .hero { flex-direction: column; } .navbar { flex-direction: column; } .nav-links { gap: 1.5rem; flex-wrap: wrap; justify-content: center; } }
+        
+        /* Анимация для серии */
+        @keyframes flameFlicker { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+        .streak-flame { display: inline-block; animation: flameFlicker 1.2s infinite ease-in-out; }
     </style>
 </head>
 <body>
@@ -107,13 +130,27 @@
 <main>
     <div class="gradient-bg"><div class="container section" style="padding-top:2rem;padding-bottom:3rem;"><div class="hero"><div class="hero-content"><div class="hero-badge">⚡ УВШЭУ УГНТУ — решение изнутри</div><h1>Не просто планер.<br>Система внешней<br>организации для первокурсника.</h1><p>«Я понимаю, что будет хуже, но всё равно откладываю» — знакомая боль?<br> Мы создали веб-платформу, которая мягко, но настойчиво возвращает контроль.</p><div style="display:flex;gap:1rem;flex-wrap:wrap;"><a href="#test" class="btn" id="testButtonNav">Хочу на тест 🎀</a><a href="#howitworks" class="btn btn-outline">Как работает</a></div><div class="hero-stats"><div class="stat"><span>20+</span><br>студентов в тесте</div><div class="stat"><span>5</span><br>принципов</div><div class="stat"><span>УГНТУ</span><br>экосистема</div></div></div><div style="flex:0.8;min-width:220px;background:#ffffffcc;border-radius:32px;padding:1.5rem;text-align:center;border:1px solid #f472b6;"><div style="font-weight:700;margin-bottom:1rem;color:#db2777;">🎯 SMART-цель</div><div style="font-size:0.9rem;">к 9 мая протестировать платформу на 20 реальных студентах УВШЭУ</div><div style="margin-top:1rem;background:#ffe0f0;border-radius:40px;padding:0.2rem 0.6rem;font-size:0.75rem;display:inline-block;color:#be185d;">✅ прототип готов</div></div></div></div></div>
 
+    <!-- СЕКЦИЯ С СЕРИЕЙ "МЫСЛЯП" (интегрировано в шапку страницы) -->
+    <div class="container" style="margin-bottom: -2rem; margin-top: 1rem;">
+        <div style="display: flex; justify-content: flex-end;">
+            <div id="streakWidget" class="streak-section">
+                <span class="streak-emoji">🧠✨</span>
+                <div>
+                    <div class="streak-text">🔥 Мысляп-серия <span class="streak-flame" style="animation: none;">🔥</span></div>
+                    <div><span class="streak-number" id="streakDays">0</span> <span style="font-weight:500;">дней подряд</span></div>
+                    <div class="streak-message" id="streakMessage"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container section" id="problem"><div style="max-width:800px;"><span style="background:#fce7f3;padding:0.2rem 0.8rem;border-radius:30px;font-size:0.8rem;font-weight:600;color:#be185d;">Почему прокрастинация?</span><h2 style="margin-top:0.8rem;">Проблема не в мотивации,<br> а в отсутствии навыка</h2><div class="quote-block"><div class="quote-text">«Я не знаю, с чего начать»<br>«Откладываю даже важное»</div><div style="margin-top:1rem;color:#1e5e7e;">— опрос 17–20 лет, студенты УВШЭУ</div></div><p>Потеря привычного школьного надзора → хаотичная учёба → долги, стресс, вина. <strong style="color:#db2777;">Системный контроль</strong> создаёт внешнюю структуру без давления.</p></div></div>
 
     <div class="container section" id="howitworks"><div style="text-align:center;"><h2>Как платформа меняет хаос → порядок</h2><p style="color:#c2417c;">5 шагов к самодисциплине</p></div><div class="steps-grid"><div class="step-card"><div class="step-number">01</div><h3>Ввод предметов и дедлайнов</h3><p>Система разбивает задачи на микрошаги.</p></div><div class="step-card"><div class="step-number">02</div><h3>3–5 задач в день</h3><p>Точечная нагрузка.</p></div><div class="step-card"><div class="step-number">03</div><h3>Live-комната 40 мин</h3><p>Таймер + эффект присутствия.</p></div><div class="step-card"><div class="step-number">04</div><h3>Серии и реакция на пропуски</h3><p>Streak как в Duolingo.</p></div><div class="step-card"><div class="step-number">05</div><h3>Прогресс на виду</h3><p>Визуализация побед.</p></div></div><div style="margin-top:2rem;text-align:center;"><span style="background:#fce7f3;padding:0.5rem 1rem;border-radius:60px;color:#c2417c;">⭐ Конкурентное отличие — платформа под УГНТУ</span></div></div>
 
     <div class="gradient-bg"><div class="container section" id="faculty"><h2>Как проект связан с УВШЭУ?</h2><div class="faculty-grid"><div class="faculty-card"><div style="font-size:2rem;">🎓</div><h3>Боль своих → решение</h3><p>Интервью с первокурсниками, мы сами студенты.</p></div><div class="faculty-card"><div style="font-size:2rem;">🧠</div><h3>Снижение выгорания</h3><p>Выше успеваемость, меньше отчислений.</p></div><div class="faculty-card"><div style="font-size:2rem;">📊</div><h3>SMART-прототип</h3><p>к 9 мая тестируем на 20 студентах.</p><div class="smart-badge">Цель: до 20 живых тестов</div></div></div><div style="background:#fff;border-radius:32px;padding:1.5rem;margin-top:1rem;border:1px solid #f472b6;"><p style="font-weight:500;color:#c2417c;">📌 «Мы однокурсники, которые нашли боль первых недель обучения и создали продукт, помогающий войти в ритм университетской жизни.»</p></div></div></div>
 
-    <!-- ========== НОВАЯ LIVE-КОМНАТА (РАБОЧИЙ ЧАТ) ========== -->
+    <!-- LIVE-КОМНАТА (РАБОЧИЙ ЧАТ) -->
     <div class="container section" id="liveRoom">
         <div class="live-room-container">
             <h2>🎙️ LIVE-КОМНАТЫ (ОБЛАЧНЫЙ ЧАТ)</h2>
@@ -129,9 +166,7 @@
                     <div id="participantsList" style="font-size:0.8rem; color:#c2417c;">👥 участников: 0</div>
                     <button id="leaveRoomBtn" class="btn-outline" style="margin-top:0.5rem; padding:0.3rem 1rem;">🚪 Покинуть комнату</button>
                 </div>
-                <div id="roomChatMessages" class="chat-messages-area">
-                    <div class="message-system">🔌 Подключение к серверу...</div>
-                </div>
+                <div id="roomChatMessages" class="chat-messages-area"><div class="message-system">🔌 Подключение к серверу...</div></div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="Напишите сообщение...">
                     <button id="sendMsgBtn" class="btn" style="padding:0.6rem 1.5rem;">Отправить</button>
@@ -150,7 +185,52 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // ========== АВТОРИЗАЦИЯ (ЛОКАЛЬНАЯ) ==========
+        // ========== СЕРИЯ "МЫСЛЯП" (по аналогии с Duolingo) ==========
+        function updateStreak() {
+            const today = new Date().toDateString();
+            let streakData = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
+            let currentStreak = streakData.streak || 0;
+            let lastVisit = streakData.lastVisit;
+            
+            if (lastVisit === today) {
+                // Уже сегодня заходили, оставляем серию без изменений
+            } else if (lastVisit) {
+                const lastDate = new Date(lastVisit);
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toDateString();
+                if (lastDate.toDateString() === yesterdayStr) {
+                    // Вчера заходил → увеличиваем серию
+                    currentStreak++;
+                } else {
+                    // Пропустил день → сброс серии
+                    currentStreak = 1;
+                }
+            } else {
+                // Первый визит
+                currentStreak = 1;
+            }
+            
+            localStorage.setItem('streakWeasel', JSON.stringify({ streak: currentStreak, lastVisit: today }));
+            return currentStreak;
+        }
+        
+        function displayStreak() {
+            const streak = updateStreak();
+            const streakSpan = document.getElementById('streakDays');
+            const messageSpan = document.getElementById('streakMessage');
+            if (streakSpan) streakSpan.innerText = streak;
+            if (messageSpan) {
+                if (streak === 1) messageSpan.innerText = '🔥 Первый день твоего Мысляпа!';
+                else if (streak < 3) messageSpan.innerText = '🧠 Мысляп растёт! Не пропускай дни.';
+                else if (streak < 7) messageSpan.innerText = '✨ Крепнет дисциплина, Мысляп в силе!';
+                else messageSpan.innerText = '🏆 Серия Мысляп ' + streak + ' дней! Гениально!';
+            }
+        }
+        
+        displayStreak();
+        
+        // ========== ОСТАЛЬНАЯ ЛОГИКА (АВТОРИЗАЦИЯ, ЧАТ, ДНЕВНИК) ==========
         let users = JSON.parse(localStorage.getItem('appUsers')) || {};
         let currentUser = localStorage.getItem('currentUser') || null;
         function getUserNickname(login) { if(!login) return "Гость"; const nick = localStorage.getItem(`nickname_${login}`); return nick || login; }
@@ -204,7 +284,7 @@
         
         function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
         
-        // ========== ДНЕВНИК МЫСЛЕЙ ==========
+        // ДНЕВНИК МЫСЛЕЙ
         let moodEntries = JSON.parse(localStorage.getItem('moodJournalEntries')) || [];
         const moodHistoryDiv = document.getElementById('moodHistoryList'), thoughtInput = document.getElementById('thoughtInput');
         window.renderMoodHistory = function() {
@@ -223,168 +303,47 @@
         document.getElementById('saveThoughtBtn').onclick = () => { if(!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; } if(!thoughtInput.value.trim()) { alert("Напиши мысль"); return; } addMoodEntry("📝 Заметка", thoughtInput.value); thoughtInput.value = ''; };
         renderMoodHistory();
         
-        // ========== ОБЛАЧНЫЙ ЧАТ (WEBSOCKET) ==========
-        // Автоматическое определение адреса WebSocket
+        // ОБЛАЧНЫЙ ЧАТ (WEBSOCKET)
         let WS_URL;
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            WS_URL = 'ws://localhost:3000';
-        } else {
-            WS_URL = `wss://${window.location.host}`;
-        }
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') WS_URL = 'ws://localhost:3000';
+        else WS_URL = `wss://${window.location.host}`;
         
-        let ws = null;
-        let currentRoom = null;
-        let nickForChat = null;
-        
-        const roomStatusDiv = document.getElementById('roomStatus');
-        const activeArea = document.getElementById('activeRoomArea');
-        const roomCodeDisplaySpan = document.getElementById('roomCodeDisplay');
-        const participantsListSpan = document.getElementById('participantsList');
-        const leaveRoomBtn = document.getElementById('leaveRoomBtn');
-        const chatMessagesDiv = document.getElementById('roomChatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendMsgBtn = document.getElementById('sendMsgBtn');
-        const showCreateRoomBtn = document.getElementById('showCreateRoomBtn');
-        const showJoinRoomBtn = document.getElementById('showJoinRoomBtn');
+        let ws = null, currentRoom = null;
+        const roomStatusDiv = document.getElementById('roomStatus'), activeArea = document.getElementById('activeRoomArea');
+        const roomCodeDisplaySpan = document.getElementById('roomCodeDisplay'), participantsListSpan = document.getElementById('participantsList');
+        const leaveRoomBtn = document.getElementById('leaveRoomBtn'), chatMessagesDiv = document.getElementById('roomChatMessages');
+        const chatInput = document.getElementById('chatInput'), sendMsgBtn = document.getElementById('sendMsgBtn');
+        const showCreateRoomBtn = document.getElementById('showCreateRoomBtn'), showJoinRoomBtn = document.getElementById('showJoinRoomBtn');
         
         function connectWebSocket() {
             if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
             try {
                 ws = new WebSocket(WS_URL);
-                ws.onopen = function() {
-                    console.log('WebSocket подключен');
-                    if (chatMessagesDiv && chatMessagesDiv.innerHTML.includes('Подключение')) {
-                        chatMessagesDiv.innerHTML = '<div class="message-system">✅ Подключено к серверу. Создайте или войдите в комнату.</div>';
-                    }
-                };
-                ws.onmessage = function(event) {
-                    try {
-                        const data = JSON.parse(event.data);
-                        handleChatMessage(data);
-                    } catch(e) { console.error('Ошибка парсинга:', e); }
-                };
-                ws.onerror = function(error) { console.error('WebSocket ошибка:', error); };
-                ws.onclose = function() { 
-                    console.log('WebSocket отключен');
-                    setTimeout(connectWebSocket, 3000);
-                };
-            } catch(e) { console.error('WebSocket не поддерживается'); }
+                ws.onopen = () => { if (chatMessagesDiv && chatMessagesDiv.innerHTML.includes('Подключение')) chatMessagesDiv.innerHTML = '<div class="message-system">✅ Подключено к серверу. Создайте или войдите в комнату.</div>'; };
+                ws.onmessage = (event) => { try { handleChatMessage(JSON.parse(event.data)); } catch(e) { console.error(e); } };
+                ws.onclose = () => setTimeout(connectWebSocket, 3000);
+            } catch(e) { console.error(e); }
         }
-        
         function handleChatMessage(data) {
-            switch(data.type) {
-                case 'room_created':
-                    currentRoom = data.roomCode;
-                    roomCodeDisplaySpan.innerHTML = `Код: ${currentRoom}`;
-                    roomStatusDiv.style.display = 'none';
-                    activeArea.style.display = 'block';
-                    addChatSystemMessage(`🎉 Комната создана! Код: ${currentRoom}. Передайте его друзьям!`);
-                    break;
-                case 'room_joined':
-                    if (data.success) {
-                        currentRoom = data.roomCode;
-                        roomCodeDisplaySpan.innerHTML = `Код: ${currentRoom}`;
-                        roomStatusDiv.style.display = 'none';
-                        activeArea.style.display = 'block';
-                        addChatSystemMessage(`✅ Вы вошли в комнату ${currentRoom}`);
-                    } else {
-                        roomStatusDiv.innerHTML = '💬 Комната не найдена. Проверьте код или создайте новую.';
-                    }
-                    break;
-                case 'history':
-                    if (chatMessagesDiv) {
-                        chatMessagesDiv.innerHTML = '';
-                        if (data.data && data.data.length) {
-                            data.data.forEach(msg => addChatMessage(msg.nickname, msg.text));
-                        } else {
-                            addChatSystemMessage('💬 Напишите первое сообщение!');
-                        }
-                    }
-                    break;
-                case 'message':
-                    addChatMessage(data.nickname, data.text);
-                    break;
-                case 'system':
-                    addChatSystemMessage(data.text);
-                    break;
-                case 'participants':
-                    participantsListSpan.innerHTML = `👥 участников: ${data.count}`;
-                    break;
-            }
+            if(data.type === 'room_created') { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`🎉 Комната создана! Код: ${currentRoom}. Передайте его друзьям!`); }
+            else if(data.type === 'room_joined' && data.success) { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`✅ Вы вошли в комнату ${currentRoom}`); }
+            else if(data.type === 'room_joined' && !data.success) roomStatusDiv.innerHTML = '💬 Комната не найдена. Проверьте код или создайте новую.';
+            else if(data.type === 'history') { if(chatMessagesDiv) { chatMessagesDiv.innerHTML = ''; if(data.data && data.data.length) data.data.forEach(msg => addChatMessage(msg.nickname, msg.text)); else addChatSystemMessage('💬 Напишите первое сообщение!'); } }
+            else if(data.type === 'message') addChatMessage(data.nickname, data.text);
+            else if(data.type === 'system') addChatSystemMessage(data.text);
+            else if(data.type === 'participants') participantsListSpan.innerHTML = `👥 участников: ${data.count}`;
         }
-        
-        function addChatMessage(nickname, text) {
-            if (!chatMessagesDiv) return;
-            const div = document.createElement('div');
-            div.className = 'message';
-            div.innerHTML = `<strong>${escapeHtml(nickname)}:</strong> ${escapeHtml(text)}`;
-            chatMessagesDiv.appendChild(div);
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-        }
-        
-        function addChatSystemMessage(text) {
-            if (!chatMessagesDiv) return;
-            const div = document.createElement('div');
-            div.className = 'message-system';
-            div.textContent = text;
-            chatMessagesDiv.appendChild(div);
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-        }
-        
-        function sendChatMessage(text) {
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
-                addChatSystemMessage('❌ Нет соединения с сервером');
-                return false;
-            }
-            if (!currentRoom) {
-                addChatSystemMessage('❌ Вы не в комнате');
-                return false;
-            }
-            const nickname = currentUser ? getUserNickname(currentUser) : "Гость";
-            ws.send(JSON.stringify({ type: 'message', nickname: nickname, text: text }));
-            return true;
-        }
-        
-        function createRoom() {
-            if (!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; }
-            if (!ws || ws.readyState !== WebSocket.OPEN) { connectWebSocket(); setTimeout(() => ws.send(JSON.stringify({ type: 'create_room' })), 500); return; }
-            ws.send(JSON.stringify({ type: 'create_room' }));
-        }
-        
-        function joinRoomByCode() {
-            if (!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; }
-            const code = prompt("Введите 6-значный код комнаты:");
-            if (!code || !code.trim()) return;
-            const roomCode = code.trim().toUpperCase();
-            if (!ws || ws.readyState !== WebSocket.OPEN) { connectWebSocket(); setTimeout(() => ws.send(JSON.stringify({ type: 'join_room', roomCode: roomCode })), 500); return; }
-            ws.send(JSON.stringify({ type: 'join_room', roomCode: roomCode }));
-        }
-        
-        function leaveChatRoom() {
-            if (currentRoom) {
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                    // Просто закрываем интерфейс
-                }
-                currentRoom = null;
-                roomStatusDiv.style.display = 'block';
-                activeArea.style.display = 'none';
-                roomStatusDiv.innerHTML = '💬 Ты не в комнате. Создай новую или войди по коду.';
-                if (chatMessagesDiv) chatMessagesDiv.innerHTML = '<div class="message-system">🔌 Вы покинули комнату</div>';
-            }
-        }
-        
+        function addChatMessage(nickname, text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message'; div.innerHTML = `<strong>${escapeHtml(nickname)}:</strong> ${escapeHtml(text)}`; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
+        function addChatSystemMessage(text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message-system'; div.textContent = text; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
+        function createRoom() { if(!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; } if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'create_room' })); else addChatSystemMessage('❌ Нет соединения с сервером'); }, 500); }
+        function joinRoomByCode() { if(!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; } const code = prompt("Введите 6-значный код комнаты:"); if(!code || !code.trim()) return; const roomCode = code.trim().toUpperCase(); if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'join_room', roomCode: roomCode })); else addChatSystemMessage('❌ Нет соединения'); }, 500); }
+        function leaveChatRoom() { if(currentRoom) { currentRoom = null; roomStatusDiv.style.display = 'block'; activeArea.style.display = 'none'; roomStatusDiv.innerHTML = '💬 Ты не в комнате. Создай новую или войди по коду.'; if(chatMessagesDiv) chatMessagesDiv.innerHTML = '<div class="message-system">🔌 Вы покинули комнату</div>'; } }
         window.leaveChatRoom = leaveChatRoom;
-        
-        if (showCreateRoomBtn) showCreateRoomBtn.onclick = createRoom;
-        if (showJoinRoomBtn) showJoinRoomBtn.onclick = joinRoomByCode;
-        if (leaveRoomBtn) leaveRoomBtn.onclick = leaveChatRoom;
-        if (sendMsgBtn) sendMsgBtn.onclick = () => {
-            const msg = chatInput.value.trim();
-            if (msg && sendChatMessage(msg)) chatInput.value = '';
-        };
-        if (chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && sendMsgBtn) sendMsgBtn.click(); });
-        
-        // Запуск WebSocket
+        if(showCreateRoomBtn) showCreateRoomBtn.onclick = createRoom;
+        if(showJoinRoomBtn) showJoinRoomBtn.onclick = joinRoomByCode;
+        if(leaveRoomBtn) leaveRoomBtn.onclick = leaveChatRoom;
+        if(sendMsgBtn) sendMsgBtn.onclick = () => { const msg = chatInput.value.trim(); if(msg && ws && ws.readyState === WebSocket.OPEN) { const nickname = currentUser ? getUserNickname(currentUser) : "Гость"; ws.send(JSON.stringify({ type: 'message', nickname: nickname, text: msg })); chatInput.value = ''; } else addChatSystemMessage('❌ Нет соединения или вы не в комнате'); };
+        if(chatInput) chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter' && sendMsgBtn) sendMsgBtn.click(); });
         connectWebSocket();
         
         document.querySelectorAll('.nav-links a, .btn-outline, .btn[href^="#"]').forEach(anchor => {
@@ -393,7 +352,6 @@
                 if(href && href.startsWith('#')) { e.preventDefault(); const targetId = href.substring(1); const targetElement = document.getElementById(targetId); if(targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
-        
         updateUI();
     });
 </script>
