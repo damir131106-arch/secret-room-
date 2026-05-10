@@ -18,18 +18,19 @@
         .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.7); padding: 0.3rem 1rem; border-radius: 40px; }
         .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.9); }
-        .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
         
-        /* Мысляп-серия */
-        .streak-container { display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #fff0f7, #ffe4f0); padding: 5px 18px; border-radius: 60px; border: 1px solid #f472b6; box-shadow: 0 2px 8px rgba(236,72,154,0.15); }
-        .streak-emoji { font-size: 1.8rem; }
-        .streak-info { text-align: left; }
-        .streak-days { font-size: 1.5rem; font-weight: 800; color: #db2777; line-height: 1; }
+        /* Мысляп-виджет */
+        .streak-widget { background: linear-gradient(135deg, #fff0f7, #ffe4f0); border-radius: 60px; padding: 5px 18px; border: 1px solid #f472b6; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(236,72,154,0.15); }
+        .streak-emoji { font-size: 1.6rem; }
+        .streak-days { font-size: 1.4rem; font-weight: 800; color: #db2777; line-height: 1; }
         .streak-label { font-size: 0.7rem; color: #c2417c; font-weight: 600; }
-        .streak-message { font-size: 0.7rem; color: #1e5e7e; }
+        .streak-message { font-size: 0.65rem; color: #1e5e7e; }
         @keyframes flameAnim { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .streak-flame { display: inline-block; animation: flameAnim 0.8s infinite ease-in-out; }
+        
+        .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
+        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        .admin-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; margin-left: 8px; }
         
         .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.7rem 1.5rem; font-weight: 600; font-size: 0.9rem; border-radius: 60px; cursor: pointer; transition: all 0.2s; gap: 0.5rem; }
         .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
@@ -67,7 +68,7 @@
         .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; }
         .message { text-align: center; padding: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem; color: #db2777; }
         
-        @media (max-width: 760px) { .hero-title { font-size: 2.5rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } .streak-container { margin-top: 10px; } }
+        @media (max-width: 760px) { .hero-title { font-size: 2.5rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -85,7 +86,7 @@
             <div id="streakWidget"></div>
             <div id="userDisplay" class="user-info" style="display: none;">
                 <span>👤 <span id="currentUserLogin"></span></span>
-                <button id="adminBtn" class="admin-link" style="background:none; border:none; color:#ec489a; cursor:pointer; font-weight:600; display:none;">👑 Админ</button>
+                <button id="adminBtn" class="admin-link" style="display:none;">👑 Админ</button>
                 <button id="logoutBtn" class="logout-btn">Выйти</button>
             </div>
         </div>
@@ -195,11 +196,10 @@
         <div class="close-modal" id="closePolicyModal">&times;</div>
         <h3>📋 Политика конфиденциальности</h3>
         <div style="font-size: 0.85rem; max-height: 400px; overflow-y: auto; text-align: left;">
-            <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта УКоннект.</strong></p>
-            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Хэш пароля. После входа мы также храним: Аватар, Описание профиля, Баннер, Список друзей и Шифрованные сообщения.</p>
-            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля, обеспечения связи между друзьями и поиска пользователей.</p>
-            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS). Сообщения шифруются.</p>
-            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент через настройки профиля.</p>
+            <p><strong>1. Сбор данных</strong><br>Имя, Фамилия, Email, Телефон, Хэш пароля.</p>
+            <p><strong>2. Использование данных</strong><br>Для авторизации и работы сервиса.</p>
+            <p><strong>3. Защита данных</strong><br>Пароли в виде хэша. HTTPS протокол.</p>
+            <p><strong>4. Права пользователя</strong><br>Вы можете запросить удаление аккаунта.</p>
         </div>
         <button class="btn" id="closePolicyBtn" style="margin-top: 1rem;">Закрыть</button>
     </div>
@@ -225,54 +225,29 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     
-    // ===== СЕРИЯ МЫСЛЯП =====
+    // ===== МЫСЛЯП =====
     function updateStreak() {
         const today = new Date().toDateString();
-        let streakData = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
-        let currentStreak = streakData.streak || 0;
-        let lastVisit = streakData.lastVisit;
-        
-        if (lastVisit === today) {
-            // уже сегодня заходили
-        } else if (lastVisit) {
-            const lastDate = new Date(lastVisit);
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (lastDate.toDateString() === yesterday.toDateString()) {
-                currentStreak++;
-            } else {
-                currentStreak = 1;
-            }
-        } else {
-            currentStreak = 1;
-        }
-        
-        localStorage.setItem('streakWeasel', JSON.stringify({ streak: currentStreak, lastVisit: today }));
-        return currentStreak;
+        let data = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
+        let streak = data.streak;
+        if (data.lastVisit === today) {}
+        else if (data.lastVisit) {
+            const lastDate = new Date(data.lastVisit);
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+            if (lastDate.toDateString() === yesterday.toDateString()) streak++;
+            else streak = 1;
+        } else streak = 1;
+        localStorage.setItem('streakWeasel', JSON.stringify({ streak, lastVisit: today }));
+        return streak;
     }
     
     function displayStreak() {
         const streak = updateStreak();
         const container = document.getElementById('streakWidget');
         if (!container) return;
-        
-        let message = '';
-        if (streak === 1) message = '🔥 Первый день Мысляпа!';
-        else if (streak < 3) message = '🧠 Мысляп растёт!';
-        else if (streak < 7) message = '✨ Крепнет дисциплина!';
-        else message = `🏆 Серия Мысляп ${streak} дней!`;
-        
-        container.innerHTML = `
-            <div class="streak-container">
-                <div class="streak-emoji">🧠✨</div>
-                <div class="streak-info">
-                    <div><span class="streak-days">${streak}</span> <span class="streak-label">дней подряд</span> <span class="streak-flame">🔥</span></div>
-                    <div class="streak-message">${message}</div>
-                </div>
-            </div>
-        `;
+        let msg = streak === 1 ? 'Первый день Мысляпа!' : (streak < 3 ? 'Мысляп растёт!' : (streak < 7 ? 'Крепнет дисциплина!' : `Серия ${streak} дней!`));
+        container.innerHTML = `<div class="streak-widget"><span class="streak-emoji">🧠✨</span><div><span class="streak-days">${streak}</span> <span class="streak-label">дней подряд</span> <span class="streak-flame">🔥</span><div class="streak-message">${msg}</div></div></div>`;
     }
-    
     displayStreak();
     
     // ===== АВТОРИЗАЦИЯ =====
@@ -280,133 +255,99 @@
     
     function updateUI() {
         const userDisplay = document.getElementById('userDisplay');
-        const currentUserLoginSpan = document.getElementById('currentUserLogin');
-        const authButtons = document.getElementById('authButtons');
+        const loginSpan = document.getElementById('currentUserLogin');
+        const authBtns = document.getElementById('authButtons');
         const adminBtn = document.getElementById('adminBtn');
-        
         if (currentUserEmail && userDisplay) {
-            currentUserLoginSpan.textContent = currentUserEmail.split('@')[0];
+            loginSpan.textContent = currentUserEmail.split('@')[0];
             userDisplay.style.display = 'flex';
-            if (authButtons) authButtons.style.display = 'none';
+            if (authBtns) authBtns.style.display = 'none';
             if (adminBtn && currentUserEmail === 'admin@systemcontrol.com') adminBtn.style.display = 'inline-block';
         } else if (userDisplay) {
             userDisplay.style.display = 'none';
-            if (authButtons) authButtons.style.display = 'flex';
+            if (authBtns) authBtns.style.display = 'flex';
             if (adminBtn) adminBtn.style.display = 'none';
         }
     }
     
-    // Модалки
     const loginModal = document.getElementById('loginModal');
     const registerModal = document.getElementById('registerModal');
     const policyModal = document.getElementById('policyModal');
     const adminPanel = document.getElementById('adminPanel');
     
-    function openLoginModal() { loginModal.classList.add('active'); }
-    function openRegisterModal() { registerModal.classList.add('active'); }
-    function closeModals() { 
-        loginModal.classList.remove('active'); 
-        registerModal.classList.remove('active');
-        policyModal.classList.remove('active');
-        adminPanel.classList.remove('active');
-    }
+    function openLogin() { loginModal.classList.add('active'); }
+    function openRegister() { registerModal.classList.add('active'); }
+    function closeModals() { loginModal.classList.remove('active'); registerModal.classList.remove('active'); policyModal.classList.remove('active'); adminPanel.classList.remove('active'); }
     
-    document.getElementById('headerLoginBtn').onclick = openLoginModal;
-    document.getElementById('headerRegisterBtn').onclick = openRegisterModal;
-    document.getElementById('testRegisterBtn').onclick = openRegisterModal;
-    document.getElementById('switchToRegisterModal').onclick = () => { closeModals(); openRegisterModal(); };
-    document.getElementById('switchToLoginModal').onclick = () => { closeModals(); openLoginModal(); };
+    document.getElementById('headerLoginBtn').onclick = openLogin;
+    document.getElementById('headerRegisterBtn').onclick = openRegister;
+    document.getElementById('testRegisterBtn').onclick = openRegister;
+    document.getElementById('switchToRegisterModal').onclick = () => { closeModals(); openRegister(); };
+    document.getElementById('switchToLoginModal').onclick = () => { closeModals(); openLogin(); };
     document.getElementById('showPolicyLink').onclick = () => policyModal.classList.add('active');
     document.getElementById('closeLoginModal').onclick = closeModals;
     document.getElementById('closeRegisterModal').onclick = closeModals;
     document.getElementById('closePolicyModal').onclick = () => policyModal.classList.remove('active');
     document.getElementById('closePolicyBtn').onclick = () => policyModal.classList.remove('active');
     document.getElementById('closeAdminPanel').onclick = () => adminPanel.classList.remove('active');
-    
     loginModal.onclick = (e) => { if (e.target === loginModal) closeModals(); };
     registerModal.onclick = (e) => { if (e.target === registerModal) closeModals(); };
     policyModal.onclick = (e) => { if (e.target === policyModal) policyModal.classList.remove('active'); };
     adminPanel.onclick = (e) => { if (e.target === adminPanel) adminPanel.classList.remove('active'); };
     
-    // Выход
-    document.getElementById('logoutBtn').onclick = () => { 
-        localStorage.removeItem('currentUserEmail'); 
-        window.location.href = '/'; 
-    };
+    document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('currentUserEmail'); location.href = '/'; };
     
-    // Админ панель
     document.getElementById('adminBtn').onclick = async () => {
         if (currentUserEmail !== 'admin@systemcontrol.com') return;
         const { data } = await supabase.from('users').select('*');
         const tbody = document.getElementById('adminTableBody');
         tbody.innerHTML = '';
-        if (data) {
-            data.forEach(user => {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = user.name || '—';
-                row.insertCell(1).textContent = user.surname || '—';
-                row.insertCell(2).textContent = user.email;
-                row.insertCell(3).textContent = user.phone || '—';
-            });
-        }
+        if (data) data.forEach(u => { const r = tbody.insertRow(); r.insertCell(0).textContent = u.name || '—'; r.insertCell(1).textContent = u.surname || '—'; r.insertCell(2).textContent = u.email; r.insertCell(3).textContent = u.phone || '—'; });
         adminPanel.classList.add('active');
     };
     
-    // Регистрация
     async function registerUser() {
-        const name = document.getElementById('regName')?.value.trim();
-        const surname = document.getElementById('regSurname')?.value.trim();
-        const email = document.getElementById('regEmail')?.value.trim();
-        const phone = document.getElementById('regPhone')?.value.trim();
-        const password = document.getElementById('regPassword')?.value;
-        const confirm = document.getElementById('regPasswordConfirm')?.value;
-        const agree = document.getElementById('regAgree')?.checked;
-        const msgDiv = document.getElementById('registerMessage');
-        
-        if (!name || !surname || !email || !phone || !password) { msgDiv.innerText = '❌ Заполните все поля'; return; }
-        if (password !== confirm) { msgDiv.innerText = '❌ Пароли не совпадают'; return; }
-        if (password.length < 4) { msgDiv.innerText = '❌ Пароль минимум 4 символа'; return; }
-        if (!agree) { msgDiv.innerText = '❌ Примите политику'; return; }
-        
-        const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-        if (existing && existing.length > 0) { msgDiv.innerText = '❌ Email уже зарегистрирован'; return; }
-        
-        const { error } = await supabase.from('users').insert([{ email, name, surname, phone, password, nickname: name }]);
-        if (error) { msgDiv.innerText = '❌ ' + error.message; return; }
-        
-        msgDiv.innerText = '✅ Регистрация успешна! Теперь войдите.';
-        setTimeout(() => { closeModals(); openLoginModal(); }, 1500);
+        const name = document.getElementById('regName').value.trim();
+        const surname = document.getElementById('regSurname').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass = document.getElementById('regPassword').value;
+        const confirm = document.getElementById('regPasswordConfirm').value;
+        const agree = document.getElementById('regAgree').checked;
+        const msg = document.getElementById('registerMessage');
+        if (!name || !surname || !email || !phone || !pass) { msg.innerText = '❌ Заполните все поля'; return; }
+        if (pass !== confirm) { msg.innerText = '❌ Пароли не совпадают'; return; }
+        if (pass.length < 4) { msg.innerText = '❌ Пароль минимум 4 символа'; return; }
+        if (!agree) { msg.innerText = '❌ Примите политику'; return; }
+        const { data: exist } = await supabase.from('users').select('email').eq('email', email);
+        if (exist && exist.length) { msg.innerText = '❌ Email уже зарегистрирован'; return; }
+        const { error } = await supabase.from('users').insert([{ email, name, surname, phone, password: pass, nickname: name }]);
+        if (error) { msg.innerText = '❌ ' + error.message; return; }
+        msg.innerText = '✅ Регистрация успешна! Войдите.';
+        setTimeout(() => { closeModals(); openLogin(); }, 1500);
     }
     
-    // Вход
     async function loginUser() {
-        const email = document.getElementById('loginEmail')?.value.trim();
-        const password = document.getElementById('loginPassword')?.value;
-        const msgDiv = document.getElementById('loginMessage');
-        
-        if (!email || !password) { msgDiv.innerText = '❌ Заполните поля'; return; }
-        
-        const { data } = await supabase.from('users').select('email').eq('email', email).eq('password', password);
-        if (!data || data.length === 0) { msgDiv.innerText = '❌ Неверный email или пароль'; return; }
-        
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMessage');
+        if (!email || !pass) { msg.innerText = '❌ Заполните поля'; return; }
+        const { data } = await supabase.from('users').select('email').eq('email', email).eq('password', pass);
+        if (!data || !data.length) { msg.innerText = '❌ Неверный email или пароль'; return; }
         currentUserEmail = email;
         localStorage.setItem('currentUserEmail', currentUserEmail);
         updateUI();
-        msgDiv.innerText = '✅ Вход выполнен!';
-        setTimeout(() => { closeModals(); window.location.href = '/'; }, 1000);
+        msg.innerText = '✅ Вход выполнен!';
+        setTimeout(() => { closeModals(); location.href = '/'; }, 1000);
     }
     
     document.getElementById('submitRegisterBtn').onclick = registerUser;
     document.getElementById('submitLoginBtn').onclick = loginUser;
-    
     updateUI();
     
-    // Создание админа
     async function ensureAdmin() {
         const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
-        if (!data || data.length === 0) {
-            await supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', password: 'admin123', nickname: 'Администратор' }]);
-        }
+        if (!data || !data.length) await supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', password: 'admin123', nickname: 'Администратор' }]);
     }
     ensureAdmin();
 </script>
