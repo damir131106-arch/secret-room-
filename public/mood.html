@@ -2,126 +2,128 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Системный контроль — Дневник мыслей</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник мыслей</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(244,114,182,0.3); margin-bottom: 2rem; }
-        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 4px; }
-        .logo-emoji { font-size: 1.8rem; color: #ec489a; }
-        .logo-text { background: linear-gradient(135deg, #db2777, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
-        .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); padding: 0.3rem 1rem; border-radius: 40px; }
-        .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.8); }
-        .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
-        
-        .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.7rem 1.5rem; font-weight: 600; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
-        
-        h1 { text-align: center; font-size: 2rem; margin: 1rem 0; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .mood-journal { background: white; border-radius: 32px; padding: 1.5rem; margin: 1rem 0; border: 1px solid #f472b6; }
-        .emoji-panel { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; flex-wrap: wrap; }
-        .mood-btn { font-size: 2rem; background: white; border: 2px solid #f472b6; cursor: pointer; border-radius: 60px; padding: 0.5rem; transition: 0.1s; box-shadow: 0 2px 8px rgba(236,72,154,0.2); }
-        .mood-btn:hover { transform: scale(1.05); background: #fce7f3; }
-        .mood-history { background: #fef2f8; border-radius: 20px; padding: 1rem; max-height: 400px; overflow-y: auto; }
-        .mood-entry { display: flex; align-items: center; gap: 0.8rem; border-bottom: 1px solid #fbcfe8; padding: 0.4rem 0; font-size: 0.85rem; }
-        .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
-        footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
-        @media (max-width: 760px) { .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
+        body { font-family: system-ui; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 32px; padding: 25px; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { text-decoration: none; color: #c2417c; background: rgba(255,255,255,0.7); padding: 5px 15px; border-radius: 40px; }
+        .btn { background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 10px 20px; border-radius: 60px; cursor: pointer; }
+        h1 { text-align: center; margin-bottom: 20px; color: #c2417c; }
+        .emoji-panel { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .mood-btn { font-size: 2rem; background: white; border: 2px solid #f472b6; border-radius: 60px; padding: 10px; cursor: pointer; }
+        .mood-history { background: #fef2f8; border-radius: 20px; padding: 15px; margin-top: 20px; max-height: 300px; overflow-y: auto; }
+        .mood-entry { border-bottom: 1px solid #fbcfe8; padding: 8px 0; }
+        .creator-section { text-align: center; margin-top: 30px; padding: 15px; background: #ffe0ef; border-radius: 40px; }
+        input { width: 100%; padding: 12px; border-radius: 60px; border: 1px solid #fbcfe8; margin: 10px 0; }
+        .user-info { background: #fff0f7; padding: 5px 15px; border-radius: 40px; display: inline-flex; align-items: center; gap: 10px; }
+        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<nav class="container">
+<div class="container">
     <div class="navbar">
-        <div class="logo"><span class="logo-emoji">🌸</span><span class="logo-text">СИСТЕМНЫЙ КОНТРОЛЬ</span></div>
+        <div class="logo">🌸 СИСТЕМНЫЙ КОНТРОЛЬ</div>
         <div class="nav-links">
-            <a href="/">🏠 Главная</a>
-            <a href="/mood.html">📔 Дневник</a>
-            <a href="/chat.html">🎙️ LIVE-комнаты</a>
-            <a href="/team.html">🕶️ Команда</a>
+            <a href="/">Главная</a>
+            <a href="/mood.html">Дневник</a>
+            <a href="/chat.html">LIVE-комнаты</a>
+            <a href="/team.html">Команда</a>
         </div>
-        <div id="userDisplay" class="user-info" style="display: none;">
-            <span>👤 <span id="currentUserLogin"></span></span>
-            <button id="logoutBtn" class="logout-btn">Выйти</button>
-        </div>
+        <div id="userInfo"></div>
     </div>
-</nav>
 
-<main class="container">
-    <h1>📔 Дневник мыслей и настроения</h1>
-    <div class="mood-journal">
-        <div class="emoji-panel">
-            <button class="mood-btn" data-mood="😞 Плохо">😞</button>
-            <button class="mood-btn" data-mood="😐 Нормально">😐</button>
-            <button class="mood-btn" data-mood="🙂 Хорошо">🙂</button>
-            <button class="mood-btn" data-mood="😄 Весело">😄</button>
-            <button class="mood-btn" data-mood="🔥 Супер">🔥</button>
-        </div>
-        <input type="text" id="thoughtInput" placeholder="Что у тебя на уме? (заметка)" style="width:100%; padding:0.7rem; border-radius:60px; border:1px solid #fbcfe8; margin:0.5rem 0;">
-        <button id="saveThoughtBtn" class="btn" style="width:100%;">➕ Добавить запись</button>
-        <h3 style="margin-top:1.5rem;">📜 История настроений</h3>
-        <div class="mood-history" id="moodHistoryList"><div class="mood-entry">📭 Нет записей — добавь своё первое настроение!</div></div>
+    <h1>📔 Дневник мыслей</h1>
+    
+    <div class="emoji-panel">
+        <button class="mood-btn" data-mood="😞">😞</button>
+        <button class="mood-btn" data-mood="😐">😐</button>
+        <button class="mood-btn" data-mood="🙂">🙂</button>
+        <button class="mood-btn" data-mood="😄">😄</button>
+        <button class="mood-btn" data-mood="🔥">🔥</button>
     </div>
-</main>
+    
+    <input type="text" id="thoughtInput" placeholder="Что у тебя на уме?">
+    <button id="saveBtn" class="btn" style="width:100%;">➕ Добавить запись</button>
+    
+    <h3 style="margin-top:20px;">📜 История</h3>
+    <div class="mood-history" id="history"></div>
+</div>
 
-<div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
-<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
+<div class="container" style="margin-top:20px;"><div class="creator-section">🕶️ Создатели: «SECRET ROOM SQUAD»</div></div>
 
 <script>
-    const currentUserEmail = localStorage.getItem('currentUserEmailSupabase');
-    const userDisplay = document.getElementById('userDisplay');
-    const currentUserLoginSpan = document.getElementById('currentUserLogin');
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (currentUserEmail && userDisplay) {
-        currentUserLoginSpan.textContent = currentUserEmail.split('@')[0];
-        userDisplay.style.display = 'flex';
-    }
-    if (logoutBtn) logoutBtn.onclick = () => { localStorage.removeItem('currentUserEmailSupabase'); window.location.href = '/'; };
+    // Получаем email пользователя из localStorage
+    const currentUser = localStorage.getItem('currentUserEmail');
+    const userInfoDiv = document.getElementById('userInfo');
     
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-    
-    let moodEntries = JSON.parse(localStorage.getItem('moodJournalEntries')) || [];
-    const moodHistoryDiv = document.getElementById('moodHistoryList'), thoughtInput = document.getElementById('thoughtInput');
-    
-    function renderMoodHistory() {
-        if(!moodHistoryDiv) return;
-        if(moodEntries.length === 0) { moodHistoryDiv.innerHTML = '<div class="mood-entry">📭 Нет записей</div>'; return; }
-        moodHistoryDiv.innerHTML = '';
-        moodEntries.slice(0,20).forEach(entry => {
-            const div = document.createElement('div'); div.className = 'mood-entry';
-            div.innerHTML = `<span style="font-weight:500;">${entry.time}</span> <span style="font-size:1.2rem;">${entry.mood.split(' ')[0]}</span> <span>${entry.mood}</span> — <strong>${escapeHtml(entry.authorNick || entry.author || "Пользователь")}</strong>: ${escapeHtml(entry.note.substring(0,50))}`;
-            moodHistoryDiv.appendChild(div);
+    // Проверка авторизации
+    if (!currentUser) {
+        userInfoDiv.innerHTML = '<a href="/" style="color:#ec489a;">Войти</a>';
+        alert('Сначала войдите в аккаунт!');
+        window.location.href = '/';
+    } else {
+        userInfoDiv.innerHTML = `
+            <div class="user-info">
+                👤 ${currentUser.split('@')[0]}
+                <button id="logoutBtn" class="logout-btn">Выйти</button>
+            </div>
+        `;
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = '/';
         });
     }
     
-    function addMoodEntry(moodText, thought) {
-        const now = new Date(), timeStr = `${now.toLocaleDateString()} ${now.toLocaleTimeString().slice(0,5)}`;
-        const authorNick = currentUserEmail ? currentUserEmail.split('@')[0] : "Гость";
-        moodEntries.unshift({ time: timeStr, mood: moodText, note: thought || "—", author: currentUserEmail, authorNick: authorNick });
-        if(moodEntries.length > 30) moodEntries.pop();
-        localStorage.setItem('moodJournalEntries', JSON.stringify(moodEntries));
-        renderMoodHistory();
+    // Дневник
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]); }
+    
+    let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
+    const historyDiv = document.getElementById('history');
+    const thoughtInput = document.getElementById('thoughtInput');
+    
+    function render() {
+        historyDiv.innerHTML = '';
+        if (entries.length === 0) {
+            historyDiv.innerHTML = '<div class="mood-entry">📭 Нет записей</div>';
+            return;
+        }
+        entries.slice(0, 20).forEach(e => {
+            const div = document.createElement('div');
+            div.className = 'mood-entry';
+            div.innerHTML = `<strong>${e.time}</strong> ${e.mood} — ${escapeHtml(e.text || '—')}`;
+            historyDiv.appendChild(div);
+        });
     }
     
     document.querySelectorAll('.mood-btn').forEach(btn => {
         btn.onclick = () => {
-            if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; }
-            addMoodEntry(btn.getAttribute('data-mood') || btn.innerText, thoughtInput.value.trim());
+            const mood = btn.getAttribute('data-mood');
+            const text = thoughtInput.value.trim();
+            const time = new Date().toLocaleString();
+            entries.unshift({ time, mood, text: text || '—' });
+            if (entries.length > 30) entries.pop();
+            localStorage.setItem('moodEntries', JSON.stringify(entries));
+            render();
             thoughtInput.value = '';
         };
     });
-    document.getElementById('saveThoughtBtn').onclick = () => {
-        if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; }
-        if(!thoughtInput.value.trim()) { alert("Напиши мысль"); return; }
-        addMoodEntry("📝 Заметка", thoughtInput.value);
+    
+    document.getElementById('saveBtn').onclick = () => {
+        const text = thoughtInput.value.trim();
+        if (!text) { alert('Напиши мысль'); return; }
+        const time = new Date().toLocaleString();
+        entries.unshift({ time, mood: '📝', text });
+        if (entries.length > 30) entries.pop();
+        localStorage.setItem('moodEntries', JSON.stringify(entries));
+        render();
         thoughtInput.value = '';
     };
-    renderMoodHistory();
+    
+    render();
 </script>
 </body>
 </html>
