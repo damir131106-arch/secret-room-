@@ -193,19 +193,15 @@
 </div>
 
 <script>
-    // Инициализация Supabase (ТОЛЬКО ОДИН РАЗ!)
+    // ========== ИНИЦИАЛИЗАЦИЯ SUPABASE (ТОЛЬКО ОДИН РАЗ) ==========
     const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // Ждём загрузки страницы
+    // ========== ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ ==========
     window.addEventListener('DOMContentLoaded', function() {
-        console.log('Страница загружена');
-        
-        // Текущий пользователь
         let currentUserEmail = localStorage.getItem('currentUserEmailSupabase') || null;
         
-        // Функция обновления интерфейса
         function updateUI() {
             const userDisplay = document.getElementById('userDisplay');
             const currentUserLoginSpan = document.getElementById('currentUserLogin');
@@ -255,7 +251,7 @@
             window.location.href = '/'; 
         };
         
-        // Функция регистрации
+        // Регистрация
         async function registerUser() {
             const name = document.getElementById('regName').value.trim();
             const surname = document.getElementById('regSurname').value.trim();
@@ -284,47 +280,26 @@
                 return;
             }
             
-            // Проверка существующего пользователя
-            const { data: existing } = await supabase
-                .from('users')
-                .select('email')
-                .eq('email', email);
-            
+            const { data: existing } = await supabase.from('users').select('email').eq('email', email);
             if (existing && existing.length > 0) {
                 msgDiv.innerHTML = '❌ Email уже зарегистрирован';
                 return;
             }
             
-            // Создание пользователя
-            const { error } = await supabase
-                .from('users')
-                .insert([{ 
-                    email: email,
-                    name: name,
-                    surname: surname,
-                    phone: phone,
-                    birthdate: birthdate || null,
-                    password: password,
-                    nickname: name,
-                    avatar: null
-                }]);
+            const { error } = await supabase.from('users').insert([{ 
+                email, name, surname, phone, birthdate: birthdate || null, password, nickname: name, avatar: null 
+            }]);
             
             if (error) {
-                console.error('Ошибка регистрации:', error);
-                msgDiv.innerHTML = '❌ Ошибка регистрации: ' + error.message;
+                msgDiv.innerHTML = '❌ Ошибка: ' + error.message;
                 return;
             }
             
             msgDiv.innerHTML = '✅ Регистрация успешна! Теперь войдите.';
-            setTimeout(() => { 
-                closeModals(); 
-                openLoginModal();
-                document.getElementById('loginMessage').innerHTML = '';
-                document.getElementById('loginEmail').value = email;
-            }, 1500);
+            setTimeout(() => { closeModals(); openLoginModal(); document.getElementById('loginMessage').innerHTML = ''; document.getElementById('loginEmail').value = email; }, 1500);
         }
         
-        // Функция входа
+        // Вход
         async function loginUser() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
@@ -335,17 +310,7 @@
                 return;
             }
             
-            // Поиск пользователя
-            const { data, error } = await supabase
-                .from('users')
-                .select('email')
-                .eq('email', email)
-                .eq('password', password);
-            
-            if (error) {
-                msgDiv.innerHTML = '❌ Ошибка: ' + error.message;
-                return;
-            }
+            const { data } = await supabase.from('users').select('email').eq('email', email).eq('password', password);
             
             if (!data || data.length === 0) {
                 msgDiv.innerHTML = '❌ Неверный email или пароль';
@@ -356,17 +321,13 @@
             localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
             updateUI();
             msgDiv.innerHTML = '✅ Вход выполнен! Добро пожаловать.';
-            setTimeout(() => { 
-                closeModals(); 
-                window.location.href = '/'; 
-            }, 1000);
+            setTimeout(() => { closeModals(); window.location.href = '/'; }, 1000);
         }
         
-        // Назначение обработчиков кнопок
+        // Назначение обработчиков
         document.getElementById('submitRegisterBtn').onclick = registerUser;
         document.getElementById('submitLoginBtn').onclick = loginUser;
         
-        // Обновление интерфейса
         updateUI();
     });
 </script>
