@@ -93,6 +93,7 @@
             <a href="/">Главная</a>
             <a href="/mood.html">Дневник</a>
             <a href="/chat.html">LIVE-комнаты</a>
+            <a href="/team.html">Команда</a>
         </div>
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
@@ -194,7 +195,7 @@
     <div class="container section" id="test"><div class="test-panel"><h3>🧪 Пилотное тестирование</h3><p>Ищем 20 студентов УВШЭУ УГНТУ.</p><div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;"><a href="#" id="fakeSubmitBtn" class="btn" style="background:#FFE7C7;color:#db2777;">✉️ Записаться</a><span>*до 9 мая</span></div><div id="testMessage" style="margin-top:1rem;"></div></div></div>
 </main>
 
-<div class="container" style="margin-bottom:2rem;"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиулин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
+<div class="container" style="margin-bottom:2rem;"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
 <footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
 <script>
@@ -442,7 +443,7 @@
             if (!usersTableBody) return;
             const { data, error } = await supabase.from('users').select('*');
             if (error) {
-                usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</tr>';
+                usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</td>';
                 return;
             }
             usersTableBody.innerHTML = '';
