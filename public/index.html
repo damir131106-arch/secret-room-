@@ -19,14 +19,10 @@
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.7); padding: 0.3rem 1rem; border-radius: 40px; }
         .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.9); }
         
-        /* Мысляп-виджет */
-        .streak-widget { background: linear-gradient(135deg, #fff0f7, #ffe4f0); border-radius: 60px; padding: 5px 18px; border: 1px solid #f472b6; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(236,72,154,0.15); }
-        .streak-emoji { font-size: 1.6rem; }
-        .streak-days { font-size: 1.4rem; font-weight: 800; color: #db2777; line-height: 1; }
-        .streak-label { font-size: 0.7rem; color: #c2417c; font-weight: 600; }
-        .streak-message { font-size: 0.65rem; color: #1e5e7e; }
+        .streak-widget { background: linear-gradient(135deg, #fff0f7, #ffe4f0); border-radius: 60px; padding: 5px 18px; border: 1px solid #f472b6; display: inline-flex; align-items: center; gap: 10px; }
+        .streak-days { font-size: 1.4rem; font-weight: 800; color: #db2777; }
+        .streak-flame { animation: flameAnim 0.8s infinite; display: inline-block; }
         @keyframes flameAnim { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .streak-flame { display: inline-block; animation: flameAnim 0.8s infinite ease-in-out; }
         
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
         .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
@@ -99,12 +95,10 @@
             <div style="background:#ffe4f0; color:#c2417c; padding:0.3rem 0.9rem; border-radius:40px; font-size:0.8rem; display:inline-block; margin-bottom:1rem;">⚡ УВШЭУ УГНТУ — решение изнутри</div>
             <h1 class="hero-title">СИСТЕМНЫЙ КОНТРОЛЬ</h1>
             <p class="hero-subtitle">Не просто планер. Система внешней организации для первокурсника.</p>
-            
             <div class="auth-buttons" id="authButtons">
                 <button id="headerLoginBtn" class="btn">🚪 Войти</button>
                 <button id="headerRegisterBtn" class="btn btn-outline">📝 Регистрация</button>
             </div>
-            
             <div class="hero-stats">
                 <div class="stat"><span>20+</span> студентов в тесте</div>
                 <div class="stat"><span>5</span> принципов</div>
@@ -201,29 +195,27 @@
             <p><strong>3. Защита данных</strong><br>Пароли в виде хэша. HTTPS протокол.</p>
             <p><strong>4. Права пользователя</strong><br>Вы можете запросить удаление аккаунта.</p>
         </div>
-        <button class="btn" id="closePolicyBtn" style="margin-top: 1rem;">Закрыть</button>
+        <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
     </div>
 </div>
 
 <!-- Админ панель -->
 <div id="adminPanel" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
+    <div class="modal-content" style="max-width:800px;">
         <div class="close-modal" id="closeAdminPanel">&times;</div>
         <h3>👑 Панель администратора</h3>
-        <div style="overflow-x: auto;">
-            <table style="width:100%; border-collapse: collapse;">
-                <thead><tr style="background:#fce7f3;"><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th></tr></thead>
-                <tbody id="adminTableBody"></tbody>
-            </table>
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#fce7f3;"><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th></tr></thead><tbody id="adminTableBody"></tbody></table>
         </div>
     </div>
 </div>
 
 <script>
-    // ===== SUPABASE =====
-    const supabaseUrl = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // ===== SUPABASE (ТОЛЬКО ОДИН РАЗ) =====
+    const _supabase = window.supabase.createClient(
+        'https://bajfklvkwzvsiuwbpzdy.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE'
+    );
     
     // ===== МЫСЛЯП =====
     function updateStreak() {
@@ -246,7 +238,7 @@
         const container = document.getElementById('streakWidget');
         if (!container) return;
         let msg = streak === 1 ? 'Первый день Мысляпа!' : (streak < 3 ? 'Мысляп растёт!' : (streak < 7 ? 'Крепнет дисциплина!' : `Серия ${streak} дней!`));
-        container.innerHTML = `<div class="streak-widget"><span class="streak-emoji">🧠✨</span><div><span class="streak-days">${streak}</span> <span class="streak-label">дней подряд</span> <span class="streak-flame">🔥</span><div class="streak-message">${msg}</div></div></div>`;
+        container.innerHTML = `<div class="streak-widget"><span>🧠✨</span><div><span class="streak-days">${streak}</span> <span style="font-size:0.7rem;">дней подряд</span> <span class="streak-flame">🔥</span><div style="font-size:0.65rem;">${msg}</div></div></div>`;
     }
     displayStreak();
     
@@ -277,7 +269,12 @@
     
     function openLogin() { loginModal.classList.add('active'); }
     function openRegister() { registerModal.classList.add('active'); }
-    function closeModals() { loginModal.classList.remove('active'); registerModal.classList.remove('active'); policyModal.classList.remove('active'); adminPanel.classList.remove('active'); }
+    function closeModals() { 
+        loginModal.classList.remove('active'); 
+        registerModal.classList.remove('active'); 
+        policyModal.classList.remove('active'); 
+        adminPanel.classList.remove('active'); 
+    }
     
     document.getElementById('headerLoginBtn').onclick = openLogin;
     document.getElementById('headerRegisterBtn').onclick = openRegister;
@@ -299,7 +296,7 @@
     
     document.getElementById('adminBtn').onclick = async () => {
         if (currentUserEmail !== 'admin@systemcontrol.com') return;
-        const { data } = await supabase.from('users').select('*');
+        const { data } = await _supabase.from('users').select('*');
         const tbody = document.getElementById('adminTableBody');
         tbody.innerHTML = '';
         if (data) data.forEach(u => { const r = tbody.insertRow(); r.insertCell(0).textContent = u.name || '—'; r.insertCell(1).textContent = u.surname || '—'; r.insertCell(2).textContent = u.email; r.insertCell(3).textContent = u.phone || '—'; });
@@ -319,9 +316,9 @@
         if (pass !== confirm) { msg.innerText = '❌ Пароли не совпадают'; return; }
         if (pass.length < 4) { msg.innerText = '❌ Пароль минимум 4 символа'; return; }
         if (!agree) { msg.innerText = '❌ Примите политику'; return; }
-        const { data: exist } = await supabase.from('users').select('email').eq('email', email);
+        const { data: exist } = await _supabase.from('users').select('email').eq('email', email);
         if (exist && exist.length) { msg.innerText = '❌ Email уже зарегистрирован'; return; }
-        const { error } = await supabase.from('users').insert([{ email, name, surname, phone, password: pass, nickname: name }]);
+        const { error } = await _supabase.from('users').insert([{ email, name, surname, phone, password: pass, nickname: name }]);
         if (error) { msg.innerText = '❌ ' + error.message; return; }
         msg.innerText = '✅ Регистрация успешна! Войдите.';
         setTimeout(() => { closeModals(); openLogin(); }, 1500);
@@ -332,7 +329,7 @@
         const pass = document.getElementById('loginPassword').value;
         const msg = document.getElementById('loginMessage');
         if (!email || !pass) { msg.innerText = '❌ Заполните поля'; return; }
-        const { data } = await supabase.from('users').select('email').eq('email', email).eq('password', pass);
+        const { data } = await _supabase.from('users').select('email').eq('email', email).eq('password', pass);
         if (!data || !data.length) { msg.innerText = '❌ Неверный email или пароль'; return; }
         currentUserEmail = email;
         localStorage.setItem('currentUserEmail', currentUserEmail);
@@ -346,8 +343,8 @@
     updateUI();
     
     async function ensureAdmin() {
-        const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
-        if (!data || !data.length) await supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', password: 'admin123', nickname: 'Администратор' }]);
+        const { data } = await _supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
+        if (!data || !data.length) await _supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', password: 'admin123', nickname: 'Администратор' }]);
     }
     ensureAdmin();
 </script>
