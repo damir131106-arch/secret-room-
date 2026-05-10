@@ -19,7 +19,7 @@
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.7); padding: 0.3rem 1rem; border-radius: 40px; }
         .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.9); }
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
         
         .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.7rem 1.5rem; font-weight: 600; font-size: 0.9rem; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
         .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
@@ -163,7 +163,7 @@
         <h3>📝 Регистрация</h3>
         <div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div>
         <div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div>
-        <input type="date" id="regBirthdate" placeholder="Дата рождения">
+        <input type="date" id="regBirthdate" placeholder="Дата рождения (необязательно)">
         <input type="password" id="regPassword" placeholder="Пароль *">
         <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
         <div class="checkbox-row">
@@ -176,7 +176,7 @@
     </div>
 </div>
 
-<!-- Модальное окно политики конфиденциальности -->
+<!-- Модальное окно политики -->
 <div id="policyModal" class="modal">
     <div class="modal-content" style="max-width: 550px;">
         <div class="close-modal" id="closePolicyModal">&times;</div>
@@ -193,38 +193,50 @@
 </div>
 
 <script>
+    // Инициализация Supabase (ТОЛЬКО ОДИН РАЗ!)
     const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    document.addEventListener('DOMContentLoaded', function() {
+    // Ждём загрузки страницы
+    window.addEventListener('DOMContentLoaded', function() {
+        console.log('Страница загружена');
+        
+        // Текущий пользователь
         let currentUserEmail = localStorage.getItem('currentUserEmailSupabase') || null;
         
-        function getUserNickname(email) { return email ? email.split('@')[0] : "Гость"; }
-        
+        // Функция обновления интерфейса
         function updateUI() {
             const userDisplay = document.getElementById('userDisplay');
             const currentUserLoginSpan = document.getElementById('currentUserLogin');
             if (currentUserEmail && userDisplay) {
-                currentUserLoginSpan.textContent = getUserNickname(currentUserEmail);
+                currentUserLoginSpan.textContent = currentUserEmail.split('@')[0];
                 userDisplay.style.display = 'flex';
             } else if (userDisplay) {
                 userDisplay.style.display = 'none';
             }
         }
         
-        // Модальные окна
+        // Элементы модалок
         const loginModal = document.getElementById('loginModal');
         const registerModal = document.getElementById('registerModal');
         const policyModal = document.getElementById('policyModal');
         
+        // Функции открытия/закрытия
         function openLoginModal() { loginModal.classList.add('active'); }
         function openRegisterModal() { registerModal.classList.add('active'); }
         function closeModals() { 
             loginModal.classList.remove('active'); 
             registerModal.classList.remove('active');
-            policyModal.classList.remove('active');
         }
+        
+        // Кнопки открытия
+        document.getElementById('headerLoginBtn').onclick = openLoginModal;
+        document.getElementById('headerRegisterBtn').onclick = openRegisterModal;
+        document.getElementById('testRegisterBtn').onclick = openRegisterModal;
+        document.getElementById('switchToRegisterModal').onclick = () => { closeModals(); openRegisterModal(); };
+        document.getElementById('switchToLoginModal').onclick = () => { closeModals(); openLoginModal(); };
+        document.getElementById('showPolicyLink2').onclick = () => policyModal.classList.add('active');
         
         // Закрытие по крестикам
         document.getElementById('closeLoginModal').onclick = closeModals;
@@ -237,21 +249,13 @@
         registerModal.onclick = (e) => { if (e.target === registerModal) closeModals(); };
         policyModal.onclick = (e) => { if (e.target === policyModal) policyModal.classList.remove('active'); };
         
-        // Кнопки открытия
-        document.getElementById('headerLoginBtn').onclick = openLoginModal;
-        document.getElementById('headerRegisterBtn').onclick = openRegisterModal;
-        document.getElementById('testRegisterBtn').onclick = openRegisterModal;
-        document.getElementById('switchToRegisterModal').onclick = () => { closeModals(); openRegisterModal(); };
-        document.getElementById('switchToLoginModal').onclick = () => { closeModals(); openLoginModal(); };
-        document.getElementById('showPolicyLink2').onclick = () => policyModal.classList.add('active');
-        
         // Выход
         document.getElementById('logoutBtn').onclick = () => { 
             localStorage.removeItem('currentUserEmailSupabase'); 
             window.location.href = '/'; 
         };
         
-        // Регистрация
+        // Функция регистрации
         async function registerUser() {
             const name = document.getElementById('regName').value.trim();
             const surname = document.getElementById('regSurname').value.trim();
@@ -264,60 +268,106 @@
             const msgDiv = document.getElementById('registerMessage');
             
             if (!name || !surname || !email || !phone || !password) {
-                msgDiv.innerHTML = '❌ Заполните все обязательные поля'; return;
+                msgDiv.innerHTML = '❌ Заполните все обязательные поля';
+                return;
             }
-            if (password !== confirm) { msgDiv.innerHTML = '❌ Пароли не совпадают'; return; }
-            if (password.length < 4) { msgDiv.innerHTML = '❌ Пароль минимум 4 символа'; return; }
-            if (!agree) { msgDiv.innerHTML = '❌ Примите политику конфиденциальности'; return; }
+            if (password !== confirm) {
+                msgDiv.innerHTML = '❌ Пароли не совпадают';
+                return;
+            }
+            if (password.length < 4) {
+                msgDiv.innerHTML = '❌ Пароль минимум 4 символа';
+                return;
+            }
+            if (!agree) {
+                msgDiv.innerHTML = '❌ Примите политику конфиденциальности';
+                return;
+            }
             
-            const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length > 0) { msgDiv.innerHTML = '❌ Email уже зарегистрирован'; return; }
+            // Проверка существующего пользователя
+            const { data: existing } = await supabase
+                .from('users')
+                .select('email')
+                .eq('email', email);
             
-            const { error } = await supabase.from('users').insert([{ 
-                email, name, surname, phone, birthdate, password, nickname: name, avatar: null 
-            }]);
+            if (existing && existing.length > 0) {
+                msgDiv.innerHTML = '❌ Email уже зарегистрирован';
+                return;
+            }
             
-            if (error) { msgDiv.innerHTML = '❌ Ошибка: ' + error.message; return; }
+            // Создание пользователя
+            const { error } = await supabase
+                .from('users')
+                .insert([{ 
+                    email: email,
+                    name: name,
+                    surname: surname,
+                    phone: phone,
+                    birthdate: birthdate || null,
+                    password: password,
+                    nickname: name,
+                    avatar: null
+                }]);
+            
+            if (error) {
+                console.error('Ошибка регистрации:', error);
+                msgDiv.innerHTML = '❌ Ошибка регистрации: ' + error.message;
+                return;
+            }
             
             msgDiv.innerHTML = '✅ Регистрация успешна! Теперь войдите.';
-            setTimeout(() => { closeModals(); openLoginModal(); }, 1500);
+            setTimeout(() => { 
+                closeModals(); 
+                openLoginModal();
+                document.getElementById('loginMessage').innerHTML = '';
+                document.getElementById('loginEmail').value = email;
+            }, 1500);
         }
         
-        // Вход
+        // Функция входа
         async function loginUser() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const msgDiv = document.getElementById('loginMessage');
             
-            if (!email || !password) { msgDiv.innerHTML = '❌ Заполните поля'; return; }
+            if (!email || !password) {
+                msgDiv.innerHTML = '❌ Заполните оба поля';
+                return;
+            }
             
-            const { data, error } = await supabase.from('users').select('email').eq('email', email).eq('password', password);
-            if (error || !data || data.length === 0) { msgDiv.innerHTML = '❌ Неверный email или пароль'; return; }
+            // Поиск пользователя
+            const { data, error } = await supabase
+                .from('users')
+                .select('email')
+                .eq('email', email)
+                .eq('password', password);
+            
+            if (error) {
+                msgDiv.innerHTML = '❌ Ошибка: ' + error.message;
+                return;
+            }
+            
+            if (!data || data.length === 0) {
+                msgDiv.innerHTML = '❌ Неверный email или пароль';
+                return;
+            }
             
             currentUserEmail = email;
             localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
             updateUI();
             msgDiv.innerHTML = '✅ Вход выполнен! Добро пожаловать.';
-            setTimeout(() => { closeModals(); window.location.href = '/'; }, 1000);
+            setTimeout(() => { 
+                closeModals(); 
+                window.location.href = '/'; 
+            }, 1000);
         }
         
+        // Назначение обработчиков кнопок
         document.getElementById('submitRegisterBtn').onclick = registerUser;
         document.getElementById('submitLoginBtn').onclick = loginUser;
         
+        // Обновление интерфейса
         updateUI();
-        
-        // Создание админа
-        async function ensureAdmin() {
-            const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
-            if (!data || data.length === 0) {
-                await supabase.from('users').insert([{ 
-                    email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', 
-                    phone: '+70000000000', birthdate: '2000-01-01', password: 'admin123', 
-                    nickname: 'Администратор', avatar: null 
-                }]);
-            }
-        }
-        ensureAdmin();
     });
 </script>
 </body>
