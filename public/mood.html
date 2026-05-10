@@ -11,19 +11,23 @@
         .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
         .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
         .nav-links a { text-decoration: none; color: #c2417c; background: rgba(255,255,255,0.7); padding: 5px 15px; border-radius: 40px; }
-        .btn { background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 10px 20px; border-radius: 60px; cursor: pointer; font-weight: bold; }
+        .streak-widget { background: linear-gradient(135deg, #fff0f7, #ffe4f0); border-radius: 60px; padding: 5px 18px; border: 1px solid #f472b6; display: inline-flex; align-items: center; gap: 10px; }
+        .streak-days { font-size: 1.4rem; font-weight: 800; color: #db2777; }
+        .streak-flame { animation: flameAnim 0.8s infinite; display: inline-block; }
+        @keyframes flameAnim { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .btn { background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 10px 20px; border-radius: 60px; cursor: pointer; font-weight: bold; width: 100%; }
         h1 { text-align: center; margin-bottom: 20px; color: #c2417c; }
         .emoji-panel { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
         .mood-btn { font-size: 2rem; background: white; border: 2px solid #f472b6; border-radius: 60px; padding: 10px 15px; cursor: pointer; transition: 0.1s; }
         .mood-btn:hover { transform: scale(1.05); background: #fce7f3; }
         .mood-history { background: #fef2f8; border-radius: 20px; padding: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; }
-        .mood-entry { border-bottom: 1px solid #fbcfe8; padding: 10px 0; font-size: 0.9rem; }
+        .mood-entry { border-bottom: 1px solid #fbcfe8; padding: 10px 0; }
         .mood-entry strong { color: #c2417c; }
-        .creator-section { text-align: center; margin-top: 20px; padding: 15px; background: #ffe0ef; border-radius: 40px; }
         input { width: 100%; padding: 12px; border-radius: 60px; border: 1px solid #fbcfe8; margin: 10px 0; font-size: 1rem; }
         .user-info { background: #fff0f7; padding: 5px 15px; border-radius: 40px; display: inline-flex; align-items: center; gap: 10px; }
         .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
-        @media (max-width: 700px) { .emoji-panel { gap: 5px; } .mood-btn { padding: 8px 12px; font-size: 1.5rem; } }
+        .creator-section { text-align: center; margin-top: 20px; padding: 15px; background: #ffe0ef; border-radius: 40px; }
+        @media (max-width: 700px) { .navbar { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -36,11 +40,12 @@
             <a href="/chat.html">LIVE-комнаты</a>
             <a href="/team.html">Команда</a>
         </div>
-        <div id="userInfo"></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div id="streakWidget"></div>
+            <div id="userInfo"></div>
+        </div>
     </div>
-
     <h1>📔 Дневник мыслей</h1>
-    
     <div class="emoji-panel">
         <button class="mood-btn" data-mood="😞 Плохо">😞</button>
         <button class="mood-btn" data-mood="😐 Нормально">😐</button>
@@ -48,21 +53,63 @@
         <button class="mood-btn" data-mood="😄 Весело">😄</button>
         <button class="mood-btn" data-mood="🔥 Супер">🔥</button>
     </div>
-    
-    <input type="text" id="thoughtInput" placeholder="Что у тебя на уме? (заметка)">
-    <button id="saveBtn" class="btn" style="width:100%;">➕ Добавить запись</button>
-    
-    <h3 style="margin-top:20px;">📜 История настроений</h3>
+    <input type="text" id="thoughtInput" placeholder="Что у тебя на уме?">
+    <button id="saveBtn" class="btn">➕ Добавить запись</button>
+    <h3 style="margin-top:20px;">📜 История</h3>
     <div class="mood-history" id="history"></div>
 </div>
-
 <div class="container" style="margin-top:20px;"><div class="creator-section">🕶️ Создатели: «SECRET ROOM SQUAD»</div></div>
 
 <script>
-    // ===== ПРОВЕРКА АВТОРИЗАЦИИ =====
+    // ===== МЫСЛЯП =====
+    function updateStreak() {
+        const today = new Date().toDateString();
+        let data = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
+        let streak = data.streak;
+        if (data.lastVisit === today) {
+            // уже сегодня
+        } else if (data.lastVisit) {
+            const lastDate = new Date(data.lastVisit);
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (lastDate.toDateString() === yesterday.toDateString()) {
+                streak++;
+            } else {
+                streak = 1;
+            }
+        } else {
+            streak = 1;
+        }
+        localStorage.setItem('streakWeasel', JSON.stringify({ streak: streak, lastVisit: today }));
+        return streak;
+    }
+    
+    function displayStreak() {
+        const streak = updateStreak();
+        const container = document.getElementById('streakWidget');
+        if (!container) return;
+        let message = '';
+        if (streak === 1) message = 'Первый день Мысляпа!';
+        else if (streak < 3) message = 'Мысляп растёт!';
+        else if (streak < 7) message = 'Крепнет дисциплина!';
+        else message = `Серия ${streak} дней!`;
+        container.innerHTML = `
+            <div class="streak-widget">
+                <span>🧠✨</span>
+                <div>
+                    <span class="streak-days">${streak}</span> <span style="font-size:0.7rem;">дней подряд</span>
+                    <span class="streak-flame">🔥</span>
+                    <div style="font-size:0.65rem;">${message}</div>
+                </div>
+            </div>
+        `;
+    }
+    displayStreak();
+    
+    // ===== АВТОРИЗАЦИЯ =====
     const currentUserEmail = localStorage.getItem('currentUserEmail');
-    const nickname = currentUserEmail ? currentUserEmail.split('@')[0] : null;
     const userInfoDiv = document.getElementById('userInfo');
+    const nickname = currentUserEmail ? currentUserEmail.split('@')[0] : null;
     
     if (!currentUserEmail) {
         userInfoDiv.innerHTML = '<a href="/" style="color:#ec489a;">🔐 Войти</a>';
