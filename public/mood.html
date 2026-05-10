@@ -17,27 +17,21 @@
         .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); padding: 0.3rem 1rem; border-radius: 40px; }
         .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.8); }
-        .nav-links a .emoji { font-size: 1.1rem; }
-        
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        .logout-btn { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
         
-        h1 { text-align: center; font-size: 2.5rem; margin: 1rem 0; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.7rem 1.5rem; font-weight: 600; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; border: 2px solid #f472b6; }
-        .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
         
+        h1 { text-align: center; font-size: 2rem; margin: 1rem 0; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .mood-journal { background: white; border-radius: 32px; padding: 1.5rem; margin: 1rem 0; border: 1px solid #f472b6; }
         .emoji-panel { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; flex-wrap: wrap; }
-        .mood-btn { font-size: 2.2rem; background: white; border: 2px solid #f472b6; cursor: pointer; border-radius: 60px; padding: 0.5rem; transition: 0.1s; box-shadow: 0 2px 8px rgba(236,72,154,0.2); }
-        .mood-btn:hover { transform: scale(1.1); background: #fce7f3; }
+        .mood-btn { font-size: 2rem; background: white; border: 2px solid #f472b6; cursor: pointer; border-radius: 60px; padding: 0.5rem; transition: 0.1s; box-shadow: 0 2px 8px rgba(236,72,154,0.2); }
+        .mood-btn:hover { transform: scale(1.05); background: #fce7f3; }
         .mood-history { background: #fef2f8; border-radius: 20px; padding: 1rem; max-height: 400px; overflow-y: auto; }
         .mood-entry { display: flex; align-items: center; gap: 0.8rem; border-bottom: 1px solid #fbcfe8; padding: 0.4rem 0; font-size: 0.85rem; }
         .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
         footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
-        @media (max-width: 760px) { .navbar { flex-direction: column; } .nav-links { justify-content: center; } .emoji-panel { gap: 0.5rem; } }
+        @media (max-width: 760px) { .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -46,10 +40,10 @@
     <div class="navbar">
         <div class="logo"><span class="logo-emoji">🌸</span><span class="logo-text">СИСТЕМНЫЙ КОНТРОЛЬ</span></div>
         <div class="nav-links">
-            <a href="/"><span class="emoji">🏠</span> Главная</a>
-            <a href="/mood.html"><span class="emoji">📔</span> Дневник</a>
-            <a href="/chat.html"><span class="emoji">🎙️</span> LIVE-комнаты</a>
-            <a href="/team.html"><span class="emoji">🕶️</span> Команда</a>
+            <a href="/">🏠 Главная</a>
+            <a href="/mood.html">📔 Дневник</a>
+            <a href="/chat.html">🎙️ LIVE-комнаты</a>
+            <a href="/team.html">🕶️ Команда</a>
         </div>
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
@@ -60,8 +54,6 @@
 
 <main class="container">
     <h1>📔 Дневник мыслей и настроения</h1>
-    <p style="text-align:center; color:#1e5e7e;">Как себя чувствуешь? Нажми на эмодзи и добавь заметку — все записи сохраняются!</p>
-    
     <div class="mood-journal">
         <div class="emoji-panel">
             <button class="mood-btn" data-mood="😞 Плохо">😞</button>
@@ -70,24 +62,21 @@
             <button class="mood-btn" data-mood="😄 Весело">😄</button>
             <button class="mood-btn" data-mood="🔥 Супер">🔥</button>
         </div>
-        <div style="margin-top:0.8rem;">
-            <input type="text" id="thoughtInput" placeholder="Что у тебя на уме? (заметка)" style="width:100%; padding:0.7rem; border-radius:60px; border:1px solid #fbcfe8; font-size:1rem;">
-            <button id="saveThoughtBtn" class="btn" style="margin-top:0.8rem; width:100%;">➕ Добавить запись</button>
-        </div>
+        <input type="text" id="thoughtInput" placeholder="Что у тебя на уме? (заметка)" style="width:100%; padding:0.7rem; border-radius:60px; border:1px solid #fbcfe8; margin:0.5rem 0;">
+        <button id="saveThoughtBtn" class="btn" style="width:100%;">➕ Добавить запись</button>
         <h3 style="margin-top:1.5rem;">📜 История настроений</h3>
         <div class="mood-history" id="moodHistoryList"><div class="mood-entry">📭 Нет записей — добавь своё первое настроение!</div></div>
     </div>
 </main>
 
 <div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
-<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p><p>✉️ kozyavka67@gmail.com</p></div></footer>
+<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
 <script>
     const currentUserEmail = localStorage.getItem('currentUserEmailSupabase');
     const userDisplay = document.getElementById('userDisplay');
     const currentUserLoginSpan = document.getElementById('currentUserLogin');
     const logoutBtn = document.getElementById('logoutBtn');
-    
     if (currentUserEmail && userDisplay) {
         currentUserLoginSpan.textContent = currentUserEmail.split('@')[0];
         userDisplay.style.display = 'flex';
@@ -103,18 +92,35 @@
         if(!moodHistoryDiv) return;
         if(moodEntries.length === 0) { moodHistoryDiv.innerHTML = '<div class="mood-entry">📭 Нет записей</div>'; return; }
         moodHistoryDiv.innerHTML = '';
-        moodEntries.slice(0,20).forEach(entry => { const div = document.createElement('div'); div.className = 'mood-entry'; const displayName = entry.authorNick || entry.author || "Пользователь"; div.innerHTML = `<span style="font-weight:500;">${entry.time}</span> <span style="font-size:1.2rem;">${entry.mood.split(' ')[0]}</span> <span>${entry.mood}</span> — <strong>${escapeHtml(displayName)}</strong>: ${escapeHtml(entry.note.substring(0,50))}`; moodHistoryDiv.appendChild(div); });
+        moodEntries.slice(0,20).forEach(entry => {
+            const div = document.createElement('div'); div.className = 'mood-entry';
+            div.innerHTML = `<span style="font-weight:500;">${entry.time}</span> <span style="font-size:1.2rem;">${entry.mood.split(' ')[0]}</span> <span>${entry.mood}</span> — <strong>${escapeHtml(entry.authorNick || entry.author || "Пользователь")}</strong>: ${escapeHtml(entry.note.substring(0,50))}`;
+            moodHistoryDiv.appendChild(div);
+        });
     }
     
     function addMoodEntry(moodText, thought) {
         const now = new Date(), timeStr = `${now.toLocaleDateString()} ${now.toLocaleTimeString().slice(0,5)}`;
         const authorNick = currentUserEmail ? currentUserEmail.split('@')[0] : "Гость";
         moodEntries.unshift({ time: timeStr, mood: moodText, note: thought || "—", author: currentUserEmail, authorNick: authorNick });
-        if(moodEntries.length > 30) moodEntries.pop(); localStorage.setItem('moodJournalEntries', JSON.stringify(moodEntries)); renderMoodHistory();
+        if(moodEntries.length > 30) moodEntries.pop();
+        localStorage.setItem('moodJournalEntries', JSON.stringify(moodEntries));
+        renderMoodHistory();
     }
     
-    document.querySelectorAll('.mood-btn').forEach(btn => { btn.onclick = () => { if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; } addMoodEntry(btn.getAttribute('data-mood') || btn.innerText, thoughtInput.value.trim()); thoughtInput.value = ''; }; });
-    document.getElementById('saveThoughtBtn').onclick = () => { if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; } if(!thoughtInput.value.trim()) { alert("Напиши мысль"); return; } addMoodEntry("📝 Заметка", thoughtInput.value); thoughtInput.value = ''; };
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.onclick = () => {
+            if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; }
+            addMoodEntry(btn.getAttribute('data-mood') || btn.innerText, thoughtInput.value.trim());
+            thoughtInput.value = '';
+        };
+    });
+    document.getElementById('saveThoughtBtn').onclick = () => {
+        if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; }
+        if(!thoughtInput.value.trim()) { alert("Напиши мысль"); return; }
+        addMoodEntry("📝 Заметка", thoughtInput.value);
+        thoughtInput.value = '';
+    };
     renderMoodHistory();
 </script>
 </body>

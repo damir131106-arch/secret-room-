@@ -11,60 +11,58 @@
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; scroll-behavior: smooth; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         
+        /* Шапка */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(244,114,182,0.3); margin-bottom: 2rem; }
         .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 4px; }
-        .logo-emoji { font-size: 1.8rem; background: none; color: #ec489a; }
+        .logo-emoji { font-size: 1.8rem; color: #ec489a; }
         .logo-text { background: linear-gradient(135deg, #db2777, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
         .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); padding: 0.3rem 1rem; border-radius: 40px; }
         .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.8); }
-        .nav-links a .emoji { font-size: 1.1rem; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); }
-        
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
         .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
         
-        h1 { font-size: 3.2rem; line-height: 1.2; margin-bottom: 1.5rem; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        h2 { font-size: 2.2rem; margin-bottom: 1.2rem; position: relative; display: inline-block; color: #c2417c; }
-        h2:after { content: ''; position: absolute; bottom: -8px; left: 0; width: 70%; height: 3px; background: linear-gradient(90deg, #f472b6, #38bdf8); border-radius: 4px; }
-        .section { padding: 5rem 0; border-bottom: 1px solid rgba(244,114,182,0.3); }
-        .section:last-child { border-bottom: none; }
-        .gradient-bg { background: linear-gradient(135deg, #ffe0f0 0%, #cff2fc 100%); border-radius: 0 0 48px 48px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.9rem 2rem; font-weight: 600; font-size: 1rem; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; box-shadow: 0 4px 12px rgba(236,72,154,0.3); }
-        .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; box-shadow: none; }
-        .btn-outline:hover { background: #ec489a15; transform: translateY(-2px); }
-        .btn:hover { background: linear-gradient(135deg, #db2777, #ec489a); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(236,72,154,0.4); }
+        /* Кнопки */
+        .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.7rem 1.5rem; font-weight: 600; font-size: 0.9rem; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
+        .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
+        .btn-sm { padding: 0.4rem 1rem; font-size: 0.85rem; }
         
-        .hero-stats { display: flex; gap: 2rem; margin-top: 1.5rem; justify-content: center; }
-        .stat { font-weight: 700; font-size: 1rem; color: #c2417c; text-align: center; }
-        .stat span { font-size: 1.8rem; font-weight: 800; color: #db2777; display: block; }
-        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.8rem; margin-top: 2rem; }
-        .step-card { background: rgba(255,255,250,0.95); border-radius: 28px; padding: 1.8rem 1.4rem; transition: all 0.2s; border: 1px solid #fbcfe8; }
+        /* Герой-секция */
+        .hero-section { text-align: center; padding: 4rem 0; }
+        .hero-title { font-size: 4rem; font-weight: 800; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .hero-subtitle { font-size: 1.2rem; color: #1e5e7e; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .auth-buttons { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; }
+        
+        /* Остальные секции */
+        h2 { font-size: 2rem; margin: 1rem 0; color: #c2417c; text-align: center; }
+        .section { padding: 4rem 0; border-bottom: 1px solid rgba(244,114,182,0.3); }
+        .gradient-bg { background: linear-gradient(135deg, #ffe0f0 0%, #cff2fc 100%); border-radius: 0 0 48px 48px; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .step-card { background: rgba(255,255,250,0.95); border-radius: 28px; padding: 1.5rem; transition: all 0.2s; border: 1px solid #fbcfe8; text-align: center; }
         .step-card:hover { transform: translateY(-5px); background: white; border-color: #f472b6; }
-        .step-number { font-size: 2.2rem; font-weight: 800; color: #fbcfe8; margin-bottom: 0.5rem; }
-        .step-card h3 { margin-bottom: 0.7rem; font-size: 1.35rem; color: #c2417c; }
-        .quote-block { background: #fff0f7; padding: 2rem; border-radius: 32px; margin: 2rem 0; border-left: 6px solid #ec489a; }
+        .step-number { font-size: 2rem; font-weight: 800; color: #fbcfe8; margin-bottom: 0.5rem; }
         .faculty-grid { display: flex; flex-wrap: wrap; gap: 2rem; margin: 2rem 0; }
-        .faculty-card { flex: 1; background: white; padding: 1.8rem; border-radius: 28px; border: 1px solid #fbcfe8; transition: all 0.2s; }
-        .faculty-card:hover { border-color: #ec489a; background: #fffafc; }
-        .smart-badge { background: #fce7f3; font-weight: 600; padding: 0.5rem 1rem; border-radius: 40px; display: inline-block; margin-top: 1rem; color: #be185d; }
-        .test-panel { background: linear-gradient(115deg, #db2777 0%, #0284c7 100%); border-radius: 32px; padding: 2rem; color: white; margin-top: 1.5rem; text-align: center; }
-        .creator-section { margin-top: 3rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem 1.8rem; text-align: center; font-weight: 600; border: 1px solid #f472b6; color: #c2417c; }
+        .faculty-card { flex: 1; background: white; padding: 1.5rem; border-radius: 28px; border: 1px solid #fbcfe8; text-align: center; }
+        .test-panel { background: linear-gradient(115deg, #db2777 0%, #0284c7 100%); border-radius: 32px; padding: 2rem; color: white; text-align: center; margin-top: 2rem; }
+        .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
         footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
         
-        /* Модальное окно */
+        /* Модальные окна */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
+        .modal-content { background: white; border-radius: 48px; padding: 1.8rem; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
         .modal-content h3 { color: #c2417c; margin-bottom: 1rem; text-align: center; }
-        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-        .modal-content input { width: 100%; padding: 0.8rem 1rem; margin-bottom: 0.8rem; border-radius: 60px; border: 1px solid #fbcfe8; font-size: 1rem; }
-        .modal-switch { text-align: center; color: #1e5e7e; cursor: pointer; margin-top: 0.5rem; }
-        .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
-        .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0; }
-        .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; }
-        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #f472b6; }
+        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .form-row input { flex: 1; }
+        .modal-content input { width: 100%; padding: 0.7rem 1rem; margin-bottom: 0.7rem; border-radius: 60px; border: 1px solid #fbcfe8; font-size: 0.9rem; }
+        .modal-switch { text-align: center; color: #1e5e7e; cursor: pointer; margin-top: 0.5rem; font-size: 0.85rem; }
+        .close-modal { text-align: right; cursor: pointer; font-size: 1.3rem; color: #c2417c; }
+        .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.8rem 0; }
+        .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; font-size: 0.85rem; }
+        .avatar-preview { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #f472b6; }
+        .message { text-align: center; padding: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem; color: #db2777; }
         
-        @media (max-width: 760px) { h1 { font-size: 2rem; } h2 { font-size: 1.6rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } .hero-stats { flex-wrap: wrap; } }
+        @media (max-width: 760px) { .hero-title { font-size: 2.5rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -73,15 +71,13 @@
     <div class="navbar">
         <div class="logo"><span class="logo-emoji">🌸</span><span class="logo-text">СИСТЕМНЫЙ КОНТРОЛЬ</span></div>
         <div class="nav-links">
-            <a href="/"><span class="emoji">🏠</span> Главная</a>
-            <a href="/mood.html"><span class="emoji">📔</span> Дневник</a>
-            <a href="/chat.html"><span class="emoji">🎙️</span> LIVE-комнаты</a>
-            <a href="/team.html"><span class="emoji">🕶️</span> Команда</a>
+            <a href="/">🏠 Главная</a>
+            <a href="/mood.html">📔 Дневник</a>
+            <a href="/chat.html">🎙️ LIVE-комнаты</a>
+            <a href="/team.html">🕶️ Команда</a>
         </div>
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
-            <button id="profileBtn" class="profile-link">✎ Профиль</button>
-            <button id="adminBtn" class="profile-link" style="display:none;">👑 Админ</button>
             <button id="logoutBtn" class="logout-btn">Выйти</button>
         </div>
     </div>
@@ -89,82 +85,101 @@
 
 <main>
     <div class="gradient-bg">
-        <div class="container section" style="padding-top: 2rem; padding-bottom: 3rem;">
-            <div style="text-align: center;">
-                <div class="hero-badge" style="background:#ffe4f0; color:#c2417c; padding:0.3rem 0.9rem; border-radius:40px; font-size:0.8rem; display:inline-block; margin-bottom:1rem; border:1px solid #f472b6;">⚡ УВШЭУ УГНТУ — решение изнутри</div>
-                <h1>Не просто планер.<br>Система внешней<br>организации для первокурсника.</h1>
-                <p style="font-size:1.2rem; color: #1e5e7e; max-width: 600px; margin: 1rem auto;">«Я понимаю, что будет хуже, но всё равно откладываю» — знакомая боль?<br> Мы создали веб-платформу, которая мягко, но настойчиво возвращает контроль.</p>
-                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                    <a href="#test" class="btn" id="testButtonNav">Хочу на тест 🎀</a>
-                    <a href="#howitworks" class="btn btn-outline">Как работает</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat"><span>20+</span> студентов в тесте</div>
-                    <div class="stat"><span>5</span> принципов</div>
-                    <div class="stat"><span>УГНТУ</span> экосистема</div>
-                </div>
+        <div class="container hero-section">
+            <div class="hero-badge" style="background:#ffe4f0; color:#c2417c; padding:0.3rem 0.9rem; border-radius:40px; font-size:0.8rem; display:inline-block; margin-bottom:1rem;">⚡ УВШЭУ УГНТУ — решение изнутри</div>
+            <h1 class="hero-title">СИСТЕМНЫЙ КОНТРОЛЬ</h1>
+            <p class="hero-subtitle">Не просто планер. Система внешней организации для первокурсника.</p>
+            
+            <!-- Кнопки входа/регистрации -->
+            <div class="auth-buttons">
+                <button id="headerLoginBtn" class="btn">🚪 Войти</button>
+                <button id="headerRegisterBtn" class="btn btn-outline">📝 Регистрация</button>
+            </div>
+            
+            <div class="hero-stats" style="display: flex; gap: 2rem; justify-content: center;">
+                <div class="stat"><span>20+</span><br>студентов в тесте</div>
+                <div class="stat"><span>5</span><br>принципов</div>
+                <div class="stat"><span>УГНТУ</span><br>экосистема</div>
             </div>
         </div>
     </div>
 
-    <div class="container section" id="problem">
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <span style="background:#fce7f3; padding:0.2rem 0.8rem; border-radius:30px; font-size:0.8rem; color:#be185d;">Почему прокрастинация?</span>
-            <h2 style="margin-top: 0.8rem;">Проблема не в мотивации,<br> а в отсутствии навыка</h2>
-            <div class="quote-block">
-                <div class="quote-text" style="font-size:1.2rem; font-weight:500;">«Я не знаю, с чего начать»<br>«Откладываю даже важное»</div>
-                <div style="margin-top:1rem; color:#1e5e7e;">— опрос 17–20 лет, студенты УВШЭУ</div>
+    <div class="container section">
+        <h2>Почему прокрастинация?</h2>
+        <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+            <div style="background: #fff0f7; padding: 1.5rem; border-radius: 32px; border-left: 6px solid #ec489a; margin: 1rem 0;">
+                <p style="font-size:1.1rem;">«Я не знаю, с чего начать»<br>«Откладываю даже важное»</p>
             </div>
             <p>Потеря привычного школьного надзора → хаотичная учёба → долги, стресс, вина. <strong style="color:#db2777;">Системный контроль</strong> создаёт внешнюю структуру без давления.</p>
         </div>
     </div>
 
-    <div class="container section" id="howitworks">
-        <div style="text-align: center;">
-            <h2>Как платформа меняет хаос → порядок</h2>
-            <p style="color:#c2417c;">5 шагов к самодисциплине</p>
-        </div>
+    <div class="container section">
+        <h2>Как платформа меняет хаос → порядок</h2>
         <div class="steps-grid">
             <div class="step-card"><div class="step-number">01</div><h3>Ввод предметов и дедлайнов</h3><p>Система разбивает задачи на микрошаги.</p></div>
-            <div class="step-card"><div class="step-number">02</div><h3>3–5 задач в день</h3><p>Точечная нагрузка.</p></div>
+            <div class="step-card"><div class="step-number">02</div><h3>3–5 задач в день</h3><p>Точечная нагрузка, никакой перегрузки.</p></div>
             <div class="step-card"><div class="step-number">03</div><h3>Live-комната 40 мин</h3><p>Таймер + эффект присутствия.</p></div>
             <div class="step-card"><div class="step-number">04</div><h3>Серии и реакция на пропуски</h3><p>Streak как в Duolingo.</p></div>
-            <div class="step-card"><div class="step-number">05</div><h3>Прогресс на виду</h3><p>Визуализация побед.</p></div>
-        </div>
-        <div style="margin-top: 2rem; text-align: center;">
-            <span style="background:#fce7f3; padding:0.5rem 1rem; border-radius:60px; color:#c2417c;">⭐ Конкурентное отличие — платформа под УГНТУ</span>
+            <div class="step-card"><div class="step-number">05</div><h3>Прогресс на виду</h3><p>Визуализация побед укрепляет дисциплину.</p></div>
         </div>
     </div>
 
     <div class="gradient-bg">
-        <div class="container section" id="faculty">
-            <h2 style="text-align: center;">Как проект связан с УВШЭУ?</h2>
+        <div class="container section">
+            <h2>Как проект связан с УВШЭУ?</h2>
             <div class="faculty-grid">
-                <div class="faculty-card"><div style="font-size:2rem;">🎓</div><h3>Боль своих → решение</h3><p>Интервью с первокурсниками, мы сами студенты.</p></div>
-                <div class="faculty-card"><div style="font-size:2rem;">🧠</div><h3>Снижение выгорания</h3><p>Выше успеваемость, меньше отчислений.</p></div>
-                <div class="faculty-card"><div style="font-size:2rem;">📊</div><h3>SMART-прототип</h3><p>к 9 мая тестируем на 20 студентах.</p><div class="smart-badge">Цель: до 20 живых тестов</div></div>
-            </div>
-            <div style="background:#fff; border-radius:32px; padding:1.5rem; margin-top:1rem; border:1px solid #f472b6; text-align: center;">
-                <p style="font-weight:500; color:#c2417c;">📌 «Мы однокурсники, которые нашли боль первых недель обучения и создали продукт, помогающий войти в ритм университетской жизни.»</p>
+                <div class="faculty-card">🎓<h3>Боль своих → решение</h3><p>Интервью с первокурсниками, мы сами студенты.</p></div>
+                <div class="faculty-card">🧠<h3>Снижение выгорания</h3><p>Выше успеваемость, меньше отчислений.</p></div>
+                <div class="faculty-card">📊<h3>SMART-прототип</h3><p>к 9 мая тестируем на 20 студентах.</p></div>
             </div>
         </div>
     </div>
 
-    <div class="container section" id="test">
+    <div class="container section">
         <div class="test-panel">
-            <h3 style="color:white;">🧪 Пилотное тестирование</h3>
-            <p style="opacity: 0.9;">Прототип уже работает — мы ищем 20 студентов УВШЭУ УГНТУ.</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
-                <a href="#" id="fakeSubmitBtn" class="btn" style="background:#FFE7C7; color:#db2777;">✉️ Записаться</a>
-                <span>*до 9 мая, очно и онлайн</span>
-            </div>
-            <div id="testMessage" style="margin-top: 1rem;"></div>
+            <h3>🧪 Пилотное тестирование</h3>
+            <p style="opacity: 0.9;">Ищем 20 студентов УВШЭУ УГНТУ.</p>
+            <button id="testRegisterBtn" class="btn" style="background:#FFE7C7; color:#db2777; margin-top: 1rem;">✉️ Записаться</button>
         </div>
     </div>
 </main>
 
 <div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
-<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p><p>✉️ kozyavka67@gmail.com</p></div></footer>
+<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
+
+<!-- Модальное окно входа -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <div class="close-modal" id="closeLoginModal">&times;</div>
+        <h3>🔐 Вход</h3>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Пароль">
+        <button id="submitLoginBtn" class="btn">Войти</button>
+        <div class="modal-switch" id="switchToRegisterModal">Нет аккаунта? Зарегистрироваться</div>
+        <div id="loginMessage" class="message"></div>
+    </div>
+</div>
+
+<!-- Модальное окно регистрации -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <div class="close-modal" id="closeRegisterModal">&times;</div>
+        <h3>📝 Регистрация</h3>
+        <div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div>
+        <div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div>
+        <input type="date" id="regBirthdate" placeholder="Дата рождения *">
+        <input type="password" id="regPassword" placeholder="Пароль *">
+        <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
+        <div class="checkbox-row">
+            <input type="checkbox" id="regAgree">
+            <label>Я согласен с <span class="policy-link" id="showPolicyLink2">Политикой конфиденциальности</span></label>
+        </div>
+        <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
+        <div class="modal-switch" id="switchToLoginModal">Уже есть аккаунт? Войти</div>
+        <div id="registerMessage" class="message"></div>
+    </div>
+</div>
 
 <script>
     const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
@@ -173,179 +188,106 @@
     
     document.addEventListener('DOMContentLoaded', function() {
         let currentUserEmail = localStorage.getItem('currentUserEmailSupabase') || null;
+        
         function getUserNickname(email) { return email ? email.split('@')[0] : "Гость"; }
-        function isAdmin() { return currentUserEmail === 'admin@systemcontrol.com'; }
-        
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-        
-        const authModal = document.getElementById('authModal');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const submitRegisterBtn = document.getElementById('submitRegisterBtn');
-        const submitLoginBtn = document.getElementById('submitLoginBtn');
-        const switchToLogin = document.getElementById('switchToLogin');
-        const switchToRegister = document.getElementById('switchToRegister');
-        const authMessage = document.getElementById('authMessage');
-        const userDisplay = document.getElementById('userDisplay');
-        const currentUserLoginSpan = document.getElementById('currentUserLogin');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const profileBtn = document.getElementById('profileBtn');
-        const adminBtn = document.getElementById('adminBtn');
-        const closeModal = document.getElementById('closeModal');
-        const testButtonNav = document.getElementById('testButtonNav');
-        const fakeSubmitBtn = document.getElementById('fakeSubmitBtn');
-        const avatarInput = document.getElementById('avatarInput');
-        const avatarPreview = document.getElementById('avatarPreview');
-        
-        if (avatarInput) {
-            avatarInput.addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(ev) { avatarPreview.src = ev.target.result; };
-                    reader.readAsDataURL(e.target.files[0]);
-                }
-            });
-        }
-        
         function updateUI() {
-            if(currentUserEmail) { 
-                currentUserLoginSpan.textContent = getUserNickname(currentUserEmail); 
+            const userDisplay = document.getElementById('userDisplay');
+            const currentUserLoginSpan = document.getElementById('currentUserLogin');
+            if (currentUserEmail && userDisplay) {
+                currentUserLoginSpan.textContent = getUserNickname(currentUserEmail);
                 userDisplay.style.display = 'flex';
-                adminBtn.style.display = isAdmin() ? 'inline-block' : 'none';
-            } else { 
-                userDisplay.style.display = 'none'; 
+            } else if (userDisplay) {
+                userDisplay.style.display = 'none';
             }
         }
         
-        function showModal() { 
-            authMessage.innerHTML = '';
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            document.getElementById('regName').value = '';
-            document.getElementById('regSurname').value = '';
-            document.getElementById('regEmail').value = '';
-            document.getElementById('regPhone').value = '';
-            document.getElementById('regBirthdate').value = '';
-            document.getElementById('regPassword').value = '';
-            document.getElementById('regPasswordConfirm').value = '';
-            document.getElementById('regAgree').checked = false;
-            if (avatarPreview) avatarPreview.src = 'https://via.placeholder.com/80?text=Avatar';
-            if (avatarInput) avatarInput.value = '';
-            authModal.classList.add('active'); 
-        }
+        // Элементы модалок
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const switchToRegisterModal = document.getElementById('switchToRegisterModal');
+        const switchToLoginModal = document.getElementById('switchToLoginModal');
+        const submitLoginBtn = document.getElementById('submitLoginBtn');
+        const submitRegisterBtn = document.getElementById('submitRegisterBtn');
+        const headerLoginBtn = document.getElementById('headerLoginBtn');
+        const headerRegisterBtn = document.getElementById('headerRegisterBtn');
+        const testRegisterBtn = document.getElementById('testRegisterBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         
-        function closeModalFunc() { authModal.classList.remove('active'); }
+        function openLoginModal() { loginModal.classList.add('active'); }
+        function openRegisterModal() { registerModal.classList.add('active'); }
+        function closeModals() { loginModal.classList.remove('active'); registerModal.classList.remove('active'); }
         
+        if (closeLoginModal) closeLoginModal.onclick = closeModals;
+        if (closeRegisterModal) closeRegisterModal.onclick = closeModals;
+        if (headerLoginBtn) headerLoginBtn.onclick = openLoginModal;
+        if (headerRegisterBtn) headerRegisterBtn.onclick = openRegisterModal;
+        if (testRegisterBtn) testRegisterBtn.onclick = openRegisterModal;
+        if (switchToRegisterModal) switchToRegisterModal.onclick = () => { closeModals(); openRegisterModal(); };
+        if (switchToLoginModal) switchToLoginModal.onclick = () => { closeModals(); openLoginModal(); };
+        
+        loginModal.onclick = (e) => { if (e.target === loginModal) closeModals(); };
+        registerModal.onclick = (e) => { if (e.target === registerModal) closeModals(); };
+        
+        // Регистрация
         async function registerUser() {
-            const name = document.getElementById('regName').value.trim();
-            const surname = document.getElementById('regSurname').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const birthdate = document.getElementById('regBirthdate').value;
-            const password = document.getElementById('regPassword').value;
-            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
-            const agree = document.getElementById('regAgree').checked;
-            let avatarBase64 = null;
-            if (avatarInput && avatarInput.files && avatarInput.files[0]) avatarBase64 = await fileToBase64(avatarInput.files[0]);
+            const name = document.getElementById('regName')?.value.trim();
+            const surname = document.getElementById('regSurname')?.value.trim();
+            const email = document.getElementById('regEmail')?.value.trim();
+            const phone = document.getElementById('regPhone')?.value.trim();
+            const birthdate = document.getElementById('regBirthdate')?.value;
+            const password = document.getElementById('regPassword')?.value;
+            const confirm = document.getElementById('regPasswordConfirm')?.value;
+            const agree = document.getElementById('regAgree')?.checked;
+            const msgDiv = document.getElementById('registerMessage');
             
-            if (!name || !surname || !email || !phone || !birthdate || !password) { authMessage.innerHTML = '❌ Заполните все поля'; return; }
-            if (password !== passwordConfirm) { authMessage.innerHTML = '❌ Пароли не совпадают'; return; }
-            if (password.length < 4) { authMessage.innerHTML = '❌ Пароль должен быть не менее 4 символов'; return; }
-            if (!agree) { authMessage.innerHTML = '❌ Вы должны согласиться с Политикой конфиденциальности'; return; }
+            if (!name || !surname || !email || !phone || !birthdate || !password) {
+                msgDiv.innerHTML = '❌ Заполните все поля'; return;
+            }
+            if (password !== confirm) { msgDiv.innerHTML = '❌ Пароли не совпадают'; return; }
+            if (password.length < 4) { msgDiv.innerHTML = '❌ Пароль минимум 4 символа'; return; }
+            if (!agree) { msgDiv.innerHTML = '❌ Примите политику конфиденциальности'; return; }
             
             const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length > 0) { authMessage.innerHTML = '❌ Пользователь с таким Email уже существует'; return; }
+            if (existing && existing.length > 0) { msgDiv.innerHTML = '❌ Email уже зарегистрирован'; return; }
             
-            const { error } = await supabase.from('users').insert([{ email, name, surname, phone, birthdate, password, nickname: name, avatar: avatarBase64 }]);
-            if (error) { authMessage.innerHTML = '❌ Ошибка регистрации: ' + error.message; return; }
+            const { error } = await supabase.from('users').insert([{ email, name, surname, phone, birthdate, password, nickname: name, avatar: null }]);
+            if (error) { msgDiv.innerHTML = '❌ Ошибка: ' + error.message; return; }
             
-            currentUserEmail = email;
-            localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
-            updateUI();
-            closeModalFunc();
+            msgDiv.innerHTML = '✅ Регистрация успешна! Теперь войдите.';
+            setTimeout(() => { closeModals(); openLoginModal(); }, 1500);
         }
         
+        // Вход
         async function loginUser() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            if (!email || !password) { authMessage.innerHTML = '❌ Заполните все поля'; return; }
-            const { data, error } = await supabase.from('users').select('email, password').eq('email', email).eq('password', password);
-            if (error || !data || data.length === 0) { authMessage.innerHTML = '❌ Неверный email или пароль'; return; }
+            const email = document.getElementById('loginEmail')?.value.trim();
+            const password = document.getElementById('loginPassword')?.value;
+            const msgDiv = document.getElementById('loginMessage');
+            if (!email || !password) { msgDiv.innerHTML = '❌ Заполните поля'; return; }
+            const { data, error } = await supabase.from('users').select('email').eq('email', email).eq('password', password);
+            if (error || !data || data.length === 0) { msgDiv.innerHTML = '❌ Неверный email или пароль'; return; }
+            msgDiv.innerHTML = '✅ Вход выполнен! Добро пожаловать.';
             currentUserEmail = email;
             localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
             updateUI();
-            closeModalFunc();
+            setTimeout(() => { closeModals(); window.location.href = '/'; }, 1000);
         }
         
-        function logout() { currentUserEmail = null; localStorage.removeItem('currentUserEmailSupabase'); updateUI(); }
+        if (submitRegisterBtn) submitRegisterBtn.onclick = registerUser;
+        if (submitLoginBtn) submitLoginBtn.onclick = loginUser;
+        if (logoutBtn) logoutBtn.onclick = () => { localStorage.removeItem('currentUserEmailSupabase'); window.location.href = '/'; };
         
-        switchToLogin.onclick = () => { loginForm.style.display = 'block'; registerForm.style.display = 'none'; authMessage.innerHTML = ''; };
-        switchToRegister.onclick = () => { loginForm.style.display = 'none'; registerForm.style.display = 'block'; authMessage.innerHTML = ''; };
-        
-        submitRegisterBtn.onclick = registerUser;
-        submitLoginBtn.onclick = loginUser;
-        closeModal.onclick = closeModalFunc;
-        authModal.onclick = (e) => { if(e.target === authModal) closeModalFunc(); };
-        logoutBtn.onclick = logout;
-        testButtonNav.onclick = (e) => { e.preventDefault(); showModal(); };
-        fakeSubmitBtn.onclick = (e) => { e.preventDefault(); showModal(); };
-        
-        const profilePage = document.getElementById('profilePage');
-        const closeProfile = document.getElementById('closeProfile');
-        const profileLoginDisplay = document.getElementById('profileLoginDisplay');
-        const nicknameInput = document.getElementById('nicknameInput');
-        const saveNicknameBtn = document.getElementById('saveNicknameBtn');
-        const profileMessage = document.getElementById('profileMessage');
-        
-        profileBtn.onclick = async () => { 
-            if(currentUserEmail) { 
-                profileLoginDisplay.textContent = currentUserEmail; 
-                const { data } = await supabase.from('users').select('nickname').eq('email', currentUserEmail).single();
-                nicknameInput.value = data?.nickname || currentUserEmail.split('@')[0];
-                profileMessage.innerHTML = ''; 
-                profilePage.classList.add('active'); 
-            } 
-        };
-        closeProfile.onclick = () => profilePage.classList.remove('active');
-        profilePage.onclick = (e) => { if(e.target === profilePage) profilePage.classList.remove('active'); };
-        saveNicknameBtn.onclick = async () => { 
-            if(currentUserEmail) { 
-                const newNick = nicknameInput.value.trim(); 
-                if(newNick) { 
-                    await supabase.from('users').update({ nickname: newNick }).eq('email', currentUserEmail);
-                    profileMessage.innerHTML = '✅ Никнейм изменён!'; 
-                    updateUI(); 
-                } else profileMessage.innerHTML = '❌ Не может быть пустым'; 
-            } 
-        };
-        
-        const adminPanel = document.getElementById('adminPanel');
-        const closeAdminPanel = document.getElementById('closeAdminPanel');
-        const usersTableBody = document.getElementById('usersTableBody');
-        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-        async function renderAdminTable() {
-            if (!usersTableBody) return;
-            const { data, error } = await supabase.from('users').select('*');
-            if (error) { usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</td></tr>'; return; }
-            usersTableBody.innerHTML = '';
-            for (let user of data) {
-                const row = document.createElement('tr');
-                const avatarHtml = user.avatar ? `<img src="${escapeHtml(user.avatar)}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : '—';
-                row.innerHTML = `<td>${avatarHtml}</td><td>${escapeHtml(user.name || '')}</td><td>${escapeHtml(user.surname || '')}</td><td>${escapeHtml(user.email || '')}</td><td>${escapeHtml(user.phone || '')}</td><td>${escapeHtml(user.birthdate || '')}</td>`;
-                usersTableBody.appendChild(row);
-            }
+        // Политика
+        const policyModal = document.getElementById('policyModal');
+        const showPolicyLink2 = document.getElementById('showPolicyLink2');
+        if (showPolicyLink2 && policyModal) {
+            showPolicyLink2.onclick = () => policyModal.classList.add('active');
         }
-        adminBtn.onclick = async () => { if (isAdmin()) { await renderAdminTable(); adminPanel.classList.add('active'); } };
-        closeAdminPanel.onclick = () => adminPanel.classList.remove('active');
-        adminPanel.onclick = (e) => { if(e.target === adminPanel) adminPanel.classList.remove('active'); };
         
+        updateUI();
+        
+        // Создаём админа если нет
         async function ensureAdmin() {
             const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
             if (!data || data.length === 0) {
@@ -353,90 +295,32 @@
             }
         }
         ensureAdmin();
-        updateUI();
     });
 </script>
 
-<!-- Модальные окна (перенесены в конец, чтобы не мешать) -->
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <div class="close-modal" id="closeModal">&times;</div>
-        <h3 id="modalTitle">Регистрация</h3>
-        <div id="loginForm" style="display: none;">
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Пароль">
-            <button id="submitLoginBtn" class="btn">Войти</button>
-            <div class="modal-switch" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div>
-        </div>
-        <div id="registerForm">
-            <div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div>
-            <div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div>
-            <input type="date" id="regBirthdate" placeholder="Дата рождения *">
-            <input type="password" id="regPassword" placeholder="Пароль *">
-            <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
-            <div style="text-align: center; margin: 10px 0;">
-                <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/80?text=Avatar" alt="Аватар">
-                <input type="file" id="avatarInput" accept="image/*" style="margin-top: 5px;">
-                <p style="font-size: 0.7rem; color: #1e5e7e;">Загрузите фото профиля (необязательно)</p>
-            </div>
-            <div class="checkbox-row">
-                <input type="checkbox" id="regAgree">
-                <label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span> *</label>
-            </div>
-            <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
-            <div class="modal-switch" id="switchToLogin">Уже есть аккаунт? Войти</div>
-        </div>
-        <div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div>
-    </div>
-</div>
-
+<!-- Модалка политики -->
 <div id="policyModal" class="modal">
-    <div class="modal-content" style="max-width: 550px;">
+    <div class="modal-content" style="max-width: 500px;">
         <div class="close-modal" id="closePolicyModal">&times;</div>
         <h3>📋 Политика конфиденциальности</h3>
-        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; max-height: 400px; overflow-y: auto;">
+        <div style="font-size: 0.85rem; max-height: 400px; overflow-y: auto; text-align: left;">
             <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта УКоннект.</strong></p>
-            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Хэш пароля. После входа мы также храним: Аватар, Описание профиля, Баннер, Список друзей и Шифрованные сообщения.</p>
-            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля, обеспечения связи между друзьями и поиска пользователей.</p>
-            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS). Сообщения шифруются.</p>
-            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент через настройки профиля.</p>
+            <p><strong>1. Сбор данных</strong><br>Имя, Фамилия, Email, Телефон, Дата рождения, Хэш пароля.</p>
+            <p><strong>2. Использование данных</strong><br>Для авторизации, отображения профиля.</p>
+            <p><strong>3. Защита данных</strong><br>Пароли в виде хэша. HTTPS протокол.</p>
+            <p><strong>4. Права пользователя</strong><br>Вы можете запросить удаление аккаунта.</p>
         </div>
-        <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
+        <button class="btn" id="closePolicyBtn" style="margin-top: 1rem;">Закрыть</button>
     </div>
 </div>
-
-<div id="profilePage" class="profile-page"><div class="profile-content"><div class="close-profile" id="closeProfile">&times;</div><h3>👤 Мой профиль</h3><p>Email: <strong id="profileLoginDisplay"></strong></p><input type="text" id="nicknameInput" placeholder="Никнейм"><button id="saveNicknameBtn" class="btn">Сохранить</button><div id="profileMessage" style="margin-top:1rem;font-size:0.85rem;color:#db2777;"></div></div></div>
-
-<div id="adminPanel" class="profile-page">
-    <div class="profile-content">
-        <div class="close-profile" id="closeAdminPanel">&times;</div>
-        <h3>👑 Панель администратора</h3>
-        <p>Все зарегистрированные пользователи (облачная синхронизация):</p>
-        <div style="overflow-x: auto;">
-            <table class="user-table" id="usersTable">
-                <thead><tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr></thead>
-                <tbody id="usersTableBody"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<style>
-    .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
-    .profile-page.active { display: flex; }
-    .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 900px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
-    .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; vertical-align: middle; }
-    .user-table th { background: #fce7f3; color: #c2417c; }
-    .policy-link { cursor: pointer; color: #ec489a; text-decoration: underline; }
-    .modal .btn { width: 100%; margin-bottom: 0.5rem; }
-</style>
 
 <script>
-    document.getElementById('showPolicyLink').onclick = () => document.getElementById('policyModal').classList.add('active');
-    document.getElementById('closePolicyModal').onclick = () => document.getElementById('policyModal').classList.remove('active');
-    document.getElementById('closePolicyBtn').onclick = () => document.getElementById('policyModal').classList.remove('active');
-    document.getElementById('policyModal').onclick = (e) => { if(e.target === document.getElementById('policyModal')) document.getElementById('policyModal').classList.remove('active'); };
+    const policyModal = document.getElementById('policyModal');
+    const closePolicyModal = document.getElementById('closePolicyModal');
+    const closePolicyBtn = document.getElementById('closePolicyBtn');
+    if (closePolicyModal) closePolicyModal.onclick = () => policyModal.classList.remove('active');
+    if (closePolicyBtn) closePolicyBtn.onclick = () => policyModal.classList.remove('active');
+    policyModal.onclick = (e) => { if (e.target === policyModal) policyModal.classList.remove('active'); };
 </script>
 </body>
 </html>
