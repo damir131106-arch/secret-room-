@@ -10,7 +10,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; scroll-behavior: smooth; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; }
+        
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(244,114,182,0.3); margin-bottom: 2rem; }
+        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 4px; }
+        .logo-emoji { font-size: 1.8rem; background: none; color: #ec489a; }
+        .logo-text { background: linear-gradient(135deg, #db2777, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); padding: 0.3rem 1rem; border-radius: 40px; }
+        .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.8); }
+        .nav-links a .emoji { font-size: 1.1rem; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); }
+        
+        .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
+        .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        
         h1 { font-size: 3.2rem; line-height: 1.2; margin-bottom: 1.5rem; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
         h2 { font-size: 2.2rem; margin-bottom: 1.2rem; position: relative; display: inline-block; color: #c2417c; }
         h2:after { content: ''; position: absolute; bottom: -8px; left: 0; width: 70%; height: 3px; background: linear-gradient(90deg, #f472b6, #38bdf8); border-radius: 4px; }
@@ -21,51 +33,10 @@
         .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; box-shadow: none; }
         .btn-outline:hover { background: #ec489a15; transform: translateY(-2px); }
         .btn:hover { background: linear-gradient(135deg, #db2777, #ec489a); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(236,72,154,0.4); }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; }
-        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 4px; }
-        .logo-emoji { font-size: 1.8rem; color: #ec489a; }
-        .logo-text { background: linear-gradient(135deg, #db2777, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 2rem; font-weight: 500; }
-        .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; }
-        .nav-links a:hover { color: #0284c7; }
-        .streak-section { background: rgba(255,240,247,0.95); border-radius: 80px; padding: 0.2rem 1rem 0.2rem 1.2rem; display: inline-flex; align-items: center; gap: 0.8rem; border: 1px solid #f472b6; backdrop-filter: blur(4px); }
-        .streak-text { font-weight: 700; color: #c2417c; font-size: 0.9rem; }
-        .streak-number { font-size: 1.6rem; font-weight: 800; color: #db2777; }
-        .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
-        .avatar-small { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 8px; vertical-align: middle; }
-        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #f472b6; }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
-        .modal-content h3 { color: #c2417c; margin-bottom: 1.5rem; text-align: center; }
-        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-        .form-row input { flex: 1; }
-        .modal-content input, .modal-content select { width: 100%; padding: 0.8rem 1rem; margin-bottom: 0.8rem; border-radius: 60px; border: 1px solid #fbcfe8; font-family: inherit; font-size: 1rem; }
-        .modal-content .btn { width: 100%; margin-bottom: 0.8rem; }
-        .modal-switch { text-align: center; color: #1e5e7e; cursor: pointer; margin-top: 0.5rem; }
-        .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
-        .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0; }
-        .checkbox-row input { width: auto; margin: 0; }
-        .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; }
-        
-        .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
-        .profile-page.active { display: flex; }
-        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 900px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
-        .close-profile { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
-        .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; vertical-align: middle; }
-        .user-table th { background: #fce7f3; color: #c2417c; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        
-        .hero { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 2rem 0; }
-        .hero-content { flex: 1.2; }
-        .hero-badge { background: #ffe4f0; color: #c2417c; padding: 0.3rem 0.9rem; border-radius: 40px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 1.2rem; border: 1px solid #f472b6; }
-        .hero p { font-size: 1.2rem; color: #1e5e7e; margin: 1.5rem 0 2rem; }
-        .hero-stats { display: flex; gap: 2rem; margin-top: 1.5rem; }
-        .stat { font-weight: 700; font-size: 1rem; color: #c2417c; }
-        .stat span { font-size: 1.8rem; font-weight: 800; color: #db2777; }
+        .hero-stats { display: flex; gap: 2rem; margin-top: 1.5rem; justify-content: center; }
+        .stat { font-weight: 700; font-size: 1rem; color: #c2417c; text-align: center; }
+        .stat span { font-size: 1.8rem; font-weight: 800; color: #db2777; display: block; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.8rem; margin-top: 2rem; }
         .step-card { background: rgba(255,255,250,0.95); border-radius: 28px; padding: 1.8rem 1.4rem; transition: all 0.2s; border: 1px solid #fbcfe8; }
         .step-card:hover { transform: translateY(-5px); background: white; border-color: #f472b6; }
@@ -73,15 +44,27 @@
         .step-card h3 { margin-bottom: 0.7rem; font-size: 1.35rem; color: #c2417c; }
         .quote-block { background: #fff0f7; padding: 2rem; border-radius: 32px; margin: 2rem 0; border-left: 6px solid #ec489a; }
         .faculty-grid { display: flex; flex-wrap: wrap; gap: 2rem; margin: 2rem 0; }
-        .faculty-card { flex: 1; background: white; padding: 1.8rem; border-radius: 28px; border: 1px solid #fbcfe8; }
+        .faculty-card { flex: 1; background: white; padding: 1.8rem; border-radius: 28px; border: 1px solid #fbcfe8; transition: all 0.2s; }
         .faculty-card:hover { border-color: #ec489a; background: #fffafc; }
         .smart-badge { background: #fce7f3; font-weight: 600; padding: 0.5rem 1rem; border-radius: 40px; display: inline-block; margin-top: 1rem; color: #be185d; }
-        .test-panel { background: linear-gradient(115deg, #db2777 0%, #0284c7 100%); border-radius: 32px; padding: 2rem; color: white; margin-top: 1.5rem; }
-        .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem 1.8rem; text-align: center; font-weight: 600; border: 1px solid #f472b6; color: #c2417c; }
-        footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; }
-        @media (max-width: 760px) { h1 { font-size: 2.3rem; } h2 { font-size: 1.8rem; } .hero { flex-direction: column; } .navbar { flex-direction: column; } .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; } }
-        @keyframes flameFlicker { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
-        .streak-flame { display: inline-block; animation: flameFlicker 1.2s infinite ease-in-out; }
+        .test-panel { background: linear-gradient(115deg, #db2777 0%, #0284c7 100%); border-radius: 32px; padding: 2rem; color: white; margin-top: 1.5rem; text-align: center; }
+        .creator-section { margin-top: 3rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem 1.8rem; text-align: center; font-weight: 600; border: 1px solid #f472b6; color: #c2417c; }
+        footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
+        
+        /* Модальное окно */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
+        .modal-content h3 { color: #c2417c; margin-bottom: 1rem; text-align: center; }
+        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+        .modal-content input { width: 100%; padding: 0.8rem 1rem; margin-bottom: 0.8rem; border-radius: 60px; border: 1px solid #fbcfe8; font-size: 1rem; }
+        .modal-switch { text-align: center; color: #1e5e7e; cursor: pointer; margin-top: 0.5rem; }
+        .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
+        .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0; }
+        .policy-link { color: #ec489a; cursor: pointer; text-decoration: underline; }
+        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #f472b6; }
+        
+        @media (max-width: 760px) { h1 { font-size: 2rem; } h2 { font-size: 1.6rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } .hero-stats { flex-wrap: wrap; } }
     </style>
 </head>
 <body>
@@ -90,10 +73,10 @@
     <div class="navbar">
         <div class="logo"><span class="logo-emoji">🌸</span><span class="logo-text">СИСТЕМНЫЙ КОНТРОЛЬ</span></div>
         <div class="nav-links">
-            <a href="/">Главная</a>
-            <a href="/mood.html">Дневник</a>
-            <a href="/chat.html">LIVE-комнаты</a>
-            <a href="/team.html">Команда</a>
+            <a href="/"><span class="emoji">🏠</span> Главная</a>
+            <a href="/mood.html"><span class="emoji">📔</span> Дневник</a>
+            <a href="/chat.html"><span class="emoji">🎙️</span> LIVE-комнаты</a>
+            <a href="/team.html"><span class="emoji">🕶️</span> Команда</a>
         </div>
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
@@ -104,99 +87,84 @@
     </div>
 </nav>
 
-<!-- Модальное окно регистрации/входа -->
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <div class="close-modal" id="closeModal">&times;</div>
-        <h3 id="modalTitle">Регистрация</h3>
-        
-        <div id="loginForm" style="display: none;">
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Пароль">
-            <button id="submitLoginBtn" class="btn">Войти</button>
-            <div class="modal-switch" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div>
-        </div>
-        
-        <div id="registerForm">
-            <div class="form-row">
-                <input type="text" id="regName" placeholder="Имя *">
-                <input type="text" id="regSurname" placeholder="Фамилия *">
-            </div>
-            <div class="form-row">
-                <input type="email" id="regEmail" placeholder="Email *">
-                <input type="tel" id="regPhone" placeholder="Номер телефона *">
-            </div>
-            <input type="date" id="regBirthdate" placeholder="Дата рождения *">
-            <input type="password" id="regPassword" placeholder="Пароль *">
-            <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
-            
-            <!-- Загрузка аватара -->
-            <div style="text-align: center; margin: 10px 0;">
-                <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/80?text=Avatar" alt="Аватар">
-                <input type="file" id="avatarInput" accept="image/*" style="margin-top: 5px;">
-                <p style="font-size: 0.7rem; color: #1e5e7e;">Загрузите фото профиля (необязательно)</p>
-            </div>
-            
-            <div class="checkbox-row">
-                <input type="checkbox" id="regAgree">
-                <label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span> *</label>
-            </div>
-            <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
-            <div class="modal-switch" id="switchToLogin">Уже есть аккаунт? Войти</div>
-        </div>
-        <div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div>
-    </div>
-</div>
-
-<!-- Политика конфиденциальности -->
-<div id="policyModal" class="modal">
-    <div class="modal-content" style="max-width: 550px;">
-        <div class="close-modal" id="closePolicyModal">&times;</div>
-        <h3>📋 Политика конфиденциальности</h3>
-        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; max-height: 400px; overflow-y: auto;">
-            <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта УКоннект.</strong></p>
-            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Хэш пароля. После входа мы также храним: Аватар, Описание профиля, Баннер, Список друзей и Шифрованные сообщения.</p>
-            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля, обеспечения связи между друзьями и поиска пользователей.</p>
-            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS). Сообщения шифруются.</p>
-            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент через настройки профиля.</p>
-        </div>
-        <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
-    </div>
-</div>
-
-<!-- Админ панель -->
-<div id="adminPanel" class="profile-page">
-    <div class="profile-content">
-        <div class="close-profile" id="closeAdminPanel">&times;</div>
-        <h3>👑 Панель администратора</h3>
-        <p>Все зарегистрированные пользователи (облачная синхронизация):</p>
-        <div style="overflow-x: auto;">
-            <table class="user-table" id="usersTable">
-                <thead><tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr></thead>
-                <tbody id="usersTableBody"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="profilePage" class="profile-page"><div class="profile-content"><div class="close-profile" id="closeProfile">&times;</div><h3>👤 Мой профиль</h3><p>Email: <strong id="profileLoginDisplay"></strong></p><input type="text" id="nicknameInput" placeholder="Никнейм"><button id="saveNicknameBtn" class="btn">Сохранить</button><div id="profileMessage" style="margin-top:1rem;font-size:0.85rem;color:#db2777;"></div></div></div>
-
 <main>
-    <div class="gradient-bg"><div class="container section" style="padding-top:2rem;padding-bottom:3rem;"><div class="hero"><div class="hero-content"><div class="hero-badge">⚡ УВШЭУ УГНТУ — решение изнутри</div><h1>Не просто планер.<br>Система внешней<br>организации для первокурсника.</h1><p>«Я понимаю, что будет хуже, но всё равно откладываю» — знакомая боль?<br> Мы создали веб-платформу, которая мягко, но настойчиво возвращает контроль.</p><div style="display:flex;gap:1rem;flex-wrap:wrap;"><a href="#test" class="btn" id="testButtonNav">Хочу на тест 🎀</a><a href="#howitworks" class="btn btn-outline">Как работает</a></div><div class="hero-stats"><div class="stat"><span>20+</span><br>студентов в тесте</div><div class="stat"><span>5</span><br>принципов</div><div class="stat"><span>УГНТУ</span><br>экосистема</div></div></div><div style="flex:0.8;min-width:220px;background:#ffffffcc;border-radius:32px;padding:1.5rem;text-align:center;border:1px solid #f472b6;"><div style="font-weight:700;margin-bottom:1rem;color:#db2777;">🎯 SMART-цель</div><div style="font-size:0.9rem;">к 9 мая протестировать платформу на 20 реальных студентах УВШЭУ</div><div style="margin-top:1rem;background:#ffe0f0;border-radius:40px;padding:0.2rem 0.6rem;font-size:0.75rem;display:inline-block;color:#be185d;">✅ прототип готов</div></div></div></div></div>
+    <div class="gradient-bg">
+        <div class="container section" style="padding-top: 2rem; padding-bottom: 3rem;">
+            <div style="text-align: center;">
+                <div class="hero-badge" style="background:#ffe4f0; color:#c2417c; padding:0.3rem 0.9rem; border-radius:40px; font-size:0.8rem; display:inline-block; margin-bottom:1rem; border:1px solid #f472b6;">⚡ УВШЭУ УГНТУ — решение изнутри</div>
+                <h1>Не просто планер.<br>Система внешней<br>организации для первокурсника.</h1>
+                <p style="font-size:1.2rem; color: #1e5e7e; max-width: 600px; margin: 1rem auto;">«Я понимаю, что будет хуже, но всё равно откладываю» — знакомая боль?<br> Мы создали веб-платформу, которая мягко, но настойчиво возвращает контроль.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                    <a href="#test" class="btn" id="testButtonNav">Хочу на тест 🎀</a>
+                    <a href="#howitworks" class="btn btn-outline">Как работает</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat"><span>20+</span> студентов в тесте</div>
+                    <div class="stat"><span>5</span> принципов</div>
+                    <div class="stat"><span>УГНТУ</span> экосистема</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="container" style="margin-bottom:-2rem; margin-top:1rem;"><div style="display:flex; justify-content:flex-end;"><div id="streakWidget" class="streak-section"><span class="streak-emoji">🧠✨</span><div><div class="streak-text">🔥 Мысляп-серия <span class="streak-flame">🔥</span></div><div><span class="streak-number" id="streakDays">0</span> <span style="font-weight:500;">дней подряд</span></div><div class="streak-message" id="streakMessage"></div></div></div></div></div>
+    <div class="container section" id="problem">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <span style="background:#fce7f3; padding:0.2rem 0.8rem; border-radius:30px; font-size:0.8rem; color:#be185d;">Почему прокрастинация?</span>
+            <h2 style="margin-top: 0.8rem;">Проблема не в мотивации,<br> а в отсутствии навыка</h2>
+            <div class="quote-block">
+                <div class="quote-text" style="font-size:1.2rem; font-weight:500;">«Я не знаю, с чего начать»<br>«Откладываю даже важное»</div>
+                <div style="margin-top:1rem; color:#1e5e7e;">— опрос 17–20 лет, студенты УВШЭУ</div>
+            </div>
+            <p>Потеря привычного школьного надзора → хаотичная учёба → долги, стресс, вина. <strong style="color:#db2777;">Системный контроль</strong> создаёт внешнюю структуру без давления.</p>
+        </div>
+    </div>
 
-    <div class="container section" id="problem"><div style="max-width:800px;"><span style="background:#fce7f3;padding:0.2rem 0.8rem;border-radius:30px;font-size:0.8rem;font-weight:600;color:#be185d;">Почему прокрастинация?</span><h2 style="margin-top:0.8rem;">Проблема не в мотивации,<br> а в отсутствии навыка</h2><div class="quote-block"><div class="quote-text">«Я не знаю, с чего начать»<br>«Откладываю даже важное»</div><div style="margin-top:1rem;color:#1e5e7e;">— опрос 17–20 лет, студенты УВШЭУ</div></div><p>Потеря привычного школьного надзора → хаотичная учёба → долги, стресс, вина. <strong style="color:#db2777;">Системный контроль</strong> создаёт внешнюю структуру без давления.</p></div></div>
+    <div class="container section" id="howitworks">
+        <div style="text-align: center;">
+            <h2>Как платформа меняет хаос → порядок</h2>
+            <p style="color:#c2417c;">5 шагов к самодисциплине</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card"><div class="step-number">01</div><h3>Ввод предметов и дедлайнов</h3><p>Система разбивает задачи на микрошаги.</p></div>
+            <div class="step-card"><div class="step-number">02</div><h3>3–5 задач в день</h3><p>Точечная нагрузка.</p></div>
+            <div class="step-card"><div class="step-number">03</div><h3>Live-комната 40 мин</h3><p>Таймер + эффект присутствия.</p></div>
+            <div class="step-card"><div class="step-number">04</div><h3>Серии и реакция на пропуски</h3><p>Streak как в Duolingo.</p></div>
+            <div class="step-card"><div class="step-number">05</div><h3>Прогресс на виду</h3><p>Визуализация побед.</p></div>
+        </div>
+        <div style="margin-top: 2rem; text-align: center;">
+            <span style="background:#fce7f3; padding:0.5rem 1rem; border-radius:60px; color:#c2417c;">⭐ Конкурентное отличие — платформа под УГНТУ</span>
+        </div>
+    </div>
 
-    <div class="container section" id="howitworks"><div style="text-align:center;"><h2>Как платформа меняет хаос → порядок</h2><p style="color:#c2417c;">5 шагов к самодисциплине</p></div><div class="steps-grid"><div class="step-card"><div class="step-number">01</div><h3>Ввод предметов и дедлайнов</h3><p>Система разбивает задачи на микрошаги.</p></div><div class="step-card"><div class="step-number">02</div><h3>3–5 задач в день</h3><p>Точечная нагрузка.</p></div><div class="step-card"><div class="step-number">03</div><h3>Live-комната 40 мин</h3><p>Таймер + эффект присутствия.</p></div><div class="step-card"><div class="step-number">04</div><h3>Серии и реакция на пропуски</h3><p>Streak как в Duolingo.</p></div><div class="step-card"><div class="step-number">05</div><h3>Прогресс на виду</h3><p>Визуализация побед.</p></div></div><div style="margin-top:2rem;text-align:center;"><span style="background:#fce7f3;padding:0.5rem 1rem;border-radius:60px;color:#c2417c;">⭐ Конкурентное отличие — платформа под УГНТУ</span></div></div>
+    <div class="gradient-bg">
+        <div class="container section" id="faculty">
+            <h2 style="text-align: center;">Как проект связан с УВШЭУ?</h2>
+            <div class="faculty-grid">
+                <div class="faculty-card"><div style="font-size:2rem;">🎓</div><h3>Боль своих → решение</h3><p>Интервью с первокурсниками, мы сами студенты.</p></div>
+                <div class="faculty-card"><div style="font-size:2rem;">🧠</div><h3>Снижение выгорания</h3><p>Выше успеваемость, меньше отчислений.</p></div>
+                <div class="faculty-card"><div style="font-size:2rem;">📊</div><h3>SMART-прототип</h3><p>к 9 мая тестируем на 20 студентах.</p><div class="smart-badge">Цель: до 20 живых тестов</div></div>
+            </div>
+            <div style="background:#fff; border-radius:32px; padding:1.5rem; margin-top:1rem; border:1px solid #f472b6; text-align: center;">
+                <p style="font-weight:500; color:#c2417c;">📌 «Мы однокурсники, которые нашли боль первых недель обучения и создали продукт, помогающий войти в ритм университетской жизни.»</p>
+            </div>
+        </div>
+    </div>
 
-    <div class="gradient-bg"><div class="container section" id="faculty"><h2>Как проект связан с УВШЭУ?</h2><div class="faculty-grid"><div class="faculty-card"><div style="font-size:2rem;">🎓</div><h3>Боль своих → решение</h3><p>Интервью с первокурсниками, мы сами студенты.</p></div><div class="faculty-card"><div style="font-size:2rem;">🧠</div><h3>Снижение выгорания</h3><p>Выше успеваемость, меньше отчислений.</p></div><div class="faculty-card"><div style="font-size:2rem;">📊</div><h3>SMART-прототип</h3><p>к 9 мая тестируем на 20 студентах.</p><div class="smart-badge">Цель: до 20 живых тестов</div></div></div><div style="background:#fff;border-radius:32px;padding:1.5rem;margin-top:1rem;border:1px solid #f472b6;"><p style="font-weight:500;color:#c2417c;">📌 «Мы однокурсники, которые нашли боль первых недель обучения и создали продукт, помогающий войти в ритм университетской жизни.»</p></div></div></div>
-
-    <div class="container section" id="test"><div class="test-panel"><h3>🧪 Пилотное тестирование</h3><p>Ищем 20 студентов УВШЭУ УГНТУ.</p><div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;"><a href="#" id="fakeSubmitBtn" class="btn" style="background:#FFE7C7;color:#db2777;">✉️ Записаться</a><span>*до 9 мая</span></div><div id="testMessage" style="margin-top:1rem;"></div></div></div>
+    <div class="container section" id="test">
+        <div class="test-panel">
+            <h3 style="color:white;">🧪 Пилотное тестирование</h3>
+            <p style="opacity: 0.9;">Прототип уже работает — мы ищем 20 студентов УВШЭУ УГНТУ.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+                <a href="#" id="fakeSubmitBtn" class="btn" style="background:#FFE7C7; color:#db2777;">✉️ Записаться</a>
+                <span>*до 9 мая, очно и онлайн</span>
+            </div>
+            <div id="testMessage" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
 </main>
 
-<div class="container" style="margin-bottom:2rem;"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
-<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
+<div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
+<footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p><p>✉️ kozyavka67@gmail.com</p></div></footer>
 
 <script>
     const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
@@ -204,40 +172,10 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     document.addEventListener('DOMContentLoaded', function() {
-        function updateStreak() {
-            const today = new Date().toDateString();
-            let streakData = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
-            let currentStreak = streakData.streak || 0;
-            let lastVisit = streakData.lastVisit;
-            if (lastVisit === today) {}
-            else if (lastVisit) {
-                const lastDate = new Date(lastVisit);
-                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                if (lastDate.toDateString() === yesterday.toDateString()) currentStreak++;
-                else currentStreak = 1;
-            } else currentStreak = 1;
-            localStorage.setItem('streakWeasel', JSON.stringify({ streak: currentStreak, lastVisit: today }));
-            return currentStreak;
-        }
-        function displayStreak() {
-            const streak = updateStreak();
-            const streakSpan = document.getElementById('streakDays');
-            const messageSpan = document.getElementById('streakMessage');
-            if (streakSpan) streakSpan.innerText = streak;
-            if (messageSpan) {
-                if (streak === 1) messageSpan.innerText = '🔥 Первый день твоего Мысляпа!';
-                else if (streak < 3) messageSpan.innerText = '🧠 Мысляп растёт! Не пропускай дни.';
-                else if (streak < 7) messageSpan.innerText = '✨ Крепнет дисциплина, Мысляп в силе!';
-                else messageSpan.innerText = '🏆 Серия Мысляп ' + streak + ' дней! Гениально!';
-            }
-        }
-        displayStreak();
-        
         let currentUserEmail = localStorage.getItem('currentUserEmailSupabase') || null;
         function getUserNickname(email) { return email ? email.split('@')[0] : "Гость"; }
         function isAdmin() { return currentUserEmail === 'admin@systemcontrol.com'; }
         
-        // Функция для преобразования файла в base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -247,9 +185,7 @@
             });
         }
         
-        // Элементы DOM
         const authModal = document.getElementById('authModal');
-        const modalTitle = document.getElementById('modalTitle');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const submitRegisterBtn = document.getElementById('submitRegisterBtn');
@@ -268,14 +204,11 @@
         const avatarInput = document.getElementById('avatarInput');
         const avatarPreview = document.getElementById('avatarPreview');
         
-        // Предпросмотр аватара
         if (avatarInput) {
             avatarInput.addEventListener('change', function(e) {
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        avatarPreview.src = ev.target.result;
-                    };
+                    reader.onload = function(ev) { avatarPreview.src = ev.target.result; };
                     reader.readAsDataURL(e.target.files[0]);
                 }
             });
@@ -295,7 +228,6 @@
             authMessage.innerHTML = '';
             loginForm.style.display = 'none';
             registerForm.style.display = 'block';
-            modalTitle.textContent = 'Регистрация';
             document.getElementById('regName').value = '';
             document.getElementById('regSurname').value = '';
             document.getElementById('regEmail').value = '';
@@ -320,47 +252,19 @@
             const password = document.getElementById('regPassword').value;
             const passwordConfirm = document.getElementById('regPasswordConfirm').value;
             const agree = document.getElementById('regAgree').checked;
-            
-            // Загрузка аватара
             let avatarBase64 = null;
-            if (avatarInput && avatarInput.files && avatarInput.files[0]) {
-                avatarBase64 = await fileToBase64(avatarInput.files[0]);
-            }
+            if (avatarInput && avatarInput.files && avatarInput.files[0]) avatarBase64 = await fileToBase64(avatarInput.files[0]);
             
-            if (!name || !surname || !email || !phone || !birthdate || !password) {
-                authMessage.innerHTML = '❌ Заполните все поля'; return;
-            }
-            if (password !== passwordConfirm) {
-                authMessage.innerHTML = '❌ Пароли не совпадают'; return;
-            }
-            if (password.length < 4) {
-                authMessage.innerHTML = '❌ Пароль должен быть не менее 4 символов'; return;
-            }
-            if (!agree) {
-                authMessage.innerHTML = '❌ Вы должны согласиться с Политикой конфиденциальности'; return;
-            }
+            if (!name || !surname || !email || !phone || !birthdate || !password) { authMessage.innerHTML = '❌ Заполните все поля'; return; }
+            if (password !== passwordConfirm) { authMessage.innerHTML = '❌ Пароли не совпадают'; return; }
+            if (password.length < 4) { authMessage.innerHTML = '❌ Пароль должен быть не менее 4 символов'; return; }
+            if (!agree) { authMessage.innerHTML = '❌ Вы должны согласиться с Политикой конфиденциальности'; return; }
             
             const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length > 0) {
-                authMessage.innerHTML = '❌ Пользователь с таким Email уже существует';
-                return;
-            }
+            if (existing && existing.length > 0) { authMessage.innerHTML = '❌ Пользователь с таким Email уже существует'; return; }
             
-            const { error } = await supabase.from('users').insert([{
-                email: email,
-                name: name,
-                surname: surname,
-                phone: phone,
-                birthdate: birthdate,
-                password: password,
-                nickname: name,
-                avatar: avatarBase64
-            }]);
-            
-            if (error) {
-                authMessage.innerHTML = '❌ Ошибка регистрации: ' + error.message;
-                return;
-            }
+            const { error } = await supabase.from('users').insert([{ email, name, surname, phone, birthdate, password, nickname: name, avatar: avatarBase64 }]);
+            if (error) { authMessage.innerHTML = '❌ Ошибка регистрации: ' + error.message; return; }
             
             currentUserEmail = email;
             localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
@@ -371,58 +275,19 @@
         async function loginUser() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            if (!email || !password) {
-                authMessage.innerHTML = '❌ Заполните все поля';
-                return;
-            }
-            
-            const { data, error } = await supabase
-                .from('users')
-                .select('email, password')
-                .eq('email', email)
-                .eq('password', password);
-            
-            if (error || !data || data.length === 0) {
-                authMessage.innerHTML = '❌ Неверный email или пароль';
-                return;
-            }
-            
+            if (!email || !password) { authMessage.innerHTML = '❌ Заполните все поля'; return; }
+            const { data, error } = await supabase.from('users').select('email, password').eq('email', email).eq('password', password);
+            if (error || !data || data.length === 0) { authMessage.innerHTML = '❌ Неверный email или пароль'; return; }
             currentUserEmail = email;
             localStorage.setItem('currentUserEmailSupabase', currentUserEmail);
             updateUI();
             closeModalFunc();
         }
         
-        function logout() { 
-            currentUserEmail = null; 
-            localStorage.removeItem('currentUserEmailSupabase'); 
-            updateUI(); 
-        }
+        function logout() { currentUserEmail = null; localStorage.removeItem('currentUserEmailSupabase'); updateUI(); }
         
-        // Политика
-        const policyModal = document.getElementById('policyModal');
-        const showPolicyLink = document.getElementById('showPolicyLink');
-        const closePolicyModal = document.getElementById('closePolicyModal');
-        const closePolicyBtn = document.getElementById('closePolicyBtn');
-        
-        showPolicyLink.onclick = () => policyModal.classList.add('active');
-        closePolicyModal.onclick = () => policyModal.classList.remove('active');
-        closePolicyBtn.onclick = () => policyModal.classList.remove('active');
-        policyModal.onclick = (e) => { if(e.target === policyModal) policyModal.classList.remove('active'); };
-        
-        // Переключение форм
-        switchToLogin.onclick = () => {
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            modalTitle.textContent = 'Вход';
-            authMessage.innerHTML = '';
-        };
-        switchToRegister.onclick = () => {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            modalTitle.textContent = 'Регистрация';
-            authMessage.innerHTML = '';
-        };
+        switchToLogin.onclick = () => { loginForm.style.display = 'block'; registerForm.style.display = 'none'; authMessage.innerHTML = ''; };
+        switchToRegister.onclick = () => { loginForm.style.display = 'none'; registerForm.style.display = 'block'; authMessage.innerHTML = ''; };
         
         submitRegisterBtn.onclick = registerUser;
         submitLoginBtn.onclick = loginUser;
@@ -432,46 +297,6 @@
         testButtonNav.onclick = (e) => { e.preventDefault(); showModal(); };
         fakeSubmitBtn.onclick = (e) => { e.preventDefault(); showModal(); };
         
-        // Админ панель
-        const adminPanel = document.getElementById('adminPanel');
-        const closeAdminPanel = document.getElementById('closeAdminPanel');
-        const usersTableBody = document.getElementById('usersTableBody');
-        
-        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-        
-        async function renderAdminTable() {
-            if (!usersTableBody) return;
-            const { data, error } = await supabase.from('users').select('*');
-            if (error) {
-                usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</td>';
-                return;
-            }
-            usersTableBody.innerHTML = '';
-            for (let user of data) {
-                const row = document.createElement('tr');
-                const avatarHtml = user.avatar ? `<img src="${escapeHtml(user.avatar)}" class="user-avatar">` : '—';
-                row.innerHTML = `
-                    <td>${avatarHtml}</td>
-                    <td>${escapeHtml(user.name || '')}</td>
-                    <td>${escapeHtml(user.surname || '')}</td>
-                    <td>${escapeHtml(user.email || '')}</td>
-                    <td>${escapeHtml(user.phone || '')}</td>
-                    <td>${escapeHtml(user.birthdate || '')}</td>
-                `;
-                usersTableBody.appendChild(row);
-            }
-        }
-        
-        adminBtn.onclick = async () => {
-            if (isAdmin()) {
-                await renderAdminTable();
-                adminPanel.classList.add('active');
-            }
-        };
-        closeAdminPanel.onclick = () => adminPanel.classList.remove('active');
-        adminPanel.onclick = (e) => { if(e.target === adminPanel) adminPanel.classList.remove('active'); };
-        
-        // Профиль
         const profilePage = document.getElementById('profilePage');
         const closeProfile = document.getElementById('closeProfile');
         const profileLoginDisplay = document.getElementById('profileLoginDisplay');
@@ -501,25 +326,117 @@
             } 
         };
         
-        updateUI();
+        const adminPanel = document.getElementById('adminPanel');
+        const closeAdminPanel = document.getElementById('closeAdminPanel');
+        const usersTableBody = document.getElementById('usersTableBody');
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+        async function renderAdminTable() {
+            if (!usersTableBody) return;
+            const { data, error } = await supabase.from('users').select('*');
+            if (error) { usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</td></tr>'; return; }
+            usersTableBody.innerHTML = '';
+            for (let user of data) {
+                const row = document.createElement('tr');
+                const avatarHtml = user.avatar ? `<img src="${escapeHtml(user.avatar)}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : '—';
+                row.innerHTML = `<td>${avatarHtml}</td><td>${escapeHtml(user.name || '')}</td><td>${escapeHtml(user.surname || '')}</td><td>${escapeHtml(user.email || '')}</td><td>${escapeHtml(user.phone || '')}</td><td>${escapeHtml(user.birthdate || '')}</td>`;
+                usersTableBody.appendChild(row);
+            }
+        }
+        adminBtn.onclick = async () => { if (isAdmin()) { await renderAdminTable(); adminPanel.classList.add('active'); } };
+        closeAdminPanel.onclick = () => adminPanel.classList.remove('active');
+        adminPanel.onclick = (e) => { if(e.target === adminPanel) adminPanel.classList.remove('active'); };
         
         async function ensureAdmin() {
             const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
             if (!data || data.length === 0) {
-                await supabase.from('users').insert([{
-                    email: 'admin@systemcontrol.com',
-                    name: 'Admin',
-                    surname: 'System',
-                    phone: '+70000000000',
-                    birthdate: '2000-01-01',
-                    password: 'admin123',
-                    nickname: 'Администратор',
-                    avatar: null
-                }]);
+                await supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', birthdate: '2000-01-01', password: 'admin123', nickname: 'Администратор', avatar: null }]);
             }
         }
         ensureAdmin();
+        updateUI();
     });
+</script>
+
+<!-- Модальные окна (перенесены в конец, чтобы не мешать) -->
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <div class="close-modal" id="closeModal">&times;</div>
+        <h3 id="modalTitle">Регистрация</h3>
+        <div id="loginForm" style="display: none;">
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Пароль">
+            <button id="submitLoginBtn" class="btn">Войти</button>
+            <div class="modal-switch" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div>
+        </div>
+        <div id="registerForm">
+            <div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div>
+            <div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div>
+            <input type="date" id="regBirthdate" placeholder="Дата рождения *">
+            <input type="password" id="regPassword" placeholder="Пароль *">
+            <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
+            <div style="text-align: center; margin: 10px 0;">
+                <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/80?text=Avatar" alt="Аватар">
+                <input type="file" id="avatarInput" accept="image/*" style="margin-top: 5px;">
+                <p style="font-size: 0.7rem; color: #1e5e7e;">Загрузите фото профиля (необязательно)</p>
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" id="regAgree">
+                <label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span> *</label>
+            </div>
+            <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
+            <div class="modal-switch" id="switchToLogin">Уже есть аккаунт? Войти</div>
+        </div>
+        <div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div>
+    </div>
+</div>
+
+<div id="policyModal" class="modal">
+    <div class="modal-content" style="max-width: 550px;">
+        <div class="close-modal" id="closePolicyModal">&times;</div>
+        <h3>📋 Политика конфиденциальности</h3>
+        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; max-height: 400px; overflow-y: auto;">
+            <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта УКоннект.</strong></p>
+            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Хэш пароля. После входа мы также храним: Аватар, Описание профиля, Баннер, Список друзей и Шифрованные сообщения.</p>
+            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля, обеспечения связи между друзьями и поиска пользователей.</p>
+            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS). Сообщения шифруются.</p>
+            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент через настройки профиля.</p>
+        </div>
+        <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
+    </div>
+</div>
+
+<div id="profilePage" class="profile-page"><div class="profile-content"><div class="close-profile" id="closeProfile">&times;</div><h3>👤 Мой профиль</h3><p>Email: <strong id="profileLoginDisplay"></strong></p><input type="text" id="nicknameInput" placeholder="Никнейм"><button id="saveNicknameBtn" class="btn">Сохранить</button><div id="profileMessage" style="margin-top:1rem;font-size:0.85rem;color:#db2777;"></div></div></div>
+
+<div id="adminPanel" class="profile-page">
+    <div class="profile-content">
+        <div class="close-profile" id="closeAdminPanel">&times;</div>
+        <h3>👑 Панель администратора</h3>
+        <p>Все зарегистрированные пользователи (облачная синхронизация):</p>
+        <div style="overflow-x: auto;">
+            <table class="user-table" id="usersTable">
+                <thead><tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr></thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
+    .profile-page.active { display: flex; }
+    .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 900px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
+    .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; vertical-align: middle; }
+    .user-table th { background: #fce7f3; color: #c2417c; }
+    .policy-link { cursor: pointer; color: #ec489a; text-decoration: underline; }
+    .modal .btn { width: 100%; margin-bottom: 0.5rem; }
+</style>
+
+<script>
+    document.getElementById('showPolicyLink').onclick = () => document.getElementById('policyModal').classList.add('active');
+    document.getElementById('closePolicyModal').onclick = () => document.getElementById('policyModal').classList.remove('active');
+    document.getElementById('closePolicyBtn').onclick = () => document.getElementById('policyModal').classList.remove('active');
+    document.getElementById('policyModal').onclick = (e) => { if(e.target === document.getElementById('policyModal')) document.getElementById('policyModal').classList.remove('active'); };
 </script>
 </body>
 </html>

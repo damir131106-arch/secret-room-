@@ -5,30 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Системный контроль — LIVE-комнаты</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; }
         .container { max-width: 950px; margin: 0 auto; padding: 0 24px; }
-        h1 { font-size: 2.5rem; margin: 1rem 0; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; text-align: center; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.8rem 1.5rem; font-weight: 600; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
-        .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; }
+        
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(244,114,182,0.3); margin-bottom: 2rem; }
         .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 4px; }
         .logo-emoji { font-size: 1.8rem; color: #ec489a; }
         .logo-text { background: linear-gradient(135deg, #db2777, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 2rem; font-weight: 500; }
-        .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; }
-        .nav-links a:hover { color: #0284c7; }
+        .nav-links { display: flex; gap: 2rem; font-weight: 500; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: #c2417c; transition: color 0.2s; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); padding: 0.3rem 1rem; border-radius: 40px; }
+        .nav-links a:hover { color: #0284c7; background: rgba(255,255,255,0.8); }
+        .nav-links a .emoji { font-size: 1.1rem; }
+        
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
         .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        
+        h1 { text-align: center; font-size: 2rem; margin: 1rem 0; background: linear-gradient(135deg, #c71585, #0284c7); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 0.8rem 1.5rem; font-weight: 600; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-decoration: none; gap: 0.5rem; }
+        .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; border: 2px solid #f472b6; }
         .close-modal { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
-        .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
-        .profile-page.active { display: flex; }
-        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 450px; width: 90%; text-align: center; border: 2px solid #f472b6; }
-        .close-profile { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
+        
         .live-room-container { background: rgba(255,255,250,0.98); border-radius: 48px; padding: 1.8rem; margin: 1rem 0; border: 2px solid #f472b6; }
         .room-buttons { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .room-info { background: #fce7f3; border-radius: 28px; padding: 1rem; margin-bottom: 1rem; text-align: center; }
@@ -38,11 +40,8 @@
         .chat-input-area { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
         .chat-input-area input { flex: 1; padding: 0.8rem 1rem; border-radius: 50px; border: 1px solid #fbcfe8; background: white; font-size: 1rem; }
         .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
-        footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; }
-        /* Исправленные цвета для эмодзи */
-        .emoji-fix { color: #ec489a; background: none; display: inline-block; }
-        .message strong { color: #c2417c; }
-        @media (max-width: 760px) { .navbar { flex-direction: column; } .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; } }
+        footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
+        @media (max-width: 760px) { .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -51,21 +50,17 @@
     <div class="navbar">
         <div class="logo"><span class="logo-emoji">🌸</span><span class="logo-text">СИСТЕМНЫЙ КОНТРОЛЬ</span></div>
         <div class="nav-links">
-            <a href="/">Главная</a>
-            <a href="/mood.html">Дневник</a>
-            <a href="/chat.html">LIVE-комнаты</a>
+            <a href="/"><span class="emoji">🏠</span> Главная</a>
+            <a href="/mood.html"><span class="emoji">📔</span> Дневник</a>
+            <a href="/chat.html"><span class="emoji">🎙️</span> LIVE-комнаты</a>
+            <a href="/team.html"><span class="emoji">🕶️</span> Команда</a>
         </div>
         <div id="userDisplay" class="user-info" style="display: none;">
             <span>👤 <span id="currentUserLogin"></span></span>
-            <button id="profileBtn" class="profile-link">✎ Профиль</button>
             <button id="logoutBtn" class="logout-btn">Выйти</button>
         </div>
     </div>
 </nav>
-
-<div id="authModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeModal">&times;</div><h3 id="modalTitle">Регистрация</h3><input type="text" id="authLogin" placeholder="Логин"><input type="password" id="authPassword" placeholder="Пароль"><button id="submitAuthBtn" class="btn">Зарегистрироваться</button><div id="authSwitch" class="modal-switch">Уже есть аккаунт? Войти</div><div id="authMessage" style="margin-top:1rem;font-size:0.85rem;text-align:center;color:#db2777;"></div></div></div>
-
-<div id="profilePage" class="profile-page"><div class="profile-content"><div class="close-profile" id="closeProfile">&times;</div><h3>👤 Мой профиль</h3><p>Логин: <strong id="profileLoginDisplay"></strong></p><input type="text" id="nicknameInput" placeholder="Никнейм"><button id="saveNicknameBtn" class="btn">Сохранить</button><div id="profileMessage" style="margin-top:1rem;font-size:0.85rem;color:#db2777;"></div></div></div>
 
 <main class="container">
     <h1>🎙️ LIVE-КОМНАТЫ</h1>
@@ -92,99 +87,72 @@
     </div>
 </main>
 
-<div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиулин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
+<div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
 <footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let users = JSON.parse(localStorage.getItem('appUsers')) || {};
-        let currentUser = localStorage.getItem('currentUser') || null;
-        function getUserNickname(login) { if(!login) return "Гость"; const nick = localStorage.getItem(`nickname_${login}`); return nick || login; }
-        function saveUserNickname(login, nickname) { if(nickname.trim()) localStorage.setItem(`nickname_${login}`, nickname.trim()); }
-        
-        const authModal = document.getElementById('authModal'), modalTitle = document.getElementById('modalTitle');
-        const authLogin = document.getElementById('authLogin'), authPassword = document.getElementById('authPassword');
-        const submitAuthBtn = document.getElementById('submitAuthBtn'), authSwitch = document.getElementById('authSwitch');
-        const authMessage = document.getElementById('authMessage'), userDisplay = document.getElementById('userDisplay');
-        const currentUserLoginSpan = document.getElementById('currentUserLogin'), logoutBtn = document.getElementById('logoutBtn');
-        const profileBtn = document.getElementById('profileBtn'), profilePage = document.getElementById('profilePage');
-        const closeProfile = document.getElementById('closeProfile'), profileLoginDisplay = document.getElementById('profileLoginDisplay');
-        const nicknameInput = document.getElementById('nicknameInput'), saveNicknameBtn = document.getElementById('saveNicknameBtn');
-        const profileMessage = document.getElementById('profileMessage');
-        let isLoginMode = false;
-        
-        function updateUI() {
-            if(currentUser) { currentUserLoginSpan.textContent = getUserNickname(currentUser); userDisplay.style.display = 'flex'; }
-            else { userDisplay.style.display = 'none'; }
-        }
-        function showModal() { authLogin.value = ''; authPassword.value = ''; authMessage.innerHTML = ''; authModal.classList.add('active'); }
-        function closeModal() { authModal.classList.remove('active'); }
-        function register(login, password) {
-            if(!login.trim() || !password.trim()) { authMessage.innerHTML = '❌ Заполните поля'; return false; }
-            if(users[login]) { authMessage.innerHTML = '❌ Логин существует'; return false; }
-            users[login] = { password: password }; localStorage.setItem('appUsers', JSON.stringify(users));
-            currentUser = login; localStorage.setItem('currentUser', currentUser); updateUI(); closeModal(); return true;
-        }
-        function login(login, password) {
-            if(!users[login]) { authMessage.innerHTML = '❌ Пользователь не найден'; return false; }
-            if(users[login].password !== password) { authMessage.innerHTML = '❌ Неверный пароль'; return false; }
-            currentUser = login; localStorage.setItem('currentUser', currentUser); updateUI(); closeModal(); return true;
-        }
-        function logout() { if(window.leaveChatRoom) window.leaveChatRoom(); currentUser = null; localStorage.removeItem('currentUser'); updateUI(); }
-        
-        submitAuthBtn.onclick = () => { const l = authLogin.value.trim(), p = authPassword.value.trim(); isLoginMode ? login(l,p) : register(l,p); };
-        authSwitch.onclick = () => { isLoginMode = !isLoginMode; modalTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация'; submitAuthBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться'; authSwitch.innerHTML = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти'; authMessage.innerHTML = ''; };
-        document.getElementById('closeModal').onclick = closeModal; authModal.onclick = (e) => { if(e.target === authModal) closeModal(); };
-        logoutBtn.onclick = logout;
-        profileBtn.onclick = () => { if(currentUser) { profileLoginDisplay.textContent = currentUser; nicknameInput.value = getUserNickname(currentUser); profileMessage.innerHTML = ''; profilePage.classList.add('active'); } };
-        closeProfile.onclick = () => profilePage.classList.remove('active'); profilePage.onclick = (e) => { if(e.target === profilePage) profilePage.classList.remove('active'); };
-        saveNicknameBtn.onclick = () => { if(currentUser) { const newNick = nicknameInput.value.trim(); if(newNick) { saveUserNickname(currentUser, newNick); profileMessage.innerHTML = '✅ Никнейм изменён!'; updateUI(); } else profileMessage.innerHTML = '❌ Не может быть пустым'; } };
-        
-        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-        
-        let WS_URL;
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') WS_URL = 'ws://localhost:3000';
-        else WS_URL = `wss://${window.location.host}`;
-        
-        let ws = null, currentRoom = null;
-        const roomStatusDiv = document.getElementById('roomStatus'), activeArea = document.getElementById('activeRoomArea');
-        const roomCodeDisplaySpan = document.getElementById('roomCodeDisplay'), participantsListSpan = document.getElementById('participantsList');
-        const leaveRoomBtn = document.getElementById('leaveRoomBtn'), chatMessagesDiv = document.getElementById('roomChatMessages');
-        const chatInput = document.getElementById('chatInput'), sendMsgBtn = document.getElementById('sendMsgBtn');
-        const showCreateRoomBtn = document.getElementById('showCreateRoomBtn'), showJoinRoomBtn = document.getElementById('showJoinRoomBtn');
-        
-        function connectWebSocket() {
-            if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
-            try {
-                ws = new WebSocket(WS_URL);
-                ws.onopen = () => { if (chatMessagesDiv && chatMessagesDiv.innerHTML.includes('Подключение')) chatMessagesDiv.innerHTML = '<div class="message-system">✅ Подключено к серверу. Создайте или войдите в комнату.</div>'; };
-                ws.onmessage = (event) => { try { handleChatMessage(JSON.parse(event.data)); } catch(e) { console.error(e); } };
-                ws.onclose = () => setTimeout(connectWebSocket, 3000);
-            } catch(e) { console.error(e); }
-        }
-        function handleChatMessage(data) {
-            if(data.type === 'room_created') { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `🔑 Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`🎉 Комната создана! Код: ${currentRoom}. Передайте его друзьям!`); }
-            else if(data.type === 'room_joined' && data.success) { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `🔑 Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`✅ Вы вошли в комнату ${currentRoom}`); }
-            else if(data.type === 'room_joined' && !data.success) roomStatusDiv.innerHTML = '💬 Комната не найдена. Проверьте код или создайте новую.';
-            else if(data.type === 'history') { if(chatMessagesDiv) { chatMessagesDiv.innerHTML = ''; if(data.data && data.data.length) data.data.forEach(msg => addChatMessage(msg.nickname, msg.text)); else addChatSystemMessage('💬 Напишите первое сообщение!'); } }
-            else if(data.type === 'message') addChatMessage(data.nickname, data.text);
-            else if(data.type === 'system') addChatSystemMessage(data.text);
-            else if(data.type === 'participants') participantsListSpan.innerHTML = `👥 участников: ${data.count}`;
-        }
-        function addChatMessage(nickname, text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message'; div.innerHTML = `<strong>${escapeHtml(nickname)}:</strong> ${escapeHtml(text)}`; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
-        function addChatSystemMessage(text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message-system'; div.textContent = text; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
-        function createRoom() { if(!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; } if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'create_room' })); else addChatSystemMessage('❌ Нет соединения с сервером'); }, 500); }
-        function joinRoomByCode() { if(!currentUser) { alert("Сначала зарегистрируйтесь!"); showModal(); return; } const code = prompt("Введите 6-значный код комнаты:"); if(!code || !code.trim()) return; const roomCode = code.trim().toUpperCase(); if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'join_room', roomCode: roomCode })); else addChatSystemMessage('❌ Нет соединения'); }, 500); }
-        function leaveChatRoom() { if(currentRoom) { currentRoom = null; roomStatusDiv.style.display = 'block'; activeArea.style.display = 'none'; roomStatusDiv.innerHTML = '💬 Ты не в комнате. Создай новую или войди по коду.'; if(chatMessagesDiv) chatMessagesDiv.innerHTML = '<div class="message-system">🔌 Вы покинули комнату</div>'; } }
-        window.leaveChatRoom = leaveChatRoom;
-        if(showCreateRoomBtn) showCreateRoomBtn.onclick = createRoom;
-        if(showJoinRoomBtn) showJoinRoomBtn.onclick = joinRoomByCode;
-        if(leaveRoomBtn) leaveRoomBtn.onclick = leaveChatRoom;
-        if(sendMsgBtn) sendMsgBtn.onclick = () => { const msg = chatInput.value.trim(); if(msg && ws && ws.readyState === WebSocket.OPEN) { const nickname = currentUser ? getUserNickname(currentUser) : "Гость"; ws.send(JSON.stringify({ type: 'message', nickname: nickname, text: msg })); chatInput.value = ''; } else addChatSystemMessage('❌ Нет соединения или вы не в комнате'); };
-        if(chatInput) chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter' && sendMsgBtn) sendMsgBtn.click(); });
-        connectWebSocket();
-        updateUI();
-    });
+    const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    const currentUserEmail = localStorage.getItem('currentUserEmailSupabase');
+    const userDisplay = document.getElementById('userDisplay');
+    const currentUserLoginSpan = document.getElementById('currentUserLogin');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    if (currentUserEmail && userDisplay) {
+        currentUserLoginSpan.textContent = currentUserEmail.split('@')[0];
+        userDisplay.style.display = 'flex';
+    }
+    if (logoutBtn) logoutBtn.onclick = () => { localStorage.removeItem('currentUserEmailSupabase'); window.location.href = '/'; };
+    
+    function getUserNickname() { return currentUserEmail ? currentUserEmail.split('@')[0] : "Гость"; }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    
+    let WS_URL;
+    if (window.location.hostname === 'localhost') WS_URL = 'ws://localhost:3000';
+    else WS_URL = `wss://${window.location.host}`;
+    
+    let ws = null, currentRoom = null;
+    const roomStatusDiv = document.getElementById('roomStatus'), activeArea = document.getElementById('activeRoomArea');
+    const roomCodeDisplaySpan = document.getElementById('roomCodeDisplay'), participantsListSpan = document.getElementById('participantsList');
+    const leaveRoomBtn = document.getElementById('leaveRoomBtn'), chatMessagesDiv = document.getElementById('roomChatMessages');
+    const chatInput = document.getElementById('chatInput'), sendMsgBtn = document.getElementById('sendMsgBtn');
+    const showCreateRoomBtn = document.getElementById('showCreateRoomBtn'), showJoinRoomBtn = document.getElementById('showJoinRoomBtn');
+    
+    function connectWebSocket() {
+        if (ws && ws.readyState === WebSocket.OPEN) return;
+        try {
+            ws = new WebSocket(WS_URL);
+            ws.onopen = () => { if (chatMessagesDiv && chatMessagesDiv.innerHTML.includes('Подключение')) chatMessagesDiv.innerHTML = '<div class="message-system">✅ Подключено к серверу. Создайте или войдите в комнату.</div>'; };
+            ws.onmessage = (event) => { try { handleChatMessage(JSON.parse(event.data)); } catch(e) { console.error(e); } };
+            ws.onclose = () => setTimeout(connectWebSocket, 3000);
+        } catch(e) { console.error(e); }
+    }
+    
+    function handleChatMessage(data) {
+        if(data.type === 'room_created') { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `🔑 Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`🎉 Комната создана! Код: ${currentRoom}. Передайте его друзьям!`); }
+        else if(data.type === 'room_joined' && data.success) { currentRoom = data.roomCode; roomCodeDisplaySpan.innerHTML = `🔑 Код: ${currentRoom}`; roomStatusDiv.style.display = 'none'; activeArea.style.display = 'block'; addChatSystemMessage(`✅ Вы вошли в комнату ${currentRoom}`); }
+        else if(data.type === 'room_joined' && !data.success) roomStatusDiv.innerHTML = '💬 Комната не найдена. Проверьте код или создайте новую.';
+        else if(data.type === 'history') { if(chatMessagesDiv) { chatMessagesDiv.innerHTML = ''; if(data.data && data.data.length) data.data.forEach(msg => addChatMessage(msg.nickname, msg.text)); else addChatSystemMessage('💬 Напишите первое сообщение!'); } }
+        else if(data.type === 'message') addChatMessage(data.nickname, data.text);
+        else if(data.type === 'system') addChatSystemMessage(data.text);
+        else if(data.type === 'participants') participantsListSpan.innerHTML = `👥 участников: ${data.count}`;
+    }
+    
+    function addChatMessage(nickname, text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message'; div.innerHTML = `<strong>${escapeHtml(nickname)}:</strong> ${escapeHtml(text)}`; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
+    function addChatSystemMessage(text) { if(!chatMessagesDiv) return; const div = document.createElement('div'); div.className = 'message-system'; div.textContent = text; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
+    function createRoom() { if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; } if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'create_room' })); else addChatSystemMessage('❌ Нет соединения с сервером'); }, 500); }
+    function joinRoomByCode() { if(!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); window.location.href = '/'; return; } const code = prompt("Введите 6-значный код комнаты:"); if(!code || !code.trim()) return; const roomCode = code.trim().toUpperCase(); if(!ws || ws.readyState !== WebSocket.OPEN) connectWebSocket(); setTimeout(() => { if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'join_room', roomCode: roomCode })); else addChatSystemMessage('❌ Нет соединения'); }, 500); }
+    function leaveChatRoom() { if(currentRoom) { currentRoom = null; roomStatusDiv.style.display = 'block'; activeArea.style.display = 'none'; roomStatusDiv.innerHTML = '💬 Ты не в комнате. Создай новую или войди по коду.'; if(chatMessagesDiv) chatMessagesDiv.innerHTML = '<div class="message-system">🔌 Вы покинули комнату</div>'; } }
+    
+    if(showCreateRoomBtn) showCreateRoomBtn.onclick = createRoom;
+    if(showJoinRoomBtn) showJoinRoomBtn.onclick = joinRoomByCode;
+    if(leaveRoomBtn) leaveRoomBtn.onclick = leaveChatRoom;
+    if(sendMsgBtn) sendMsgBtn.onclick = () => { const msg = chatInput.value.trim(); if(msg && ws && ws.readyState === WebSocket.OPEN) { const nickname = getUserNickname(); ws.send(JSON.stringify({ type: 'message', nickname: nickname, text: msg })); chatInput.value = ''; } else addChatSystemMessage('❌ Нет соединения или вы не в комнате'); };
+    if(chatInput) chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter' && sendMsgBtn) sendMsgBtn.click(); });
+    
+    connectWebSocket();
 </script>
 </body>
 </html>
