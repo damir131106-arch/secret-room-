@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* стили такие же, как были — не меняем */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; scroll-behavior: smooth; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -34,11 +33,12 @@
         .streak-number { font-size: 1.6rem; font-weight: 800; color: #db2777; }
         .user-info { background: #fff0f7; padding: 0.5rem 1rem; border-radius: 40px; display: inline-flex; align-items: center; gap: 0.8rem; }
         .logout-btn, .profile-link { background: none; border: none; color: #ec489a; cursor: pointer; font-weight: 600; }
+        .avatar-small { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 8px; vertical-align: middle; }
+        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #f472b6; }
         
-        /* СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА (с полной формой) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
+        .modal-content { background: white; border-radius: 48px; padding: 2rem; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid #f472b6; }
         .modal-content h3 { color: #c2417c; margin-bottom: 1.5rem; text-align: center; }
         .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
         .form-row input { flex: 1; }
@@ -52,11 +52,13 @@
         
         .profile-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 1001; justify-content: center; align-items: center; }
         .profile-page.active { display: flex; }
-        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 800px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
+        .profile-content { background: white; border-radius: 48px; padding: 2rem; max-width: 900px; width: 90%; text-align: center; border: 2px solid #f472b6; max-height: 85vh; overflow-y: auto; }
         .close-profile { text-align: right; cursor: pointer; font-size: 1.5rem; color: #c2417c; }
         .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; }
+        .user-table th, .user-table td { border: 1px solid #fbcfe8; padding: 0.5rem; text-align: left; font-size: 0.8rem; vertical-align: middle; }
         .user-table th { background: #fce7f3; color: #c2417c; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        
         .hero { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 2rem 0; }
         .hero-content { flex: 1.2; }
         .hero-badge { background: #ffe4f0; color: #c2417c; padding: 0.3rem 0.9rem; border-radius: 40px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 1.2rem; border: 1px solid #f472b6; }
@@ -101,13 +103,12 @@
     </div>
 </nav>
 
-<!-- Модальное окно регистрации/входа с ПОЛНЫМИ ПОЛЯМИ -->
+<!-- Модальное окно регистрации/входа -->
 <div id="authModal" class="modal">
     <div class="modal-content">
         <div class="close-modal" id="closeModal">&times;</div>
         <h3 id="modalTitle">Регистрация</h3>
         
-        <!-- Форма входа (скрыта по умолчанию) -->
         <div id="loginForm" style="display: none;">
             <input type="email" id="loginEmail" placeholder="Email">
             <input type="password" id="loginPassword" placeholder="Пароль">
@@ -115,7 +116,6 @@
             <div class="modal-switch" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div>
         </div>
         
-        <!-- Форма регистрации (показывается по умолчанию с ПОЛНЫМИ ПОЛЯМИ) -->
         <div id="registerForm">
             <div class="form-row">
                 <input type="text" id="regName" placeholder="Имя *">
@@ -128,6 +128,14 @@
             <input type="date" id="regBirthdate" placeholder="Дата рождения *">
             <input type="password" id="regPassword" placeholder="Пароль *">
             <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
+            
+            <!-- Загрузка аватара -->
+            <div style="text-align: center; margin: 10px 0;">
+                <img id="avatarPreview" class="avatar-preview" src="https://via.placeholder.com/80?text=Avatar" alt="Аватар">
+                <input type="file" id="avatarInput" accept="image/*" style="margin-top: 5px;">
+                <p style="font-size: 0.7rem; color: #1e5e7e;">Загрузите фото профиля (необязательно)</p>
+            </div>
+            
             <div class="checkbox-row">
                 <input type="checkbox" id="regAgree">
                 <label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span> *</label>
@@ -141,14 +149,15 @@
 
 <!-- Политика конфиденциальности -->
 <div id="policyModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content" style="max-width: 550px;">
         <div class="close-modal" id="closePolicyModal">&times;</div>
         <h3>📋 Политика конфиденциальности</h3>
-        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5;">
-            <p><strong>1. Сбор данных</strong><br>Имя, Фамилия, Email, Телефон, Дата рождения, Хэш пароля.</p>
-            <p><strong>2. Использование данных</strong><br>Для авторизации, отображения профиля.</p>
-            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. HTTPS протокол.</p>
-            <p><strong>4. Права пользователя</strong><br>Вы можете запросить удаление аккаунта.</p>
+        <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; max-height: 400px; overflow-y: auto;">
+            <p><strong>Настоящая Политика конфиденциальности определяет порядок обработки и защиты информации о Пользователях сайта УКоннект.</strong></p>
+            <p><strong>1. Сбор данных</strong><br>Мы собираем следующие данные при регистрации: Имя, Фамилия, Email, Номер телефона, Хэш пароля. После входа мы также храним: Аватар, Описание профиля, Баннер, Список друзей и Шифрованные сообщения.</p>
+            <p><strong>2. Использование данных</strong><br>Данные используются исключительно для работы сервиса: авторизации, отображения профиля, обеспечения связи между друзьями и поиска пользователей.</p>
+            <p><strong>3. Защита данных</strong><br>Пароли хранятся в виде хэша. Мы используем защищенные протоколы передачи данных (HTTPS). Сообщения шифруются.</p>
+            <p><strong>4. Права пользователя</strong><br>Вы имеете право запросить удаление вашего аккаунта и всех связанных с ним данных в любой момент через настройки профиля.</p>
         </div>
         <button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button>
     </div>
@@ -162,7 +171,7 @@
         <p>Все зарегистрированные пользователи (облачная синхронизация):</p>
         <div style="overflow-x: auto;">
             <table class="user-table" id="usersTable">
-                <thead><tr><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr></thead>
+                <thead><tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Дата рождения</th></tr></thead>
                 <tbody id="usersTableBody"></tbody>
             </table>
         </div>
@@ -189,14 +198,11 @@
 <footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
 <script>
-    // ========== НАСТРОЙКИ SUPABASE ==========
     const SUPABASE_URL = 'https://bajfklvkwzvsiuwbpzdy.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE';
-    
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     document.addEventListener('DOMContentLoaded', function() {
-        // ---------- СЕРИЯ МЫСЛЯП ----------
         function updateStreak() {
             const today = new Date().toDateString();
             let streakData = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
@@ -226,15 +232,21 @@
         }
         displayStreak();
         
-        // ---------- ОСТАЛЬНОЙ КОД (АВТОРИЗАЦИЯ, АДМИНКА И Т.Д.) ----------
         let currentUserEmail = localStorage.getItem('currentUserEmailSupabase') || null;
-        
-        function getUserNickname(email) { 
-            return email ? email.split('@')[0] : "Гость";
-        }
-        
+        function getUserNickname(email) { return email ? email.split('@')[0] : "Гость"; }
         function isAdmin() { return currentUserEmail === 'admin@systemcontrol.com'; }
         
+        // Функция для преобразования файла в base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // Элементы DOM
         const authModal = document.getElementById('authModal');
         const modalTitle = document.getElementById('modalTitle');
         const loginForm = document.getElementById('loginForm');
@@ -252,11 +264,21 @@
         const closeModal = document.getElementById('closeModal');
         const testButtonNav = document.getElementById('testButtonNav');
         const fakeSubmitBtn = document.getElementById('fakeSubmitBtn');
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarPreview = document.getElementById('avatarPreview');
         
-        const policyModal = document.getElementById('policyModal');
-        const showPolicyLink = document.getElementById('showPolicyLink');
-        const closePolicyModal = document.getElementById('closePolicyModal');
-        const closePolicyBtn = document.getElementById('closePolicyBtn');
+        // Предпросмотр аватара
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        avatarPreview.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
         
         function updateUI() {
             if(currentUserEmail) { 
@@ -281,6 +303,8 @@
             document.getElementById('regPassword').value = '';
             document.getElementById('regPasswordConfirm').value = '';
             document.getElementById('regAgree').checked = false;
+            if (avatarPreview) avatarPreview.src = 'https://via.placeholder.com/80?text=Avatar';
+            if (avatarInput) avatarInput.value = '';
             authModal.classList.add('active'); 
         }
         
@@ -295,6 +319,12 @@
             const password = document.getElementById('regPassword').value;
             const passwordConfirm = document.getElementById('regPasswordConfirm').value;
             const agree = document.getElementById('regAgree').checked;
+            
+            // Загрузка аватара
+            let avatarBase64 = null;
+            if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+                avatarBase64 = await fileToBase64(avatarInput.files[0]);
+            }
             
             if (!name || !surname || !email || !phone || !birthdate || !password) {
                 authMessage.innerHTML = '❌ Заполните все поля'; return;
@@ -322,7 +352,8 @@
                 phone: phone,
                 birthdate: birthdate,
                 password: password,
-                nickname: name
+                nickname: name,
+                avatar: avatarBase64
             }]);
             
             if (error) {
@@ -367,6 +398,18 @@
             updateUI(); 
         }
         
+        // Политика
+        const policyModal = document.getElementById('policyModal');
+        const showPolicyLink = document.getElementById('showPolicyLink');
+        const closePolicyModal = document.getElementById('closePolicyModal');
+        const closePolicyBtn = document.getElementById('closePolicyBtn');
+        
+        showPolicyLink.onclick = () => policyModal.classList.add('active');
+        closePolicyModal.onclick = () => policyModal.classList.remove('active');
+        closePolicyBtn.onclick = () => policyModal.classList.remove('active');
+        policyModal.onclick = (e) => { if(e.target === policyModal) policyModal.classList.remove('active'); };
+        
+        // Переключение форм
         switchToLogin.onclick = () => {
             loginForm.style.display = 'block';
             registerForm.style.display = 'none';
@@ -388,26 +431,26 @@
         testButtonNav.onclick = (e) => { e.preventDefault(); showModal(); };
         fakeSubmitBtn.onclick = (e) => { e.preventDefault(); showModal(); };
         
-        showPolicyLink.onclick = () => policyModal.classList.add('active');
-        closePolicyModal.onclick = () => policyModal.classList.remove('active');
-        closePolicyBtn.onclick = () => policyModal.classList.remove('active');
-        policyModal.onclick = (e) => { if(e.target === policyModal) policyModal.classList.remove('active'); };
-        
+        // Админ панель
         const adminPanel = document.getElementById('adminPanel');
         const closeAdminPanel = document.getElementById('closeAdminPanel');
         const usersTableBody = document.getElementById('usersTableBody');
+        
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
         
         async function renderAdminTable() {
             if (!usersTableBody) return;
             const { data, error } = await supabase.from('users').select('*');
             if (error) {
-                usersTableBody.innerHTML = '<tr><td colspan="5">Ошибка загрузки</td></tr>';
+                usersTableBody.innerHTML = '<tr><td colspan="6">Ошибка загрузки</tr>';
                 return;
             }
             usersTableBody.innerHTML = '';
             for (let user of data) {
                 const row = document.createElement('tr');
+                const avatarHtml = user.avatar ? `<img src="${escapeHtml(user.avatar)}" class="user-avatar">` : '—';
                 row.innerHTML = `
+                    <td>${avatarHtml}</td>
                     <td>${escapeHtml(user.name || '')}</td>
                     <td>${escapeHtml(user.surname || '')}</td>
                     <td>${escapeHtml(user.email || '')}</td>
@@ -427,6 +470,7 @@
         closeAdminPanel.onclick = () => adminPanel.classList.remove('active');
         adminPanel.onclick = (e) => { if(e.target === adminPanel) adminPanel.classList.remove('active'); };
         
+        // Профиль
         const profilePage = document.getElementById('profilePage');
         const closeProfile = document.getElementById('closeProfile');
         const profileLoginDisplay = document.getElementById('profileLoginDisplay');
@@ -456,8 +500,6 @@
             } 
         };
         
-        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-        
         updateUI();
         
         async function ensureAdmin() {
@@ -470,7 +512,8 @@
                     phone: '+70000000000',
                     birthdate: '2000-01-01',
                     password: 'admin123',
-                    nickname: 'Администратор'
+                    nickname: 'Администратор',
+                    avatar: null
                 }]);
             }
         }
