@@ -8,33 +8,29 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// ===== НАСТРОЙКИ TELEGRAM =====
+// ===== TELEGRAM НАСТРОЙКИ =====
 const TELEGRAM_BOT_TOKEN = '8418856066:AAHSBBdKcrmMAn1-lLBhZB9D5MlMiEiZYU8';
-// chat_id больше не нужен — отправляем напрямую пользователям по username
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// ===== API ДЛЯ ОТПРАВКИ ЗАДАЧ В TELEGRAM КОНКРЕТНОМУ ПОЛЬЗОВАТЕЛЮ =====
+// ===== API ДЛЯ ОТПРАВКИ ЗАДАЧ =====
 app.post('/api/send-task', async (req, res) => {
-    const { task, user, telegramUsername } = req.body;
+    const { task, user, chatId } = req.body;
     
     if (!task) {
         return res.status(400).json({ success: false, error: 'Нет текста задачи' });
     }
     
-    if (!telegramUsername) {
-        return res.status(400).json({ success: false, error: 'Пользователь не указал Telegram username' });
+    if (!chatId) {
+        return res.status(400).json({ success: false, error: 'У пользователя не указан Telegram ID' });
     }
-    
-    // Очищаем username от @ если он есть
-    const cleanUsername = telegramUsername.replace('@', '');
     
     const message = `📝 *Новая задача от ${user || 'Пользователь'}!*\n\n📌 Задача: ${task}\n\n🧠 Помни: маленькие шаги ведут к большим победам!\n\n#СистемныйКонтроль`;
     
     try {
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            chat_id: `@${cleanUsername}`,
+            chat_id: chatId,
             text: message,
             parse_mode: 'Markdown'
         });
@@ -42,26 +38,24 @@ app.post('/api/send-task', async (req, res) => {
         if (response.data && response.data.ok) {
             res.json({ success: true, message: 'Задача отправлена в Telegram!' });
         } else {
-            res.status(500).json({ success: false, error: 'Ошибка при отправке в Telegram' });
+            res.status(500).json({ success: false, error: 'Ошибка при отправке' });
         }
     } catch (error) {
-        console.error('Ошибка отправки в Telegram:', error.response?.data || error.message);
-        
-        // Обработка конкретных ошибок Telegram
+        console.error('Ошибка Telegram:', error.response?.data || error.message);
+        let errorMessage = 'Не удалось отправить';
         if (error.response?.data?.description) {
             const errMsg = error.response.data.description;
             if (errMsg.includes('chat not found')) {
-                res.status(400).json({ success: false, error: 'Пользователь не начал диалог с ботом. Напишите @myslyapbot команду /start' });
+                errorMessage = 'Пользователь не начал диалог с ботом. Напишите @myslyapbot команду /start';
             } else {
-                res.status(500).json({ success: false, error: errMsg });
+                errorMessage = errMsg;
             }
-        } else {
-            res.status(500).json({ success: false, error: error.message });
         }
+        res.status(500).json({ success: false, error: errorMessage });
     }
 });
 
-// ===== ВЕБСОКЕТ ДЛЯ ЧАТА =====
+// ===== ВЕБСОКЕТ ДЛЯ ЧАТА (без изменений) =====
 const rooms = new Map();
 const roomMessages = new Map();
 const clientRooms = new Map();
