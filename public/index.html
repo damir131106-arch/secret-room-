@@ -50,7 +50,6 @@
         .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
         footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
 
-        /* Стили для раздела с задачами */
         .tasks-section {
             background: white;
             border-radius: 32px;
@@ -170,7 +169,6 @@
         </div>
     </div>
 
-    <!-- ===== РАЗДЕЛ "МОИ ЗАДАЧИ" ===== -->
     <div class="container tasks-section" id="tasksSection">
         <h3>📋 Мои задачи на сегодня</h3>
         <div class="task-input-area" id="taskInputArea">
@@ -224,7 +222,6 @@
 <!-- Модальные окна -->
 <div id="loginModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeLoginModal">&times;</div><h3>🔐 Вход</h3><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Пароль"><button id="submitLoginBtn" class="btn">Войти</button><div class="modal-switch" id="switchToRegisterModal">Нет аккаунта? Зарегистрироваться</div><div id="loginMessage" class="message"></div></div></div>
 
-<!-- Модальное окно регистрации -->
 <div id="registerModal" class="modal">
     <div class="modal-content">
         <div class="close-modal" id="closeRegisterModal">&times;</div>
@@ -247,7 +244,7 @@
 <div id="adminPanel" class="modal"><div class="modal-content" style="max-width:800px;"><div class="close-modal" id="closeAdminPanel">&times;</div><h3>👑 Панель администратора</h3><div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#fce7f3;"><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Telegram</th></tr></thead><tbody id="adminTableBody"></tbody></table></div></div></div>
 
 <script>
-    // Supabase
+    // ===== ИНИЦИАЛИЗАЦИЯ SUPABASE (ТОЛЬКО ОДИН РАЗ) =====
     const supabase = window.supabase.createClient(
         'https://bajfklvkwzvsiuwbpzdy.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE'
@@ -293,7 +290,6 @@
         const loginSpan = document.getElementById('currentUserLogin');
         const authBtns = document.getElementById('authButtons');
         const adminBtn = document.getElementById('adminBtn');
-        const tasksSection = document.getElementById('tasksSection');
         const taskInputArea = document.getElementById('taskInputArea');
         const notLoggedWarning = document.getElementById('notLoggedWarning');
         
@@ -302,14 +298,12 @@
             userDisplay.style.display = 'flex';
             if (authBtns) authBtns.style.display = 'none';
             if (adminBtn && currentUserEmail === 'admin@systemcontrol.com') adminBtn.style.display = 'inline-block';
-            // Показываем поле для задач
             if (taskInputArea) taskInputArea.style.display = 'flex';
             if (notLoggedWarning) notLoggedWarning.style.display = 'none';
         } else if (userDisplay) {
             userDisplay.style.display = 'none';
             if (authBtns) authBtns.style.display = 'flex';
             if (adminBtn) adminBtn.style.display = 'none';
-            // Скрываем поле для задач, показываем предупреждение
             if (taskInputArea) taskInputArea.style.display = 'none';
             if (notLoggedWarning) notLoggedWarning.style.display = 'block';
         }
@@ -329,10 +323,8 @@
         adminPanel.classList.remove('active'); 
     }
     
-    // Кнопки для незарегистрированных пользователей
     document.getElementById('loginLinkFromTasks')?.addEventListener('click', (e) => { e.preventDefault(); openLogin(); });
     document.getElementById('registerLinkFromTasks')?.addEventListener('click', (e) => { e.preventDefault(); openRegister(); });
-    
     document.getElementById('headerLoginBtn').onclick = openLogin;
     document.getElementById('headerRegisterBtn').onclick = openRegister;
     document.getElementById('testRegisterBtn').onclick = openRegister;
@@ -421,7 +413,7 @@
     }
     ensureAdmin();
     
-    // ===== ЗАДАЧИ И TELEGRAM =====
+    // ===== ЗАДАЧИ =====
     let userTasks = JSON.parse(localStorage.getItem('userTasks')) || [];
     
     function renderTasks() {
@@ -455,12 +447,10 @@
     async function sendTaskToTelegram(taskText) {
         const statusDiv = document.getElementById('tgStatus');
         if (!statusDiv) return;
-        
         if (!currentUserTelegram) {
             statusDiv.innerHTML = '⚠️ Вы не указали Telegram username при регистрации. Укажите его в профиле.';
             return;
         }
-        
         statusDiv.innerHTML = '🔄 Отправка в Telegram...';
         try {
             const response = await fetch('/api/send-task', {
