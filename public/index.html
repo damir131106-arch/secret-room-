@@ -173,9 +173,12 @@
     <!-- ===== РАЗДЕЛ "МОИ ЗАДАЧИ" ===== -->
     <div class="container tasks-section" id="tasksSection">
         <h3>📋 Мои задачи на сегодня</h3>
-        <div class="task-input-area">
+        <div class="task-input-area" id="taskInputArea">
             <input type="text" id="taskInput" placeholder="Что нужно сделать? (например: Сделать математику)">
             <button id="addTaskBtn" class="btn">➕ Добавить задачу</button>
+        </div>
+        <div id="notLoggedWarning" style="display: none; text-align: center; padding: 1rem; background: #fce7f3; border-radius: 60px; margin-bottom: 1rem; color: #c2417c;">
+            ⚠️ Чтобы добавлять задачи, <a href="#" id="loginLinkFromTasks" style="color:#ec489a;">войдите в аккаунт</a> или <a href="#" id="registerLinkFromTasks" style="color:#ec489a;">зарегистрируйтесь</a>
         </div>
         <ul id="taskList" class="task-list">
             <li style="justify-content: center; color: #94a3b8;">У вас пока нет задач. Добавьте первую!</li>
@@ -221,7 +224,7 @@
 <!-- Модальные окна -->
 <div id="loginModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeLoginModal">&times;</div><h3>🔐 Вход</h3><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Пароль"><button id="submitLoginBtn" class="btn">Войти</button><div class="modal-switch" id="switchToRegisterModal">Нет аккаунта? Зарегистрироваться</div><div id="loginMessage" class="message"></div></div></div>
 
-<!-- Модальное окно регистрации (ДОБАВЛЕНО ПОЛЕ TELEGRAM) -->
+<!-- Модальное окно регистрации -->
 <div id="registerModal" class="modal">
     <div class="modal-content">
         <div class="close-modal" id="closeRegisterModal">&times;</div>
@@ -290,15 +293,25 @@
         const loginSpan = document.getElementById('currentUserLogin');
         const authBtns = document.getElementById('authButtons');
         const adminBtn = document.getElementById('adminBtn');
+        const tasksSection = document.getElementById('tasksSection');
+        const taskInputArea = document.getElementById('taskInputArea');
+        const notLoggedWarning = document.getElementById('notLoggedWarning');
+        
         if (currentUserEmail && userDisplay) {
             loginSpan.textContent = currentUserEmail.split('@')[0];
             userDisplay.style.display = 'flex';
             if (authBtns) authBtns.style.display = 'none';
             if (adminBtn && currentUserEmail === 'admin@systemcontrol.com') adminBtn.style.display = 'inline-block';
+            // Показываем поле для задач
+            if (taskInputArea) taskInputArea.style.display = 'flex';
+            if (notLoggedWarning) notLoggedWarning.style.display = 'none';
         } else if (userDisplay) {
             userDisplay.style.display = 'none';
             if (authBtns) authBtns.style.display = 'flex';
             if (adminBtn) adminBtn.style.display = 'none';
+            // Скрываем поле для задач, показываем предупреждение
+            if (taskInputArea) taskInputArea.style.display = 'none';
+            if (notLoggedWarning) notLoggedWarning.style.display = 'block';
         }
     }
     
@@ -315,6 +328,10 @@
         policyModal.classList.remove('active'); 
         adminPanel.classList.remove('active'); 
     }
+    
+    // Кнопки для незарегистрированных пользователей
+    document.getElementById('loginLinkFromTasks')?.addEventListener('click', (e) => { e.preventDefault(); openLogin(); });
+    document.getElementById('registerLinkFromTasks')?.addEventListener('click', (e) => { e.preventDefault(); openRegister(); });
     
     document.getElementById('headerLoginBtn').onclick = openLogin;
     document.getElementById('headerRegisterBtn').onclick = openRegister;
@@ -369,7 +386,7 @@
         
         const { error } = await supabase.from('users').insert([{ 
             email, name, surname, phone, password: pass, nickname: name, 
-            telegram_username: telegram || null
+            telegram_username: telegram.replace('@', '') || null
         }]);
         if (error) { msg.innerText = '❌ ' + error.message; return; }
         msg.innerText = '✅ Регистрация успешна! Войдите.';
@@ -477,6 +494,7 @@
         }
         if (!currentUserEmail) {
             alert('Сначала войдите в аккаунт!');
+            openLogin();
             return;
         }
         userTasks.unshift({ text: taskText, date: new Date().toISOString() });
