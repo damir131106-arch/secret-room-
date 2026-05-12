@@ -61,52 +61,30 @@
 <div class="container" style="margin-top:20px;"><div class="creator-section">🕶️ Создатели: «SECRET ROOM SQUAD»</div></div>
 
 <script>
-    // ===== МЫСЛЯП =====
     function updateStreak() {
         const today = new Date().toDateString();
         let data = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
         let streak = data.streak;
-        if (data.lastVisit === today) {
-            // уже сегодня
-        } else if (data.lastVisit) {
-            const lastDate = new Date(data.lastVisit);
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (lastDate.toDateString() === yesterday.toDateString()) {
-                streak++;
-            } else {
-                streak = 1;
-            }
-        } else {
-            streak = 1;
-        }
-        localStorage.setItem('streakWeasel', JSON.stringify({ streak: streak, lastVisit: today }));
+        if (data.lastVisit === today) {}
+        else if (data.lastVisit) {
+            const last = new Date(data.lastVisit);
+            const yes = new Date(); yes.setDate(yes.getDate() - 1);
+            if (last.toDateString() === yes.toDateString()) streak++;
+            else streak = 1;
+        } else streak = 1;
+        localStorage.setItem('streakWeasel', JSON.stringify({ streak, lastVisit: today }));
         return streak;
     }
     
     function displayStreak() {
-        const streak = updateStreak();
-        const container = document.getElementById('streakWidget');
-        if (!container) return;
-        let message = '';
-        if (streak === 1) message = 'Первый день Мысляпа!';
-        else if (streak < 3) message = 'Мысляп растёт!';
-        else if (streak < 7) message = 'Крепнет дисциплина!';
-        else message = `Серия ${streak} дней!`;
-        container.innerHTML = `
-            <div class="streak-widget">
-                <span>🧠✨</span>
-                <div>
-                    <span class="streak-days">${streak}</span> <span style="font-size:0.7rem;">дней подряд</span>
-                    <span class="streak-flame">🔥</span>
-                    <div style="font-size:0.65rem;">${message}</div>
-                </div>
-            </div>
-        `;
+        const s = updateStreak();
+        const w = document.getElementById('streakWidget');
+        if (!w) return;
+        let msg = s === 1 ? 'Первый день Мысляпа!' : (s < 3 ? 'Мысляп растёт!' : (s < 7 ? 'Крепнет дисциплина!' : `Серия ${s} дней!`));
+        w.innerHTML = `<div class="streak-widget"><span>🧠✨</span><div><span class="streak-days">${s}</span> <span style="font-size:0.7rem;">дней подряд</span> <span class="streak-flame">🔥</span><div style="font-size:0.65rem;">${msg}</div></div></div>`;
     }
     displayStreak();
     
-    // ===== АВТОРИЗАЦИЯ =====
     const currentUserEmail = localStorage.getItem('currentUserEmail');
     const userInfoDiv = document.getElementById('userInfo');
     const nickname = currentUserEmail ? currentUserEmail.split('@')[0] : null;
@@ -116,19 +94,13 @@
         alert('Сначала войдите в аккаунт!');
         window.location.href = '/';
     } else {
-        userInfoDiv.innerHTML = `
-            <div class="user-info">
-                👤 ${nickname}
-                <button id="logoutBtn" class="logout-btn">Выйти</button>
-            </div>
-        `;
+        userInfoDiv.innerHTML = `<div class="user-info">👤 ${nickname}<button id="logoutBtn" class="logout-btn">Выйти</button></div>`;
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             localStorage.removeItem('currentUserEmail');
             window.location.href = '/';
         });
     }
     
-    // ===== ДНЕВНИК =====
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
@@ -154,12 +126,7 @@
     
     function addEntry(mood, text) {
         const time = new Date().toLocaleString();
-        entries.unshift({ 
-            time: time, 
-            mood: mood, 
-            text: text || '—',
-            nickname: nickname
-        });
+        entries.unshift({ time, mood, text: text || '—', nickname });
         if (entries.length > 50) entries.pop();
         localStorage.setItem('moodEntries', JSON.stringify(entries));
         render();

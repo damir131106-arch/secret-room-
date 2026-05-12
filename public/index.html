@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Системный контроль — помощь первокурсникам УГНТУ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffe4f0 0%, #b8e1fc 100%); color: #1e2b3a; line-height: 1.4; scroll-behavior: smooth; }
@@ -49,7 +50,7 @@
         .creator-section { margin-top: 2rem; background: linear-gradient(105deg, #ffe0ef, #cff2fc); border-radius: 40px; padding: 1rem; text-align: center; border: 1px solid #f472b6; color: #c2417c; }
         footer { text-align: center; padding: 2rem 0; color: #c2417c; font-size: 0.85rem; border-top: 1px solid #fbcfe8; margin-top: 2rem; }
 
-        /* Стили для нового раздела с задачами */
+        /* Стили для раздела с задачами */
         .tasks-section {
             background: white;
             border-radius: 32px;
@@ -118,7 +119,6 @@
         
         @media (max-width: 760px) { .hero-title { font-size: 2.5rem; } .navbar { flex-direction: column; } .nav-links { justify-content: center; } }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -170,7 +170,7 @@
         </div>
     </div>
 
-    <!-- ========== НОВЫЙ РАЗДЕЛ: МОИ ЗАДАЧИ ========== -->
+    <!-- ===== РАЗДЕЛ "МОИ ЗАДАЧИ" ===== -->
     <div class="container tasks-section" id="tasksSection">
         <h3>📋 Мои задачи на сегодня</h3>
         <div class="task-input-area">
@@ -181,7 +181,7 @@
             <li style="justify-content: center; color: #94a3b8;">У вас пока нет задач. Добавьте первую!</li>
         </ul>
         <div id="tgStatus" class="tg-message"></div>
-        <p style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">✅ Все задачи автоматически отправляются в Telegram-бота @myslyap_bot</p>
+        <p style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">✅ Все задачи автоматически отправляются в ваш Telegram (если вы указали username при регистрации)</p>
     </div>
 
     <div class="container section">
@@ -218,18 +218,34 @@
 <div class="container"><div class="creator-section">🕶️ Создатели: <strong>«SECRET ROOM SQUAD»</strong> 🕶️<br><span>Исламова Элина, Кожевникова Екатерина, Дырова Дарья, Галиуллин Газиз, Сычевников Станислав, Шайдулин Эмин</span></div></div>
 <footer><div class="container"><p>© 2026 «Системный контроль» — проект студентов УВШЭУ УГНТУ</p></div></footer>
 
-<!-- Модальные окна (входа, регистрации и т.д.) -->
+<!-- Модальные окна -->
 <div id="loginModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeLoginModal">&times;</div><h3>🔐 Вход</h3><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Пароль"><button id="submitLoginBtn" class="btn">Войти</button><div class="modal-switch" id="switchToRegisterModal">Нет аккаунта? Зарегистрироваться</div><div id="loginMessage" class="message"></div></div></div>
 
-<div id="registerModal" class="modal"><div class="modal-content"><div class="close-modal" id="closeRegisterModal">&times;</div><h3>📝 Регистрация</h3><div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div><div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div><input type="date" id="regBirthdate" placeholder="Дата рождения"><input type="password" id="regPassword" placeholder="Пароль *"><input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *"><div class="checkbox-row"><input type="checkbox" id="regAgree"><label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span></label></div><button id="submitRegisterBtn" class="btn">Зарегистрироваться</button><div class="modal-switch" id="switchToLoginModal">Уже есть аккаунт? Войти</div><div id="registerMessage" class="message"></div></div></div>
+<!-- Модальное окно регистрации (ДОБАВЛЕНО ПОЛЕ TELEGRAM) -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <div class="close-modal" id="closeRegisterModal">&times;</div>
+        <h3>📝 Регистрация</h3>
+        <div class="form-row"><input type="text" id="regName" placeholder="Имя *"><input type="text" id="regSurname" placeholder="Фамилия *"></div>
+        <div class="form-row"><input type="email" id="regEmail" placeholder="Email *"><input type="tel" id="regPhone" placeholder="Номер телефона *"></div>
+        <input type="text" id="regTelegram" placeholder="Telegram username (например: @ivanov)">
+        <input type="date" id="regBirthdate" placeholder="Дата рождения">
+        <input type="password" id="regPassword" placeholder="Пароль *">
+        <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль *">
+        <div class="checkbox-row"><input type="checkbox" id="regAgree"><label>Я согласен с <span class="policy-link" id="showPolicyLink">Политикой конфиденциальности</span></label></div>
+        <button id="submitRegisterBtn" class="btn">Зарегистрироваться</button>
+        <div class="modal-switch" id="switchToLoginModal">Уже есть аккаунт? Войти</div>
+        <div id="registerMessage" class="message"></div>
+    </div>
+</div>
 
 <div id="policyModal" class="modal"><div class="modal-content" style="max-width:550px;"><div class="close-modal" id="closePolicyModal">&times;</div><h3>📋 Политика конфиденциальности</h3><div style="font-size:0.85rem; max-height:400px; overflow-y:auto; text-align:left;"><p><strong>1. Сбор данных</strong><br>Имя, Фамилия, Email, Телефон, Хэш пароля.</p><p><strong>2. Использование данных</strong><br>Для авторизации и работы сервиса.</p><p><strong>3. Защита данных</strong><br>Пароли в виде хэша. HTTPS протокол.</p><p><strong>4. Права пользователя</strong><br>Вы можете запросить удаление аккаунта.</p></div><button class="btn" id="closePolicyBtn" style="margin-top:1rem;">Закрыть</button></div></div>
 
-<div id="adminPanel" class="modal"><div class="modal-content" style="max-width:800px;"><div class="close-modal" id="closeAdminPanel">&times;</div><h3>👑 Панель администратора</h3><div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#fce7f3;"><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th></tr></thead><tbody id="adminTableBody"></tbody></table></div></div></div>
+<div id="adminPanel" class="modal"><div class="modal-content" style="max-width:800px;"><div class="close-modal" id="closeAdminPanel">&times;</div><h3>👑 Панель администратора</h3><div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#fce7f3;"><th>Имя</th><th>Фамилия</th><th>Email</th><th>Телефон</th><th>Telegram</th></tr></thead><tbody id="adminTableBody"></tbody></table></div></div></div>
 
 <script>
-    // Supabase (используем уникальное имя)
-    const _supabase = window.supabase.createClient(
+    // Supabase
+    const supabase = window.supabase.createClient(
         'https://bajfklvkwzvsiuwbpzdy.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhamZrbHZrd3p2c2l1d2JwemR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzc4MDQsImV4cCI6MjA5MzgxMzgwNH0.CiX6PAqJIsdeox9350PTfzWXDqnNgaWspHkUrs8LUzE'
     );
@@ -261,6 +277,13 @@
     
     // ===== АВТОРИЗАЦИЯ =====
     let currentUserEmail = localStorage.getItem('currentUserEmail') || null;
+    let currentUserTelegram = null;
+    
+    async function loadCurrentUserData() {
+        if (!currentUserEmail) return;
+        const { data } = await supabase.from('users').select('telegram_username').eq('email', currentUserEmail).single();
+        if (data) currentUserTelegram = data.telegram_username;
+    }
     
     function updateUI() {
         const userDisplay = document.getElementById('userDisplay');
@@ -313,10 +336,17 @@
     
     document.getElementById('adminBtn').onclick = async () => {
         if (currentUserEmail !== 'admin@systemcontrol.com') return;
-        const { data } = await _supabase.from('users').select('*');
+        const { data } = await supabase.from('users').select('*');
         const tbody = document.getElementById('adminTableBody');
         tbody.innerHTML = '';
-        if (data) data.forEach(u => { const r = tbody.insertRow(); r.insertCell(0).textContent = u.name || '—'; r.insertCell(1).textContent = u.surname || '—'; r.insertCell(2).textContent = u.email; r.insertCell(3).textContent = u.phone || '—'; });
+        if (data) data.forEach(u => { 
+            const r = tbody.insertRow(); 
+            r.insertCell(0).textContent = u.name || '—'; 
+            r.insertCell(1).textContent = u.surname || '—'; 
+            r.insertCell(2).textContent = u.email; 
+            r.insertCell(3).textContent = u.phone || '—';
+            r.insertCell(4).textContent = u.telegram_username || '—';
+        });
         adminPanel.classList.add('active');
     };
     
@@ -325,6 +355,7 @@
         const surname = document.getElementById('regSurname').value.trim();
         const email = document.getElementById('regEmail').value.trim();
         const phone = document.getElementById('regPhone').value.trim();
+        const telegram = document.getElementById('regTelegram').value.trim();
         const pass = document.getElementById('regPassword').value;
         const confirm = document.getElementById('regPasswordConfirm').value;
         const agree = document.getElementById('regAgree').checked;
@@ -333,9 +364,13 @@
         if (pass !== confirm) { msg.innerText = '❌ Пароли не совпадают'; return; }
         if (pass.length < 4) { msg.innerText = '❌ Пароль минимум 4 символа'; return; }
         if (!agree) { msg.innerText = '❌ Примите политику'; return; }
-        const { data: exist } = await _supabase.from('users').select('email').eq('email', email);
+        const { data: exist } = await supabase.from('users').select('email').eq('email', email);
         if (exist && exist.length) { msg.innerText = '❌ Email уже зарегистрирован'; return; }
-        const { error } = await _supabase.from('users').insert([{ email, name, surname, phone, password: pass, nickname: name }]);
+        
+        const { error } = await supabase.from('users').insert([{ 
+            email, name, surname, phone, password: pass, nickname: name, 
+            telegram_username: telegram || null
+        }]);
         if (error) { msg.innerText = '❌ ' + error.message; return; }
         msg.innerText = '✅ Регистрация успешна! Войдите.';
         setTimeout(() => { closeModals(); openLogin(); }, 1500);
@@ -346,10 +381,11 @@
         const pass = document.getElementById('loginPassword').value;
         const msg = document.getElementById('loginMessage');
         if (!email || !pass) { msg.innerText = '❌ Заполните поля'; return; }
-        const { data } = await _supabase.from('users').select('email').eq('email', email).eq('password', pass);
+        const { data } = await supabase.from('users').select('email').eq('email', email).eq('password', pass);
         if (!data || !data.length) { msg.innerText = '❌ Неверный email или пароль'; return; }
         currentUserEmail = email;
         localStorage.setItem('currentUserEmail', currentUserEmail);
+        await loadCurrentUserData();
         updateUI();
         msg.innerText = '✅ Вход выполнен!';
         setTimeout(() => { closeModals(); location.href = '/'; }, 1000);
@@ -357,15 +393,18 @@
     
     document.getElementById('submitRegisterBtn').onclick = registerUser;
     document.getElementById('submitLoginBtn').onclick = loginUser;
-    updateUI();
     
     async function ensureAdmin() {
-        const { data } = await _supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
-        if (!data || !data.length) await _supabase.from('users').insert([{ email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', phone: '+70000000000', password: 'admin123', nickname: 'Администратор' }]);
+        const { data } = await supabase.from('users').select('email').eq('email', 'admin@systemcontrol.com');
+        if (!data || !data.length) await supabase.from('users').insert([{ 
+            email: 'admin@systemcontrol.com', name: 'Admin', surname: 'System', 
+            phone: '+70000000000', password: 'admin123', nickname: 'Администратор',
+            telegram_username: null
+        }]);
     }
     ensureAdmin();
     
-    // ===== НОВАЯ ФУНКЦИЯ: РАБОТА С ЗАДАЧАМИ И ОТПРАВКА В TELEGRAM =====
+    // ===== ЗАДАЧИ И TELEGRAM =====
     let userTasks = JSON.parse(localStorage.getItem('userTasks')) || [];
     
     function renderTasks() {
@@ -399,6 +438,12 @@
     async function sendTaskToTelegram(taskText) {
         const statusDiv = document.getElementById('tgStatus');
         if (!statusDiv) return;
+        
+        if (!currentUserTelegram) {
+            statusDiv.innerHTML = '⚠️ Вы не указали Telegram username при регистрации. Укажите его в профиле.';
+            return;
+        }
+        
         statusDiv.innerHTML = '🔄 Отправка в Telegram...';
         try {
             const response = await fetch('/api/send-task', {
@@ -406,7 +451,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     task: taskText,
-                    user: currentUserEmail ? currentUserEmail.split('@')[0] : 'Гость'
+                    user: currentUserEmail ? currentUserEmail.split('@')[0] : 'Гость',
+                    telegramUsername: currentUserTelegram
                 })
             });
             const result = await response.json();
@@ -442,6 +488,8 @@
     });
     
     renderTasks();
+    loadCurrentUserData();
+    updateUI();
 </script>
 </body>
 </html>

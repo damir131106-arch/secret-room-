@@ -8,29 +8,33 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// ===== НАСТРОЙКИ TELEGRAM (ВАШИ ДАННЫЕ) =====
+// ===== НАСТРОЙКИ TELEGRAM =====
 const TELEGRAM_BOT_TOKEN = '8418856066:AAHSBBdKcrmMAn1-lLBhZB9D5MlMiEiZYU8';
-const TELEGRAM_CHAT_ID = '5137760110';
-// ============================================
+// chat_id больше не нужен — отправляем напрямую пользователям по username
 
-// Middleware для обработки JSON
 app.use(express.json());
 app.use(express.static('public'));
 
-// ===== API ДЛЯ ОТПРАВКИ ЗАДАЧ В TELEGRAM =====
+// ===== API ДЛЯ ОТПРАВКИ ЗАДАЧ В TELEGRAM КОНКРЕТНОМУ ПОЛЬЗОВАТЕЛЮ =====
 app.post('/api/send-task', async (req, res) => {
-    const { task, user } = req.body;
+    const { task, user, telegramUsername } = req.body;
     
     if (!task) {
         return res.status(400).json({ success: false, error: 'Нет текста задачи' });
     }
     
-    const message = `📝 *Новая задача от пользователя ${user || 'Гость'}!*\n\n📌 Задача: ${task}\n\n🧠 Помни: маленькие шаги ведут к большим победам! #СистемныйКонтроль`;
+    if (!telegramUsername) {
+        return res.status(400).json({ success: false, error: 'Пользователь не указал Telegram username' });
+    }
+    
+    // Очищаем username от @ если он есть
+    const cleanUsername = telegramUsername.replace('@', '');
+    
+    const message = `📝 *Новая задача от ${user || 'Пользователь'}!*\n\n📌 Задача: ${task}\n\n🧠 Помни: маленькие шаги ведут к большим победам!\n\n#СистемныйКонтроль`;
     
     try {
-        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-        const response = await axios.post(telegramUrl, {
-            chat_id: TELEGRAM_CHAT_ID,
+        const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            chat_id: `@${cleanUsername}`,
             text: message,
             parse_mode: 'Markdown'
         });
@@ -41,13 +45,23 @@ app.post('/api/send-task', async (req, res) => {
             res.status(500).json({ success: false, error: 'Ошибка при отправке в Telegram' });
         }
     } catch (error) {
-        console.error('Ошибка отправки в Telegram:', error.message);
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Ошибка отправки в Telegram:', error.response?.data || error.message);
+        
+        // Обработка конкретных ошибок Telegram
+        if (error.response?.data?.description) {
+            const errMsg = error.response.data.description;
+            if (errMsg.includes('chat not found')) {
+                res.status(400).json({ success: false, error: 'Пользователь не начал диалог с ботом. Напишите @myslyapbot команду /start' });
+            } else {
+                res.status(500).json({ success: false, error: errMsg });
+            }
+        } else {
+            res.status(500).json({ success: false, error: error.message });
+        }
     }
 });
 
 // ===== ВЕБСОКЕТ ДЛЯ ЧАТА =====
-// Хранилище комнат
 const rooms = new Map();
 const roomMessages = new Map();
 const clientRooms = new Map();
@@ -151,9 +165,8 @@ wss.on('connection', (ws) => {
     });
 });
 
-// ===== ЗАПУСК СЕРВЕРА =====
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Сервер запущен на порту ${PORT}`);
-    console.log(`Telegram бот настроен, chat_id: ${TELEGRAM_CHAT_ID}`);
+    console.log(`🚀 Сервер запущен на порту ${PORT}`);
+    console.log(`🤖 Telegram бот настроен`);
 });
