@@ -16,6 +16,7 @@
         .streak-flame { animation: flameAnim 0.8s infinite; display: inline-block; }
         @keyframes flameAnim { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .btn { background: linear-gradient(135deg, #ec489a, #f472b6); color: white; border: none; padding: 12px 24px; border-radius: 60px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        .btn-outline { background: transparent; border: 1.5px solid #ec489a; color: #ec489a; }
         .room-buttons { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
         .room-info { background: #fce7f3; border-radius: 28px; padding: 15px; text-align: center; margin: 15px 0; font-size: 1.1rem; }
         .chat-area { background: #fef9fc; border-radius: 28px; padding: 15px; height: 350px; overflow-y: auto; border: 1px solid #fbcfe8; margin: 15px 0; }
@@ -55,7 +56,7 @@
         <div style="background:#fef2f8; border-radius:60px; padding:12px; text-align:center; margin-bottom:15px;">
             <div id="roomCodeDisplay" style="font-weight:700; color:#db2777; font-size:1.2rem;">🔑 Код: ---</div>
             <div id="participantsCount" style="font-size:0.85rem; margin-top:5px;">👥 участников: 0</div>
-            <button id="leaveRoomBtn" class="btn" style="margin-top:10px; padding:8px 20px;">🚪 Покинуть</button>
+            <button id="leaveRoomBtn" class="btn-outline" style="margin-top:10px; padding:8px 20px;">🚪 Покинуть комнату</button>
         </div>
         <div id="chatArea" class="chat-area">🔌 Подключение к серверу...</div>
         <div class="input-area">
@@ -68,17 +69,15 @@
 <div class="container" style="margin-top:20px;"><div class="creator-section">🕶️ Создатели: «SECRET ROOM SQUAD»</div></div>
 
 <script>
-    // ===== МЫСЛЯП =====
     function updateStreak() {
         const today = new Date().toDateString();
         let data = JSON.parse(localStorage.getItem('streakWeasel')) || { streak: 0, lastVisit: null };
         let streak = data.streak;
         if (data.lastVisit === today) {}
         else if (data.lastVisit) {
-            const lastDate = new Date(data.lastVisit);
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (lastDate.toDateString() === yesterday.toDateString()) streak++;
+            const last = new Date(data.lastVisit);
+            const yes = new Date(); yes.setDate(yes.getDate() - 1);
+            if (last.toDateString() === yes.toDateString()) streak++;
             else streak = 1;
         } else streak = 1;
         localStorage.setItem('streakWeasel', JSON.stringify({ streak, lastVisit: today }));
@@ -86,15 +85,14 @@
     }
     
     function displayStreak() {
-        const streak = updateStreak();
-        const container = document.getElementById('streakWidget');
-        if (!container) return;
-        let msg = streak === 1 ? 'Первый день Мысляпа!' : (streak < 3 ? 'Мысляп растёт!' : (streak < 7 ? 'Крепнет дисциплина!' : `Серия ${streak} дней!`));
-        container.innerHTML = `<div class="streak-widget"><span>🧠✨</span><div><span class="streak-days">${streak}</span> <span style="font-size:0.7rem;">дней подряд</span> <span class="streak-flame">🔥</span><div style="font-size:0.65rem;">${msg}</div></div></div>`;
+        const s = updateStreak();
+        const w = document.getElementById('streakWidget');
+        if (!w) return;
+        let msg = s === 1 ? 'Первый день Мысляпа!' : (s < 3 ? 'Мысляп растёт!' : (s < 7 ? 'Крепнет дисциплина!' : `Серия ${s} дней!`));
+        w.innerHTML = `<div class="streak-widget"><span>🧠✨</span><div><span class="streak-days">${s}</span> <span style="font-size:0.7rem;">дней подряд</span> <span class="streak-flame">🔥</span><div style="font-size:0.65rem;">${msg}</div></div></div>`;
     }
     displayStreak();
     
-    // ===== АВТОРИЗАЦИЯ =====
     const currentUserEmail = localStorage.getItem('currentUserEmail');
     const userInfoDiv = document.getElementById('userInfo');
     const nickname = currentUserEmail ? currentUserEmail.split('@')[0] : 'Гость';
@@ -108,9 +106,8 @@
         document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.removeItem('currentUserEmail'); location.href = '/'; });
     }
     
-    // ===== WEBSOCKET =====
     const wsUrl = location.protocol === 'https:' ? `wss://${location.host}` : `ws://${location.host}`;
-    let ws = null, currentRoom = null;
+    let ws = null, currentRoom = null, currentRoomName = '';
     
     function addMessage(nick, text) {
         const chatDiv = document.getElementById('chatArea');
@@ -144,15 +141,17 @@
             const data = JSON.parse(e.data);
             if (data.type === 'room_created') {
                 currentRoom = data.roomCode;
+                currentRoomName = data.roomName || 'Комната';
                 document.getElementById('roomInfo').style.display = 'none';
                 document.getElementById('chatPanel').style.display = 'block';
-                document.getElementById('roomCodeDisplay').innerHTML = `🔑 Код: ${currentRoom}`;
-                addSystemMessage(`🎉 Комната создана! Код: ${currentRoom}`);
+                document.getElementById('roomCodeDisplay').innerHTML = `🔑 Код: ${currentRoom} (${currentRoomName})`;
+                addSystemMessage(`🎉 Комната "${currentRoomName}" создана! Код: ${currentRoom}`);
             } else if (data.type === 'room_joined' && data.success) {
                 currentRoom = data.roomCode;
+                currentRoomName = data.roomName || 'Комната';
                 document.getElementById('roomInfo').style.display = 'none';
                 document.getElementById('chatPanel').style.display = 'block';
-                document.getElementById('roomCodeDisplay').innerHTML = `🔑 Код: ${currentRoom}`;
+                document.getElementById('roomCodeDisplay').innerHTML = `🔑 Код: ${currentRoom} (${currentRoomName})`;
                 addSystemMessage(`✅ Вы вошли в комнату ${currentRoom}`);
             } else if (data.type === 'room_joined' && !data.success) {
                 document.getElementById('roomInfo').innerHTML = '❌ Комната не найдена';
@@ -162,18 +161,30 @@
                 addSystemMessage(data.text);
             } else if (data.type === 'participants') {
                 document.getElementById('participantsCount').innerHTML = `👥 участников: ${data.count}`;
+            } else if (data.type === 'history') {
+                const chatDiv = document.getElementById('chatArea');
+                chatDiv.innerHTML = '';
+                if (data.data && data.data.length) {
+                    data.data.forEach(msg => addMessage(msg.nickname, msg.text));
+                } else {
+                    addSystemMessage('💬 Напишите первое сообщение!');
+                }
             }
         };
         ws.onclose = () => { statusDiv.innerHTML = '🔴 Соединение потеряно, переподключаемся...'; setTimeout(connect, 3000); };
     }
     
     document.getElementById('createRoomBtn').onclick = () => {
-        if (!ws || ws.readyState !== WebSocket.OPEN) { connect(); setTimeout(() => ws.send(JSON.stringify({ type: 'create_room' })), 1000); }
-        else ws.send(JSON.stringify({ type: 'create_room' }));
+        if (!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); return; }
+        const roomName = prompt("Введите название комнаты:", "Учеба");
+        if (!roomName) return;
+        if (!ws || ws.readyState !== WebSocket.OPEN) { connect(); setTimeout(() => ws.send(JSON.stringify({ type: 'create_room', roomName: roomName })), 1000); }
+        else ws.send(JSON.stringify({ type: 'create_room', roomName: roomName }));
     };
     
     document.getElementById('joinRoomBtn').onclick = () => {
-        const code = prompt('Введите код комнаты:');
+        if (!currentUserEmail) { alert("Сначала зарегистрируйтесь!"); return; }
+        const code = prompt('Введите код комнаты (6 символов):');
         if (!code) return;
         if (!ws || ws.readyState !== WebSocket.OPEN) { connect(); setTimeout(() => ws.send(JSON.stringify({ type: 'join_room', roomCode: code.toUpperCase() })), 1000); }
         else ws.send(JSON.stringify({ type: 'join_room', roomCode: code.toUpperCase() }));
@@ -183,7 +194,7 @@
         currentRoom = null;
         document.getElementById('roomInfo').style.display = 'block';
         document.getElementById('chatPanel').style.display = 'none';
-        document.getElementById('roomInfo').innerHTML = '💬 Ты не в комнате';
+        document.getElementById('roomInfo').innerHTML = '💬 Ты не в комнате. Создай новую или войди по коду.';
     };
     
     document.getElementById('sendBtn').onclick = () => {

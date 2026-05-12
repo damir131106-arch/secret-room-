@@ -26,7 +26,7 @@ app.post('/api/send-task', async (req, res) => {
         return res.status(400).json({ success: false, error: 'У пользователя не указан Telegram ID' });
     }
     
-    const message = `📝 *Новая задача от ${user || 'Пользователь'}!*\n\n📌 Задача: ${task}\n\n🧠 Помни: маленькие шаги ведут к большим победам!\n\n#СистемныйКонтроль`;
+    const message = `📝 *Новая задача от ${user || 'Пользователь'}!*\n\n📌 Задача: ${task}\n\n🧠 #СистемныйКонтроль`;
     
     try {
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -42,23 +42,15 @@ app.post('/api/send-task', async (req, res) => {
         }
     } catch (error) {
         console.error('Ошибка Telegram:', error.response?.data || error.message);
-        let errorMessage = 'Не удалось отправить';
-        if (error.response?.data?.description) {
-            const errMsg = error.response.data.description;
-            if (errMsg.includes('chat not found')) {
-                errorMessage = 'Пользователь не начал диалог с ботом. Напишите @myslyapbot команду /start';
-            } else {
-                errorMessage = errMsg;
-            }
-        }
-        res.status(500).json({ success: false, error: errorMessage });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// ===== ВЕБСОКЕТ ДЛЯ ЧАТА (без изменений) =====
-const rooms = new Map();
-const roomMessages = new Map();
-const clientRooms = new Map();
+// ===== ВЕБСОКЕТ ДЛЯ ЧАТА С СОХРАНЕНИЕМ КОМНАТ =====
+// Хранилище комнат (сохраняется в памяти, но не теряется при отключении клиентов)
+const rooms = new Map(); // roomCode -> Set of WebSocket connections
+const roomMessages = new Map(); // roomCode -> array of messages
+const roomInfo = new Map(); // roomCode -> { name: string, createdAt: date }
 
 function generateRoomCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -96,32 +88,56 @@ wss.on('connection', (ws) => {
             
             switch (message.type) {
                 case 'create_room':
+                    const roomName = message.roomName || 'Новая комната';
                     const newRoomCode = generateRoomCode();
                     currentRoom = newRoomCode;
+                    
                     if (!rooms.has(currentRoom)) {
                         rooms.set(currentRoom, new Set());
                         roomMessages.set(currentRoom, []);
+                        roomInfo.set(currentRoom, { name: roomName, createdAt: new Date() });
                     }
                     rooms.get(currentRoom).add(ws);
-                    clientRooms.set(ws, currentRoom);
-                    ws.send(JSON.stringify({ type: 'room_created', roomCode: currentRoom }));
+                    
+                    ws.send(JSON.stringify({ 
+                        type: 'room_created', 
+                        roomCode: currentRoom,
+                        roomName: roomName
+                    }));
                     sendHistory(ws, currentRoom);
                     updateParticipantCount(currentRoom);
+                    broadcastToRoom(currentRoom, { 
+                        type: 'system', 
+                        text: `🎉 Комната "${roomName}" создана! Код: ${currentRoom}`
+                    });
                     break;
                 
                 case 'join_room':
                     const roomCode = message.roomCode.toUpperCase();
                     const existingRoom = rooms.get(roomCode);
+                    const roomData = roomInfo.get(roomCode);
+                    
                     if (existingRoom) {
                         currentRoom = roomCode;
                         existingRoom.add(ws);
-                        clientRooms.set(ws, currentRoom);
-                        ws.send(JSON.stringify({ type: 'room_joined', roomCode: currentRoom, success: true }));
+                        ws.send(JSON.stringify({ 
+                            type: 'room_joined', 
+                            roomCode: currentRoom, 
+                            success: true,
+                            roomName: roomData ? roomData.name : 'Комната'
+                        }));
                         sendHistory(ws, currentRoom);
-                        broadcastToRoom(currentRoom, { type: 'system', text: '👤 Пользователь присоединился' }, ws);
+                        broadcastToRoom(currentRoom, { 
+                            type: 'system', 
+                            text: '👤 Пользователь присоединился к комнате' 
+                        }, ws);
                         updateParticipantCount(currentRoom);
                     } else {
-                        ws.send(JSON.stringify({ type: 'room_joined', success: false, error: 'Комната не найдена' }));
+                        ws.send(JSON.stringify({ 
+                            type: 'room_joined', 
+                            success: false, 
+                            error: 'Комната не найдена' 
+                        }));
                     }
                     break;
                 
@@ -135,7 +151,8 @@ wss.on('connection', (ws) => {
                         };
                         const history = roomMessages.get(currentRoom) || [];
                         history.push(msgData);
-                        if (history.length > 100) history.shift();
+                        // Храним до 500 сообщений на комнату
+                        if (history.length > 500) history.shift();
                         roomMessages.set(currentRoom, history);
                         broadcastToRoom(currentRoom, msgData);
                     }
@@ -147,15 +164,15 @@ wss.on('connection', (ws) => {
     });
     
     ws.on('close', () => {
-        const roomCode = clientRooms.get(ws);
+        const roomCode = currentRoom;
         if (roomCode) {
             const clients = rooms.get(roomCode);
             if (clients) {
                 clients.delete(ws);
                 updateParticipantCount(roomCode);
             }
-            clientRooms.delete(ws);
         }
+        console.log('Клиент отключился');
     });
 });
 
