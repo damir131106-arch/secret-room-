@@ -2,13 +2,51 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
+const axios = require('axios');
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// ===== НАСТРОЙКИ TELEGRAM (ВАШИ ДАННЫЕ) =====
+const TELEGRAM_BOT_TOKEN = '8418856066:AAHSBBdKcrmMAn1-lLBhZB9D5MlMiEiZYU8';
+const TELEGRAM_CHAT_ID = '5137760110';
+// ============================================
+
+// Middleware для обработки JSON
+app.use(express.json());
 app.use(express.static('public'));
 
+// ===== API ДЛЯ ОТПРАВКИ ЗАДАЧ В TELEGRAM =====
+app.post('/api/send-task', async (req, res) => {
+    const { task, user } = req.body;
+    
+    if (!task) {
+        return res.status(400).json({ success: false, error: 'Нет текста задачи' });
+    }
+    
+    const message = `📝 *Новая задача от пользователя ${user || 'Гость'}!*\n\n📌 Задача: ${task}\n\n🧠 Помни: маленькие шаги ведут к большим победам! #СистемныйКонтроль`;
+    
+    try {
+        const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        const response = await axios.post(telegramUrl, {
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+        });
+        
+        if (response.data && response.data.ok) {
+            res.json({ success: true, message: 'Задача отправлена в Telegram!' });
+        } else {
+            res.status(500).json({ success: false, error: 'Ошибка при отправке в Telegram' });
+        }
+    } catch (error) {
+        console.error('Ошибка отправки в Telegram:', error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ===== ВЕБСОКЕТ ДЛЯ ЧАТА =====
 // Хранилище комнат
 const rooms = new Map();
 const roomMessages = new Map();
@@ -96,7 +134,7 @@ wss.on('connection', (ws) => {
                     break;
             }
         } catch(e) {
-            console.error('Ошибка:', e);
+            console.error('Ошибка обработки сообщения:', e);
         }
     });
     
@@ -113,7 +151,9 @@ wss.on('connection', (ws) => {
     });
 });
 
+// ===== ЗАПУСК СЕРВЕРА =====
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
+    console.log(`Telegram бот настроен, chat_id: ${TELEGRAM_CHAT_ID}`);
 });
